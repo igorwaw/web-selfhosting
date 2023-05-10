@@ -104,7 +104,6 @@ a SMART warning anyway.
 In fact, two other drives were showing some "not great, not terrible" SMART attributes. I marked them as suspicious and made sure
 they are backed up. It's handy to have a label writer when you're dealing with 20 USB drives...
 
-
 Then after connecting the drives to the target system it was time for a proper checkup. First, a long SMART selftest which takes several
 hours:  `smartctl -t long /dev/sdX`
 
@@ -117,7 +116,7 @@ show up in the SMART data.
 
 ## Formatting the drives
 
-As I wrote before, I plan to keep some video files on USB drives. Disks  in Linux are usually
+As I wrote before, I plan to keep some video files on USB drives. Disks in Linux are usually
 addressed by the device name. The problem with USB drives is the names are not persistent: the disk that's now /dev/sde
 can become /dev/sdf on the next reboot. There are several ways to deal with it:
 
@@ -134,14 +133,15 @@ Then use the same label in /etc/fstab :
 LABEL=video1     /media/video1    ext4   nodev,noexec,noatime,nofail,x-systemd.device-timeout=4 0 0
 ```
 
-A note on other mkfs options: -m 0 disables reserving space for root - by default 5% is reserved, that's only possibly useful on a system disk.
-Option -T largefile4 changes the inode size to 4MB from the default of 16KB. Inode is an allocation unit. 4MB is a good value for
-video files which are hundreds of MB to several GB in size. Unused inodes take up some disk space. But the size taken by each
-file is rounded up to the inode size, so for filesystems containing text documents, photos, applications, etc. - pretty much
-everything other than videos or filesystem images - you should stick to the default. 
+A note on other mkfs options: `-m 0` disables reserving space for root - by default 5% is reserved, that's only possibly useful on a system disk.
+Option `-T largefile4` changes the inode size to 4MB from the default of 16KB. Inode is an allocation unit. 4MB is a good value for
+video files which are hundreds of MB to several GB in size, because unused inodes take up some disk space. But the size taken by each
+file is rounded up to the inode size, and if you run out of inodes you can't write anything to the disk even if it has free space, so for
+filesystems containing text documents, photos, applications, etc. - pretty much everything other than videos or filesystem images - you
+should stick to the default. 
 
 What do the fstab options mean? Nodev and noexec are for increased security, they forbid executables and device files on the
 data filesystems; noatime means access time will not be recorded (I use this option for all filesystems on all my machines);
-nofail means the system will boot even if the device can't be mounted and device timeout is just that - how long the system will try to mount the drive before
-giving up. By default systemd will stop if it can't mount the drive - it makes sense for system disks, but not for data.
-In that case, I'd rather have my server available on the network so I can SSH and fix it.
+nofail means the system will boot even if the device can't be mounted and device timeout is just that - how long the system
+will try to mount the drive before giving up. By default systemd will stop if it can't mount the drive - it makes sense for
+system disks, but not for data. In that case, I'd rather have my server available on the network so I can SSH and fix it.

@@ -12,9 +12,10 @@ Jellyfin has a client-server srchitecture, meaning you install server software t
 
 ## Installing the server
 
-There are several ways to install Jellyfin server, I chose the simplest for my setup: run it in a Docker container on my NAS. That way, Jellyfin doesn't need to access media files using network, I can bind mount media directories inside the container. I used an image from https://docs.linuxserver.io/images/docker-jellyfin and a very simple Ansible role.
+There are several ways to install Jellyfin server, I chose the simplest for my setup: run it in a Docker container on my NAS. That way, Jellyfin doesn't need to access media files using network, I can bind mount media directories inside the container. I used an image from <https://docs.linuxserver.io/images/docker-jellyfin> and a very simple Ansible role.
 
 Here is the task:
+
 ```yaml
 - name: Create directory for docker-compose.yml
   ansible.builtin.file:
@@ -75,7 +76,7 @@ And that's it. The things that need customization are:
 
 ## Configuring Jellyfin server
 
-Point your browser to port 8096 of your server, in my case it's http://firefly.home.arpa:8096 and go through the settings. First you need to create admin account. Next important thing is to add media sources, it's not enough to make the volumes available to the container. It it recommended that a media source contains movies, TV shows, music etc. but not a mixture of different media types. Note that media sources in the Jellyfin GUI don't need to be the same as volumes in the container:
+Point your browser to port 8096 of your server, in my case it's <http://firefly.home.arpa:8096> and go through the settings. First you need to create admin account. Next important thing is to add media sources, it's not enough to make the volumes available to the container. It it recommended that a media source contains movies, TV shows, music etc. but not a mixture of different media types. Note that media sources in the Jellyfin GUI don't need to be the same as volumes in the container:
 
 - you can have one volume split into multiple data sources, eg. a volume called /videos containing directories /vidoes/movies and /videos/shows
 - or the other way around, you can have volumes /movies1 and /movies2 combined into one data source.
@@ -86,7 +87,7 @@ In the beggining I wrote that Jellyfin doesn't need online services. Well, it wa
 
 ## More configuration
 
-You can create multiple user accounts. They can have limited access to the data sources, eg. child account might only have access to child-friendly shows (or vice versa, adult account without access to cartoons). 
+You can create multiple user accounts. They can have limited access to the data sources, eg. child account might only have access to child-friendly shows (or vice versa, adult account without access to cartoons).
 
 Transcoding options have a huge impact on CPU usage. First, use hardware accelaration if possible. This setting is available on the server. See Jellyfin manual for details, unfortunately my hardware doesn't support acceleration so I  can't speak from experience. I also have rather weak CPU. More than adequate for all other purposes, in fact it rarely goes above 1% usage, but sometimes too slow for transcoding. If you find yourself in my place, you need to tune the transcoding settings on each client (not the server):
 

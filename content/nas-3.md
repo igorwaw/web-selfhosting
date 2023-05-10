@@ -13,7 +13,7 @@ I don't have a problem configuring Linux servers without a GUI. Plus, on my last
 system and used Ansible. I can reuse the same playbook. That's the nice thing about Ansible: configuring my NAS for
 the first time took me more time than doing the same thing by hand, but the next attempts were almost fully automated.
 Installing the base system was the manual part (it could be automated as well, but it doesn't make much sense to
-automate a one-time task). 
+automate a one-time task).
 
 
 ## How to share files
@@ -26,7 +26,7 @@ the choice is obvious too.
 The less common choice is iSCSI, which exports a block device instead of a filesystem. From the point of view of the
 connected client, it will look a lot like a local drive which can be formatted and used in any way. Very useful for
 many professional settings, for example for live migrating VMs between hosts. Not so much for the home, unless
-you mostly want to train your sysadmin skills. 
+you mostly want to train your sysadmin skills.
 
 For now, I went with Samba only. I don't really need any permissions, I'm OK with making all files on the share accessible to all
 systems and users on my LAN. If I need it later, I can get NFS or iSCSI running in a few minutes.
@@ -51,7 +51,7 @@ It does quite a lot, so I split it for readability and once again the main file 
 - import_tasks: post-tasks.yml
 ```
 
-File tasks/samba.yml  is mostly taken from https://github.com/bertvv/ansible-role-samba with only minor modifications. I added three
+File tasks/samba.yml  is mostly taken from <https://github.com/bertvv/ansible-role-samba> with only minor modifications. I added three
 files with tasks required before and after configuring Samba.
 
 Before:
@@ -97,5 +97,3 @@ umount /data/{{ share.name }}-backup
 ```
 
 Where "samba_shares" contains the list of filesystems. Now, if I added another disk pair, I only need to edit "samba_shares" to modify fstab, smb.conf and the backup script.
-
-

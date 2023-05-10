@@ -65,7 +65,7 @@ There are two partitions on the micro-SD card, bootfs and rootfs. All I had to d
 - on bootfs, create a file called ssh or ssh.txt, it can be empty or has any content, just the presence of this file informs the system to start the SSH server,
 - also on bootfs, create a file called userconf.txt containing a username and an encrypted password separated by a colon, to encrypt the password you use
 the command: openssl passwd -6
--  on rootfs (not bootfs this time!), edit file etc/dhcpcd.conf to provide network information (since the Pi is going to run the DHCP server, it obviously
+- on rootfs (not bootfs this time!), edit file etc/dhcpcd.conf to provide network information (since the Pi is going to run the DHCP server, it obviously
 cannot get the configuration from DHCP)
 
 ```bash
@@ -179,16 +179,16 @@ What can we do if Pi-hole breaks the website (or we suspect that it does)? There
 Precise one, see option "domains" in the left menu. You can use it to add a domain to a whitelist or blacklist, using ordinary text or
 regular expressions.
 
-Filtering with DNS is not as effective as using a browser extension. You can't block https://example.com/ads/ while leaving the rest of https://example.com/ .
+Filtering with DNS is not as effective as using a browser extension. You can't block <https://example.com/ads/> while leaving the rest of <https://example.com/> .
 Of course, you can use both. Pi-hole can also increase security. Some malware connects to a specific domain. There are also lists of
 domains used by scammers - fake lotteries, SMS subscriptions, etc. Since I also visit Polish websites, I use a list that also includes
-Polish domains:  https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-pihole-filters/KADhosts.txt
+Polish domains:  <https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-pihole-filters/KADhosts.txt>
 
 ![Configuring blocklists]({static}/images/pihole-listy.png)
 
 ## Local DNS
 
-Recommended domain for local use is home.arpa - not localdomain or example.com that many people use. To be fair, in most cases nothing bad would happen, but let's do it by the book. Simply add your devices in Local DNS -> DNS Records. Pity there's no option to automatically populate local DNS with DHCP entries. 
+Recommended domain for local use is **home.arpa**- not localdomain or example.com that many people use. To be fair, in most cases nothing bad would happen, but let's do it by the book. Simply add your devices in Local DNS -> DNS Records. Pity there's no option to automatically populate local DNS with DHCP entries. 
 
 ## Backup
 

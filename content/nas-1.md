@@ -21,7 +21,6 @@ I'm trying to keep my IT green (see separate sidenote for details), which in sho
 - prefer old hardware to new one.
 
 
-
 ## Commercial vs DIY
 
 The easiest option is to buy an off-the-shelf NAS such as Synology or Qnap. I had one in the past. The good thing
@@ -49,7 +48,6 @@ much current (yes, I tried a powered USB hub)  and only half of them will show u
 have RAID on USB (technically, it is possible, the system wouldn't stop you, but it's a really bad idea if your
 drives can disappear at any moment). 
 
-
 ## Choosing hardware
 
 Many people choose an advanced filesystem such as ZFS for the storage server. They have some advantages
@@ -65,7 +63,6 @@ but it's the same microarchitecture as "Core i-something"  (check Wikipedia), it
 performance, bigger cache and more cores. In the past they were power hogs, these days some of them can scale
 down quite well. Check the specs to be sure.
 
-
 BTW, I wish Intel used a more consistent naming convention as they did in the previous century. Now Core i5 is supposed
 to be faster than i3, but it's not true if i3 is several generations younger. Not to mention Pentium and Celeron brands which
 don't really mean anything as the same name is used for 20 or 30 years.
@@ -78,12 +75,11 @@ But I also wanted to run other services on the same box, in containers and VMs. 
 market for a motherboard with:
 
 - a 64-bit CPU with virtualization extensions
-- preferably a home or low-power model rather than Xeon or Core i7, 
+- preferably a home or low-power model rather than Xeon or Core i7,
 - at least 1GB of RAM with an option to expand to 8GB
 - multiple SATA ports,
 - USB3 ports,
 - PCI Express slots for further expansion if needed.
-
 
 ## The plan
 
@@ -103,8 +99,6 @@ soldered directly onto the board. So here's the plan:
 - One of the 2.5" will be used for backups of my other machines
 
 These 2.5" will be off most of the time which is probably the right usage pattern for USB drives.
-
-
 
 ## A case for the proper case
 
@@ -135,19 +129,17 @@ Finally, I bought some SATA cables and a PSU. The smallest I could find was 450W
 probably because the only people who build PCs these days are gamers and crypto miners. I chose one that claims 90% efficiency
 when running with 10%-20% of the max load.
 
-
 ## The system drive
 
 Should you place your OS with the data or use a separate disk? Both ways have some pros and cons.
 
 Sometimes you are forced to use a separate drive. If you use an old motherboard, it might not support booting
-from large disks - but once the operating system loads, it will access the drives just fine. Most, if not all,
-NAS-specific distros require a separate system disk. 
+from large disks - but once the operating system loads, it will access the drives just fine. 
 
-Decoupling data from OS will generally make your life easier in the long run: you can replace data disks if 
-they are too small, you can move data to another server. You can also run the system from an SSD which is much
-faster - it doesn't make much difference if you use it only for NAS, but a huge one if you also want to host
-VMs or containers.
+Most, if not all, NAS-specific distros require a separate system disk. Decoupling data from OS will generally
+make your life easier in the long run: you can replace data disks if  they are too small, or you can move data
+to another server. You can also run the system from an SSD which is much faster - it doesn't make much
+difference if you use it only for NAS, but a huge one if you also want to host VMs or containers.
 
 On the other hand, keeping OS with the data means you don't waste precious drive bay in the case. And if your data is on
 RAID, the system is also protected from the drive failure.
@@ -166,12 +158,10 @@ internally - motherboards have USB connectors for use with the case's front port
 Is the lack of RAID a real problem? The system disk is easy to backup. If it fails, I can replace the drive and restore
 the system from an image in minutes. And it's a home system, so the risk of some downtime is acceptable.
 
-
-
 ## Some assembly required
 
 The last time I built a PC, it had a 366 MHz CPU and 128MB of RAM and it wasn't because I used second-hand parts.
-But it's not rocket science. I screwed the board in, connected all the cables, turned on the power and... nothing
+But it's not a rocket science. I screwed the board in, connected all the cables, turned on the power and... nothing
 happened. I checked the cables - still nothing. Took everything out of the case, connected only PSU to the
 motherboard, shorted the "power button" pins - same. That's what you get with the used hardware, right?
 
