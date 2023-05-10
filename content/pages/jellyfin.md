@@ -3,16 +3,29 @@ Date: 2023-04-14 17:40
 Status: published
 Tags: services
 
-My NAS holds, in addition to other things, a small collection of videos. Mostly some old movies and  TV shows not available in streaming services or my favourites that I want to keep no matter what. The PCs can easily play video files from an SMB share using VLC or another player, but mobile devices, smart TVs etc. need streaming. Plus, commercial streaming services made us used to features like easy searching, categories, recommendations, resuming on another device. Fortunately it's easy to run your own streaming server.
+We made a lot of hard work in the previous steps, time for relax. My NAS holds, in addition to other things, a small collection
+of videos. Mostly some old movies and  TV shows not available in streaming services or my favourites that I want to keep no
+matter what. The PCs can easily play video files from an SMB share using VLC or another player, but mobile devices, smart TVs
+etc. need streaming. Plus, commercial streaming services made us used to features like easy searching, categories, recommendations,
+resuming on another device. Fortunately it's easy to run your own streaming server.
 
-There are two main contenders in this field in addition to a plethora of less popular solutions. **Plex** is a well-established one with a 15 years of history. Recently many users are annoyed by the GUI changes, mostly done to promote *Plex Pass*, an optional subscription service extending features of Plex. **Jellyfin** is a fully open-source alternative that doesn't include any subscriptions or outside components, it's fully self contained. It has fewer plugins and clients than it's main competitor, but it's growing rapidly and already supports most platforms.
+There are two main contenders in this field in addition to a plethora of less popular solutions. **Plex** is a well-established
+one with a 15 years of history. Recently many users are annoyed by the GUI changes, mostly done to promote *Plex Pass*, an optional
+subscription service extending features of Plex. **Jellyfin** is a fully open-source alternative that doesn't include any
+subscriptions or outside components, it's fully self contained. It has fewer plugins and clients than it's main competitor, but
+it's growing rapidly and already supports most platforms.
 
-Jellyfin has a client-server srchitecture, meaning you install server software that reads your media files and streams them to the clients, and client software on the devices you want to use for viewing. There are clients for Android, iOS, popular smart TVs and digital media players, there's also a web client. Installing a client is a completely no thrill experience, just install it from an app store, open it and it will automatically detect the server on the LAN.
+Jellyfin has a client-server srchitecture, meaning you install server software that reads your media files and streams them to
+the clients, and client software on the devices you want to use for viewing. There are clients for Android, iOS, popular smart TVs
+and digital media players, there's also a web client. Installing a client is a completely no thrill experience, just install it
+from an app store, open it and it will automatically detect the server on the LAN.
 
 
 ## Installing the server
 
-There are several ways to install Jellyfin server, I chose the simplest for my setup: run it in a Docker container on my NAS. That way, Jellyfin doesn't need to access media files using network, I can bind mount media directories inside the container. I used an image from <https://docs.linuxserver.io/images/docker-jellyfin> and a very simple Ansible role.
+There are several ways to install Jellyfin server, I chose the simplest for my setup: run it in a Docker container on my NAS.
+That way, Jellyfin doesn't need to access media files using network, I can bind mount media directories inside the container.
+I used an image from <https://docs.linuxserver.io/images/docker-jellyfin> and a very simple Ansible role.
 
 Here is the task:
 

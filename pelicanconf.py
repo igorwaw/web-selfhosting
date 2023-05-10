@@ -16,10 +16,10 @@ AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
 # Blogroll
-# LINKS = (('Pelican', 'https://getpelican.com/'),
-#          ('Python.org', 'https://www.python.org/'),
-#          ('Jinja2', 'https://palletsprojects.com/p/jinja/'),
-#          ('You can modify those links in your config file', '#'),)
+LINKS = (('Main', 'https://too-many-machines.com/'),
+         ('Selfhosting', 'https://selfhosting.too-many-machines.com/'),
+         ('Advent of Code', 'https://advent.too-many-machines.com/'),
+         ('Random stuff', 'https://random.too-many-machines.com/'),)
 
 # # Social widget
 # SOCIAL = (('You can add links in your config file', '#'),
@@ -40,3 +40,6 @@ BOOTSTRAP_THEME = 'flatly'
 JINJA_ENVIRONMENT = {'extensions': ['jinja2.ext.i18n']}
 PLUGINS = ['i18n_subsites']
 I18N_TEMPLATES_LANG = 'en'
+
+# local settings
+DISPLAY_PAGES_ON_MENU=False
