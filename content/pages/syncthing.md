@@ -61,7 +61,7 @@ option in your config file or, since it's only needed for a moment and the defau
 setup an SSH tunnel. On my laptop, I typed `ssh -L 8385:firefly:8384 localhost` and pointed the browser to <http://localhost:8385>.
 How does the tunnel work? It means that ssh will forward local port 8385 through firefly to localhost:8384 - but that's localhost
 from the firefly's point of view. Note that I can open the tunnel *through* firefly *to* another server, sysadmins often use this
-technique to connect to servers using private IPs through one jumphost available on the internet.
+technique to connect to servers using on IPs through one jumphost available on the internet.
 
 Back to the point. In one of your browser tabs, click "Add Folder" and choose what you want to share. In my case, I'm sharing
 ~/CloudStation between all my computers. The folder name is due to historical reasons, few years ago I used Synology CloudStation
