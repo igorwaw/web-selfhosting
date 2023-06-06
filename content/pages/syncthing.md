@@ -47,7 +47,8 @@ On the NAS, it was similar, but I used Ansible. This is the task file I added to
 I could run syncthing in a Docker container, but I don't see much value in it. It's just one package,
 data is all contained in one place and an up to date package is widely available for Linux distros.
 
-Finally, on Adroid it's just installing the package from either Play Store or F-Droid.
+On Windows I installed SyncTrayzor package, which includes SyncThing and a system tray widget. Finally,
+on Adroid it's just installing the package from either Play Store or F-Droid.
 
 ## Configuration
 
@@ -58,7 +59,7 @@ backup this file so you can recreate the setup if needed. For configuring your c
 
 It's a bit more tricky with the NAS. By default, syncthing only listens on the local interface. You can change this
 option in your config file or, since it's only needed for a moment and the default is better for security, you can
-setup an SSH tunnel. On my laptop, I typed `ssh -L 8385:firefly:8384 localhost` and pointed the browser to <http://localhost:8385>.
+setup an SSH tunnel. On my laptop, I typed `ssh -L 8385:localhost:8384 firefly` and pointed the browser to <http://localhost:8385>.
 How does the tunnel work? It means that ssh will forward local port 8385 through firefly to localhost:8384 - but that's localhost
 from the firefly's point of view. Note that I can open the tunnel *through* firefly *to* another server, sysadmins often use this
 technique to connect to servers using on IPs through one jumphost available on the internet.

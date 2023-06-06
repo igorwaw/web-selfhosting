@@ -3,7 +3,6 @@ Date: 2023-04-14 17:36
 Status: published
 Tags: storage
 
-
 ## Which RAID is right?
 
 I don't trust hard drives and neither should you. They WILL fail, it's just a matter of time. One way to deal with
@@ -80,6 +79,17 @@ interesting advantages:
 The downsides: your files are not immediately protected from drive failure and the technology is not as well tested as mdraid.
 My choice? Standard Linux RAID1 for general-purpose storage, SnapRAID for videos.
 
+### June 2023 update: SnapRAID recovery
+
+It was inevitable that a disk would fail. In fact, two disks failed at once. How to deal with it?
+
+- unplug failed disks (they were both USB drives),
+- plug news disks of the same size (could be bigger, could probably be smaller if they weren't filled to the capacity, but I had the same size disks),
+- format them the same way (again, not necessary, but since the setup worked before, I didn't change anything), mount in the same place,
+- check the disk number in /etc/snapraid.conf, in my case these were d3 and d4,
+- run command to recover files: `snapraid -d d3 -l fix.log fix` for one disk and `snapraid -d d4 -l fix2.log fix`, or skip '-d DISKNAME' to fix everything (note: you should run it under screen or tmux as it will take a very long time - hours, maybe days)
+- run command to check the recovered files: `snapraid check` (again, many hours)
+- finally, re-synchronize the array: `snapraid sync` (should be quick)
 
 ## Testing the drives
 

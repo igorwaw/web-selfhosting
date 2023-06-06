@@ -36,8 +36,6 @@ internet is often the only option. Just a few kilometers from the cell tower and
 Cutting cost is probably not a good reason. You may get some savings, but it's not guaranteed. You might cut down on cloud subscriptions,
 but add the cost of hardware and electricity. Not to mention the time spent on configuring all this.
 
-
-
 ## Where am I now?
 
 I plan to write this as a step-by-step guide of my journey to self-hosting, like I'm starting from scratch. That is not strictly true. 
