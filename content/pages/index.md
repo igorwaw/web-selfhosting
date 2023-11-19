@@ -15,3 +15,5 @@ for myself. But I'll be more than happy if it's useful to someone else besides m
 - [Step 2: Storage server, part 3: software and configuration]({filename}nas-3.md)
 - [Step 3: Jellyfin, video streaming]({filename}jellyfin.md)
 - [Step 4: Syncthing, file synchronization]({filename}syncthing.md)
+- [Step 5: Monitoring with Prometheus and Grafana, part 1: installation]({filename}prometheus-1.md)
+- [Step 5: Monitoring with Prometheus and Grafana, part 2: configuration]({filename}prometheus-2.md)

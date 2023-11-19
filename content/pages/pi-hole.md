@@ -57,7 +57,7 @@ but that's because I like the old way.
 
 My system is going to run headless, but I have to do the initial configuration. There are two options: you can temporarily connect a keyboard and monitor, 
 during the first boot you'll answer a few questions. Or you can mount the micro-SD card on the PC and modify a few config files. There's a third option
-of using Raspberry Pi Images, but I already skipped this. Since I like editing config files and I'm too lazy to go to another room and fetch an HDMI cable,
+of using Raspberry Pi Imager, but I already skipped this. Since I like editing config files and I'm too lazy to go to another room and fetch an HDMI cable,
 I chose the second option. Again, feel free to use the other two if you don't feel like manually editing configs.
 
 There are two partitions on the micro-SD card, bootfs and rootfs. All I had to do was these 3 steps:

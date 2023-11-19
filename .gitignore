@@ -130,3 +130,5 @@ dmypy.json
 
 #custom
 output/
+pelican-plugins/
+pelican-themes/
