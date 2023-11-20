@@ -3,6 +3,16 @@ Date: 2023-11-17 17:40
 Status: published
 Tags: services
 
+## Port list
+For the reference, here are the default ports of different components of Prometheus/Grafana stack:
+
+- 3000  Grafana
+- 9090  Prometheus
+- 9100  Prometheus Node Exporter
+- 9116  Prometheus SNMP Exporter
+- 9093  Prometheus Alertmanager
+
+
 ## Generating node list for Prometheus
 
 In the default config file there are already two exporters configured: Prometheus for localhost and node exporter also for localhost. Yes, Prometheus server also exposes some metrics about itself and then consumes them. The first item is OK, I only have one Prometheus instance, but I want to monitor all Linux hosts on my home network. Let's put the default config file in the role's templates subdirectory and add .j2 extension (so the full name is prometheus.yml.j2). Now just change a few lines at the end of the file:

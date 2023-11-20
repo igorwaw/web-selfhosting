@@ -17,3 +17,5 @@ for myself. But I'll be more than happy if it's useful to someone else besides m
 - [Step 4: Syncthing, file synchronization]({filename}syncthing.md)
 - [Step 5: Monitoring with Prometheus and Grafana, part 1: installation]({filename}prometheus-1.md)
 - [Step 5: Monitoring with Prometheus and Grafana, part 2: configuration]({filename}prometheus-2.md)
+
+- [Sidenote 1: Using Ansible]({filename}s-ansible.md)

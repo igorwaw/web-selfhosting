@@ -52,7 +52,7 @@ First I'm installing packages: Prometheus core, alert manager, and SNMP exporter
 
 ```yaml
 - name: Install prometheus packages
-  apt: name=['prometheus', 'prometheus-snmp-exporter', 'prometheus-alertmanager'] state=latest
+  ansible.builtin.apt: name=['prometheus', 'prometheus-snmp-exporter', 'prometheus-alertmanager'] state=latest
 ```
 
 Let's point the browser to http://firefly.home.arpa:9090 - it works!
@@ -88,7 +88,7 @@ If we don't configure any volume, Grafana will store data inside the container -
 ---
 
 - name: Install prometheus packages
-  apt:
+  ansible.builtin.apt:
     name: ['prometheus', 'prometheus-snmp-exporter', 'prometheus-alertmanager']
     state: present
 
@@ -100,7 +100,7 @@ If we don't configure any volume, Grafana will store data inside the container -
     recurse: true
 
 - name: copy Grafana docker-compose.yml
-  copy:
+  ansible.builtin.copy:
     src: files/docker-compose-grafana.yml
     dest: "/home/{{ create_user }}/compose/docker-compose-grafana.yml"
     owner: "{{ create_user }}"
