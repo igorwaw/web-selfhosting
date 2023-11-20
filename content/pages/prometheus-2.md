@@ -3,8 +3,7 @@ Date: 2023-11-17 17:40
 Status: published
 Tags: services
 
-## Port list
-For the reference, here are the default ports of different components of Prometheus/Grafana stack:
+For the reference, here are the default ports of various components of Prometheus/Grafana stack:
 
 - 3000  Grafana
 - 9090  Prometheus
@@ -32,7 +31,7 @@ My Ansible inventory contains a group called linux, with all Ansible-managed Lin
 
 ```yaml
 - name: Generate config for Prometheus
-  template:
+  apt.builtin.template:
     dest: "/etc/prometheus/prometheus.yml"
     src: prometheus.yml.j2
   notify:
@@ -44,7 +43,7 @@ We're now only missing the restart handler - a task that will run only when "Gen
 ```yaml
 ---
 - name: Restart Prometheus
-  service:
+  apt.builtin.service:
     name: "prometheus"
     state: restarted
 ```

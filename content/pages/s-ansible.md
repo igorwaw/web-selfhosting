@@ -6,9 +6,9 @@ Tags: services
 I use Ansible to configure my home computers. I started doing it to learn the tool, but is it really worth to use it at home other than for education? Maybe.
 
 On the downside, it's generaly faster to configure a server manually. The syntax is quite awkward for
-beginners. If you need to change lines in a few config files, you can do it in 30 seconds with a text editor or spend an hour retrying the playbook. But it can save you time as well if you're going to repeat the task.
+beginners. If you need to change a few lines in a config file, you can do it in 30 seconds with a text editor or spend an hour retrying the playbook. But it can save you time as well if you're going to repeat the task.
 
-There are several ways to use Ansible. One is to automate ad-hoc tasks, such as patching, gatherin some information, repairing common problems. It's quite usual if you're introducing Ansible into a pre-existing infrastructure.
+There are several ways to use Ansible. One is to automate ad-hoc tasks, such as patching, gathering some information, repairing common problems. It's quite usual if you're introducing Ansible into a pre-existing infrastructure.
 
 But Ansible really shines if you use the Infrastructure as a Code approach. That is, every server (or group of identical servers) has one playbook containing the whole configuration: software, user accounts etc. Parts of the playbook that are the same on different servers can be shared (see below about roles). And if you ever need to rebuild your server, you can do it with one command. It happened 3 times with my NAS (I experimented with different hardware). For more experimental devices or VMs, you can intentionally rebuilt them often.
 
@@ -53,7 +53,7 @@ My home server Firefly gets many roles. There's one called firefly which contain
 
 Ansible uses some conventions about directory structure and file naming. You can ignore them, but adhering to them will make life easier for everyone. This is an example for a moderately complex role.
 
-The most important directory is "tasks", it stores YAML files with all task definitions. Handlers are special kind of tasks - they are run after all the standard tasks if a specific condition is met. For example, you can restart your service if it's binary has changed or if the configuration file was modified. If both events happened, Ansible is smart enough to only run the handler once. In both of these directories, only file "main.yml" is read. But if it gets too long, you can import other files from it.
+The most important directory is "tasks", it stores YAML files with all task definitions. Handlers are special kind of tasks - they are run after all the standard tasks if a specific condition was met. For example, you can restart your service if its binary has changed or if the configuration file was modified. If both events happened, Ansible is smart enough to only run the handler once. In both of these directories, only file "main.yml" is read. But if it gets too long, you can import other files from it.
 
 Directory "defaults" stores default values for variables, which are overwritten by custom values from "vars". Last but not least, "files" contains all files that will be copied to the server without any change, those from "templates" are filled with some generated content first.
 
