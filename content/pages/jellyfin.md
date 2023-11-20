@@ -20,7 +20,6 @@ the clients, and client software on the devices you want to use for viewing. The
 and digital media players, there's also a web client. Installing a client is a completely no thrill experience, just install it
 from an app store, open it and it will automatically detect the server on the LAN.
 
-
 ## Installing the server
 
 There are several ways to install Jellyfin server, I chose the simplest for my setup: run it in a Docker container on my NAS.
@@ -38,7 +37,7 @@ Here is the task:
 
 
 - name: copy docker-compose.yml
-  copy:
+  ansible.builtin.copy:
     src: files/docker-compose.yml
     dest: "/home/{{ create_user }}/compose/docker-compose.yml"
     owner: "{{ create_user }}"
