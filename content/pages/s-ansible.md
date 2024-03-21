@@ -18,7 +18,7 @@ Proper Ansible playbooks are idempotent, meaning they can be run multiple times.
 
 Since it's a home network, I didn't do several things I would do in an enterprise setting. The most important ommision is provisioning. I just started from the base system already installed. Provisioning can be automated, but I decided not to do it. I've got different types of machines: Raspberry Pis, PCs, VMs, VPS. Each needs to be provisioned in a different way: PXE, writing image to the card, cloning base image or using Terraform. That would mean lots of work for not much use (usually once per machine) and not much educational value (I know how to do it). My setup does 80% of the job with 20% of the effort.
 
-Sometimes one action you do with Ansible changes the way you interact with the server later. Example: I change SSH port on all my servers. That means I have to login with a default port on the first run, but on each subsequent run I need to use my custom port. Solution? I just manually change the port in the Ansible inventory. If I had a higly dynamic infrastructure with new machines coming every day, that wouldn't to, but in my case it only happens once per machine. 
+Sometimes one action you do with Ansible changes the way you interact with the server later. Example: I change SSH port on all my servers. That means I have to login with a default port on the first run, but on each subsequent run I need to use my custom port. Solution? I just manually change the port in the Ansible inventory. If I had a higly dynamic infrastructure with new machines coming every day, that wouldn't to, but in my case it only happens once per machine.
 
 ## Using linter
 
@@ -45,15 +45,15 @@ Roles are reusable pieces of configuration, which make my playbooks really short
 - upgrade packages
 - install some packages that I use everywhere.
 
-Which is why I prepared a role "linux_common". Then there's role "linux_dev" that install code editors, C++ compiler and some tools (Python is included in the base system). I want it on my laptop and on my desktop, but on the server. Similar with the office and multimedia software included in the role "linux_desktop".
+Which is why I prepared a role "linux_common". Then there's role "linux_dev" that install code editors, C++ compiler and some tools (I mostly code in Python, but it is already included in the base system). I want it on my laptop and on my desktop, but not on the server. Similar with the office and multimedia software included in the role "linux_desktop".
 
-My home server Firefly gets many roles. There's one called firefly which contains settings specific to this machine, but there are also roles for Jellyfin and Prometheus. In future I might decide to move them elsewhere, so I'll just include those roles in another machine's playbook.
+My home server Firefly gets many roles. There's one called firefly which contains settings specific to this machine, but there are also roles for Jellyfin and Prometheus. In future I might decide to move them elsewhere, so I'll remove those roles from Firefy and include them in another machine's playbook.
 
 ![Ansible role directory tree]({static}/images/ansible-role.png)
 
 Ansible uses some conventions about directory structure and file naming. You can ignore them, but adhering to them will make life easier for everyone. This is an example for a moderately complex role.
 
-The most important directory is "tasks", it stores YAML files with all task definitions. Handlers are special kind of tasks - they are run after all the standard tasks if a specific condition was met. For example, you can restart your service if its binary has changed or if the configuration file was modified. If both events happened, Ansible is smart enough to only run the handler once. In both of these directories, only file "main.yml" is read. But if it gets too long, you can import other files from it.
+The most important directory is "tasks", it stores YAML files with all task definitions. Handlers are special kind of tasks - they are run after all the standard tasks if a specific condition was met. For example, you can restart your service if its binary has changed or if the configuration file was modified. If both events happened, Ansible is smart enough to only run the handler once. In both of these directories, only file "main.yml" is read by. But if it gets too long, you can import other files from it.
 
 Directory "defaults" stores default values for variables, which are overwritten by custom values from "vars". Last but not least, "files" contains all files that will be copied to the server without any change, those from "templates" are filled with some generated content first.
 

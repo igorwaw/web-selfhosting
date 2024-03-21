@@ -21,3 +21,4 @@ for myself. But I'll be more than happy if it's useful to someone else besides m
 
 
 - [Sidenote 1: Using Ansible]({filename}s-ansible.md)
+- [Sidenote 2: Ansible fact gathering]({filename}s-ansible-facts.md)
