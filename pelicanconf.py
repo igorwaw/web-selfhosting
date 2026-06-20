@@ -20,6 +20,7 @@ LINKS = (('Main', 'https://too-many-machines.com/'),
          ('Selfhosting', 'https://selfhosting.too-many-machines.com/'),
          ('Advent of Code', 'https://advent.too-many-machines.com/'),
          ('Photo', 'https://photo.too-many-machines.com/'),
+         ('Easy DYI', 'https://easy-dyi.too-many-machines.com/'),
          ('Random Stuff', 'https://random.too-many-machines.com/'),         
         )
 
