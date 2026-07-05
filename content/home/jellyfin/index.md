@@ -1,7 +1,9 @@
-Title: Jellyfin, a streaming server for home
-Date: 2023-04-14 17:40
-Status: published
-Tags: services
+---
+title: "Jellyfin, a streaming server for home"
+date: 2023-04-14T17:40:00
+draft: false
+tags: ["services"]
+---
 
 We made a lot of hard work in the previous steps, time for relax. My NAS holds, in addition to other things, a small collection
 of videos. Mostly some old movies and TV shows not available in streaming services or my favourites that I want to keep no

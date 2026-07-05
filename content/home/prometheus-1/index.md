@@ -1,7 +1,9 @@
-Title: Prometheus and Grafana, monitoring - part 1
-Date: 2023-11-16 17:40
-Status: published
-Tags: services
+---
+title: "Prometheus and Grafana, monitoring - part 1"
+date: 2023-11-16T17:40:00
+draft: false
+tags: ["services"]
+---
 
 As the infrastructure grows, the need for monitoring becomes more apparent.
 Servers fail, and when they do, you want to be notified and you want to have
@@ -57,7 +59,7 @@ First I'm installing packages: Prometheus core, alert manager, and SNMP exporter
 
 Let's point the browser to http://firefly.home.arpa:9090 - it works!
 
-![Prometheus GUI right after the installation]({static}/images/empty-prometheus.png)
+![Prometheus GUI right after the installation](empty-prometheus.png)
 
 ## Installing Grafana with Ansible
 
@@ -122,4 +124,4 @@ If we don't configure any volume, Grafana will store data inside the container -
 
 Run the playbook: `ansible-playbook firefly.yml --start-at-task "Install prometheus packages"` and check if the container is running: `docker ps`. Then, point the browser to http://firefly.home.arpa:3000 - if you don't see anything, wait a moment, Grafana needs to initialise its database on the first start.
 
-![Grafana GUI right after the installation]({static}/images/empty-grafana.png)
+![Grafana GUI right after the installation](empty-grafana.png)

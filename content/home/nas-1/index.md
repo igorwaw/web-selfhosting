@@ -1,7 +1,9 @@
-Title: Storage server, part 1: hardware
-Date: 2023-04-14 17:35
-Status: published
-Tags: storage
+---
+title: "Storage server, part 1: hardware"
+date: 2023-04-14T17:35:00
+draft: false
+tags: ["storage"]
+---
 
 A house is not a home without a NAS. OK, maybe I'm not really that emotionally attached to my file server,
 but it's one of the first things you need if you want to rely less on the cloud. What can you use it for?

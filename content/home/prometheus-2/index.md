@@ -1,7 +1,9 @@
-Title: Prometheus and Grafana, monitoring - part 2
-Date: 2023-11-17 17:40
-Status: published
-Tags: services
+---
+title: "Prometheus and Grafana, monitoring - part 2"
+date: 2023-11-17T17:40:00
+draft: false
+tags: ["services"]
+---
 
 For the reference, here are the default ports of various components of Prometheus/Grafana stack:
 
@@ -54,7 +56,7 @@ Grafana is a visual tool. You can programmatically generate the config (it's all
 
 Let's get the graphs already. There are two options. You can create your own dashboard by manually adding graphs of various types and entering PromQL queries. Or you can import an existing dashboard from Grafana. The first way is useful if you need a custom dashboard to quickly see selected metrics from different sources. If you want a complete view of each node, importing a high-quality existing dashboard will save you hours. I chose "Node exporter full", a template so famous that many template designers compare their work to it, referring to it by id ("My template is similar to 1860, but...") and "Prometheus 2.0 Overview", number 3662.
 
-![Grafana node dashboard]({static}/images/grafana-node.png)
+![Grafana node dashboard](grafana-node.png)
 
 ## Where to go from here
 

@@ -1,7 +1,9 @@
-Title: IDrive, backup to the cloud
-Date: 2023-11-20 17:40
-Status: published
-Tags: backup
+---
+title: "IDrive, backup to the cloud"
+date: 2023-11-20T17:40:00
+draft: false
+tags: ["backup"]
+---
 
 That is against the spirit of self-hosting, but keeping data safe is more important than keeping purity. Your computers can backup to your NAS (I'll cover that in the next step), that protects you from disk failure, ransomware, accidental deletion and losing your laptop on a train. But a fire or flood can destroy both at the same moment. A proper disaster recovery plan requires 3 copies of data: 1 working copy, 1 on-site backup for quick restore and 1 off-site backup if the previous backup fails. One option is to find another self-hoster and arrange for mutual backup to each other's NAS, another is to use a cloud service.
 
@@ -37,4 +39,4 @@ Make sure you can restore your data. You can use `Restore_Script.pl` on your Lin
 
 Last thing to do is to run `scheduler.pl` to schedule automatic backup. Choose your frequency (hourly/daily/weekly) and time to start. Once the scheduled job starts, you can watch its progress and pause/resume/throttle using `status_retrieval.pl`.
 
-![IDrive web UI]({static}/images/idrive.png)
+![IDrive web UI](idrive.png)
