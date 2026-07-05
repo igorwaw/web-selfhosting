@@ -1,4 +1,4 @@
-Spellcheck and proofread `content/pages/$ARGUMENTS.md`. Follow these rules exactly:
+Spellcheck and proofread `content/$ARGUMENTS/index.md`. Follow these rules exactly:
 
 **Fix automatically (edit the file):**
 - Spelling mistakes — use British English (e.g. civilised, colour, organise, centimetre, tyre, kerb, programme)

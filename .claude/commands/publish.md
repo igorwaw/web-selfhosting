@@ -1,4 +1,4 @@
-Publish the post at `content/pages/$ARGUMENTS.md`. Do all of the following steps:
+Publish the post at `content/$ARGUMENTS/index.md`. Do all of the following steps:
 
 1. **Remove draft status** — delete the `draft: true` line from the front matter.
 

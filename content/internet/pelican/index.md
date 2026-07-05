@@ -5,6 +5,14 @@ draft: false
 tags: ["python", "website"]
 ---
 
+## July 2026 update
+
+I no longer use Pelican for my websites. I use another static generator: Hugo. It's much faster and actively maintained. The results look much better too, especially for pages with many or large images. For text-heavy sites like this one, there's not much difference.
+
+I decided to keep the old contents. All the generic information about static generator vs. CMS are still (or even more) valid for Hugo. And maybe someone who needs to use Pelican stumbles upon this site.
+
+## Old contents from here
+
 I use static website generator called Pelican to build all my websites, unless I have a good reason not to. Why? Since laziness is one of the virtues of a good programmer, I asked ChatGPT why a static website generator is better then a CMS. Here's a slightly edited answer:
 
 **Speed and Performance:** Static website generators offer incredible speed and performance compared to CMS. With a static website, there is no server-side processing required to generate pages, resulting in faster load times

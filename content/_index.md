@@ -23,4 +23,5 @@ comments: false
 
 ## Self hosting on the internet
 
+- [Generating websites with Hugo](/internet/hugo/)
 - [(OUTDATED) Generating websites with Pelican](/internet/pelican/)
