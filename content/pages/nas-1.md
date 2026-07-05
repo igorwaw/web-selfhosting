@@ -23,7 +23,7 @@ I'm trying to keep my IT green (see separate sidenote for details), which in sho
 
 ## Commercial vs DIY
 
-The easiest option is to buy an off-the-shelf NAS such as Synology or Qnap. I had one in the past. The good thing
+The easiest option is to buy an off-the-shelf NAS such as Synology or QNAP. I had one in the past. The good thing
 about them is you can get them up and running in less than an hour and without much knowledge.
 Just install disks, plug it to the network and answer a few questions in the web UI. Even though I had the
 knowledge (it was actually my second NAS, the first one being a DIY), I chose Synology for convenience.
@@ -44,22 +44,22 @@ Wyse) and decided I REALLY don't want a NAS on USB drives. You can run one or tw
 the more you have, the probability of problems approaches 1. Sometimes the plug moves in the socket and you
 end up with a corrupt filesystem. Or the cable cannot handle the power. Or the disks run fine when you
 initially connect them one by one, but during the next reboot they will start all at once drawing too
-much current (yes, I tried a powered USB hub)  and only half of them will show up. Of course, you can't
+much current (yes, I tried a powered USB hub) and only half of them will show up. Of course, you can't
 have RAID on USB (technically, it is possible, the system wouldn't stop you, but it's a really bad idea if your
 drives can disappear at any moment). 
 
 ## Choosing hardware
 
 Many people choose an advanced filesystem such as ZFS for the storage server. They have some advantages
-(eg. built-in RAID and snapshots), but most of them can be imitated with underlying layers such as MD and LVM. And they
+(e.g. built-in RAID and snapshots), but most of them can be imitated with underlying layers such as MD and LVM. And they
 need a lot of RAM and CPU power, in some cases also SSD for cache.
 
 If you can live with plain old filesystems, you don't really need much. Any reasonably modern (say, less than 15 years)
 mainline CPU from Intel or AMD is already way more powerful than the puny processor in commercial NAS, even most
-Atoms are. Faster CPUs generally draw more power and require more (louder) cooling,  but that's only true if you compare 
+Atoms are. Faster CPUs generally draw more power and require more (louder) cooling, but that's only true if you compare 
 models from the same generation. Very old CPUs also couldn't scale down the power when idle (or not so effectively).
 Rule of the thumb for Intel CPUs: if it's called "Core i-some number" OR if it's called something else like Pentium or Xeon,
-but it's the same microarchitecture as "Core i-something"  (check Wikipedia), it should be OK. Xeons are server CPUs, with high
+but it's the same microarchitecture as "Core i-something" (check Wikipedia), it should be OK. Xeons are server CPUs, with high
 performance, bigger cache and more cores. In the past they were power hogs, these days some of them can scale
 down quite well. Check the specs to be sure.
 
@@ -67,8 +67,8 @@ BTW, I wish Intel used a more consistent naming convention as they did in the pr
 to be faster than i3, but it's not true if i3 is several generations younger. Not to mention Pentium and Celeron brands which
 don't really mean anything as the same name is used for 20 or 30 years.
 
-As for RAM, even a small one like 1 GB is OK for the start, Linux would only need few dozen MB anyway and use the rest for
-disk cache. You should connect NAS using Ethernet, not Wifi. 1Gbit is a reasonable choice, 100Mbit can sometimes slow
+As for RAM, even a small one like 1 GB is OK for the start, Linux would only need a few dozen MB anyway and use the rest for
+disk cache. You should connect the NAS using Ethernet, not Wi-Fi. 1Gbit is a reasonable choice, 100Mbit can sometimes slow
 things down (but if you have an old LAN, don't worry too much). Faster than 1Gbit is not needed for a generic file storage.
 
 But I also wanted to run other services on the same box, in containers and VMs. To sum up: I was checking the second-hand
@@ -137,7 +137,7 @@ Sometimes you are forced to use a separate drive. If you use an old motherboard,
 from large disks - but once the operating system loads, it will access the drives just fine. 
 
 Most, if not all, NAS-specific distros require a separate system disk. Decoupling data from OS will generally
-make your life easier in the long run: you can replace data disks if  they are too small, or you can move data
+make your life easier in the long run: you can replace data disks if they are too small, or you can move data
 to another server. You can also run the system from an SSD which is much faster - it doesn't make much
 difference if you use it only for NAS, but a huge one if you also want to host VMs or containers.
 
@@ -152,7 +152,7 @@ than inside the laptop.
 Tip: if you want to use a separate drive, but don't want to waste drive bay/SATA port/money on the extra disk,
 you can install Linux on a USB stick. Just remember they are way slower even than HDDs and wear out quickly.
 You should try to use them read-only (possible but tricky, requires combining read-only fs with a writable ramdisk on top
-of it, eg. aufs) or almost read-only (eg. disable swap, redirect logs to an external system). You can even install the stick
+of it, e.g. aufs) or almost read-only (e.g. disable swap, redirect logs to an external system). You can even install the stick
 internally - motherboards have USB connectors for use with the case's front ports. 
 
 Is the lack of RAID a real problem? The system disk is easy to backup. If it fails, I can replace the drive and restore
@@ -161,15 +161,15 @@ the system from an image in minutes. And it's a home system, so the risk of some
 ## Some assembly required
 
 The last time I built a PC, it had a 366 MHz CPU and 128MB of RAM and it wasn't because I used second-hand parts.
-But it's not a rocket science. I screwed the board in, connected all the cables, turned on the power and... nothing
+But it's not rocket science. I screwed the board in, connected all the cables, turned on the power and... nothing
 happened. I checked the cables - still nothing. Took everything out of the case, connected only PSU to the
-motherboard, shorted the "power button" pins - same. That's what you get with the used hardware, right?
+motherboard, shorted the "power button" pins - same. That's what you get with used hardware, right?
 
 But I made one more check. You can start a power supply without a motherboard by shorting pin 14 with any
-of the ground pins. I did that - the fan didn't start spinning, multimeter showed no voltage. Imagine my surprise:
+of the ground pins. I did that - the fan didn't start spinning, the multimeter showed no voltage. Imagine my surprise:
 a second-hand motherboard is fine, but a brand-new PSU isn't. Returned it, got one from a more reputable brand
 (Thermaltake) - this time it worked.
 
 It's a pity that the case didn't come with a PSU. It has quite a different shape than a standard PC tower case,
-meaning the power cables could be much shorter. I use a Lenovo workstation which has a dedicated PSU with
+meaning the power cables could be much shorter. By comparison, one of my other computers - Lenovo Thinkstation - has a dedicated PSU with
 cables just the right length, it really helps to keep the inside tidy and improve the airflow.

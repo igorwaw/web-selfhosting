@@ -1,4 +1,4 @@
-Title: Syncthing, synchronizing files between the devices
+Title: Syncthing, synchronising files between the devices
 Date: 2023-05-10 17:40
 Status: published
 Tags: services
@@ -6,10 +6,10 @@ Tags: services
 Sharing files between your devices using a cloud service such as Google Drive or Dropbox is incredibly convenient.
 Wouldn't it be nice to do the same locally, with complete privacy and without using your internet connection? Sure it would.
 
-**Syncthing** works on Linux, Windows, MacOS, FreeBSD and Android. There are also packages for commercial NASes from Synology,
-QNAP, WD and others. It doesn't require a server - you can directly sync two computers, or computer with a phone,
+**Syncthing** works on Linux, Windows, macOS, FreeBSD and Android. There are also packages for commercial NASes from Synology,
+QNAP, WD and others. It doesn't require a server - you can directly sync two computers, or a computer with a phone,
 or 3 devices can all sync with each other. That's what I did before I got the NAS. But if you have a home server which is
-always on, it makes sense to treat it as a central point and have all other devices synchronize with it.
+always on, it makes sense to treat it as a central point and have all other devices synchronise with it.
 
 ## Installation
 
@@ -45,15 +45,15 @@ On the NAS, it was similar, but I used Ansible. This is the task file I added to
 ```
 
 I could run syncthing in a Docker container, but I don't see much value in it. It's just one package,
-data is all contained in one place and an up to date package is widely available for Linux distros.
+data is all contained in one place and an up-to-date package is widely available for Linux distros.
 
-On Windows I installed SyncTrayzor package, which includes SyncThing and a system tray widget. Finally,
-on Adroid it's just installing the package from either Play Store or F-Droid.
+On Windows I installed the SyncTrayzor package, which includes Syncthing and a system tray widget. Finally,
+on Android it's just installing the package from either Play Store or F-Droid.
 
 ## Configuration
 
-Syncthing isn't really well suited for automated configuration. It stores its settings in ~/.config/syncthing/config.xml
-You could generate this file if you really wanted to, but more sane option is to configure using the web GUI and then
+Syncthing isn't really well suited for automated configuration. It stores its settings in ~/.config/syncthing/config.xml.
+You could generate this file if you really wanted to, but a more sane option is to configure using the web GUI and then
 backup this file so you can recreate the setup if needed. For configuring your computer, just point your browser to
 <http://localhost:8384>.
 
@@ -62,13 +62,13 @@ option in your config file or, since it's only needed for a moment and the defau
 setup an SSH tunnel. On my laptop, I typed `ssh -L 8385:localhost:8384 firefly` and pointed the browser to <http://localhost:8385>.
 How does the tunnel work? It means that ssh will forward local port 8385 through firefly to localhost:8384 - but that's localhost
 from the firefly's point of view. Note that I can open the tunnel *through* firefly *to* another server, sysadmins often use this
-technique to connect to servers using on IPs through one jumphost available on the internet.
+technique to connect to servers using IPs through one jumphost available on the internet.
 
 Back to the point. In one of your browser tabs, click "Add Folder" and choose what you want to share. In my case, I'm sharing
-~/CloudStation between all my computers. The folder name is due to historical reasons, few years ago I used Synology CloudStation
-for the same purpose. Don't share your whole home directory as some config file are system-specific.
+~/CloudStation between all my computers. The folder name is due to historical reasons, a few years ago I used Synology CloudStation
+for the same purpose. Don't share your whole home directory as some config files are system-specific.
 
-Next, click "Add Remote Device". You can than paste the ID of your another device (or scan the QR code) or very likely, you'll
+Next, click "Add Remote Device". You can then paste the ID of another device (or scan the QR code) or very likely, you'll
 see a list of other devices on the network. Remember to type a name that will be displayed in the GUI instead of the ID. Then,
 on your other machines, confirm you want to pair with this device. A moment later you'll see a message: this device wants to
 share a folder. Click to confirm. Note that the path of the shared folder doesn't need to be the same, on my computers I use
@@ -82,17 +82,17 @@ would never access on the phone. I decided to share only a subset of files, insi
 within the other, but allows such setup.
 
 One other use for syncthing is to **auto upload my photos** from my phone to Elsa, my graphics workstation. On the 
-phone, I chose to sync the camera folder with Elsa, but there's one twist: the synchronization is only in one
-direction. Phone will send files, I can view them on the computer and delete those I don't need, the changes won't be
+phone, I chose to sync the camera folder with Elsa, but there's one twist: the synchronisation is only in one
+direction. The phone will send files, I can view them on the computer and delete those I don't need, the changes won't be
 synced back. 
 
 ## Dealing with conflicts
 
 Most of the time, nothing will stop you from modifying the same file on multiple devices at once. Some applications
-create lock files, those warn about opening the same file more than once and often suggest to open it read-only.
+create lock files, those warn about opening the same file more than once and often suggest opening it read-only.
 Depending on your workflow, this might be a huge problem ("I'm getting conflicts all the time"), none at all
 ("I'm always editing this file on this computer anyway, others only read it") or something in between.
 
 When you do get a conflict, syncthing will keep both versions of the file, adding "syncconflict" plus timestamp
-and device ID. It is then up to you - and your applications - to resolve it. For example, Keepassxc will merge
+and device ID. It is then up to you - and your applications - to resolve it. For example, KeePassXC will merge
 two DBs without any issues, text files (source code etc.) can be compared with diff, vimdiff or similar tools.

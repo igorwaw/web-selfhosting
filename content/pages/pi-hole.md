@@ -14,10 +14,10 @@ it: at some point, you'll need to point your browser or SSH client at a specific
 
 Of course, every home router contains a DHCP server which allows setting some addresses as static. It's often a good choice. There's
 one important advantage of keeping your DHCP server on the router: fewer points of failure. DHCP is needed for the network to
-function and so is the router, if they're the one, that's only one device that really needs to work all the time. But a good reason to move
+function and so is the router, if they're the same device, that's only one device that really needs to work all the time. But a good reason to move
 DHCP out of the router is the possibility to backup configuration. Are you going to keep using the same router? I certainly don't, as the
 one I got from my internet provider is terrible and I'm going to replace it soon. I don't want to configure all the addresses manually again
-and home routers don't allow to export/import DHCP configuration, certainly not between the different brands.
+and home routers don't allow you to export/import DHCP configuration, certainly not between different brands.
 
 So I decided to run my own DHCP server as a first step before I start running servers. But why would I type IPs, when I could use local DNS?
 And if I have a DNS for the local network, it can also cache internet addresses. A typical website fetches content from 10 or more different
@@ -38,7 +38,7 @@ a nice addition.
 
 Pi in Pi-hole comes from Raspberry Pi, but the software can run pretty much everywhere where you can run Linux. I did my first experiment using
 Docker on my homelab server, but I quickly thought that Raspberry Pi is indeed a better option. Not because there was anything wrong with the
-Pi-hole itself, but DHCP and DNS are such important pieces of infrastructure they really should run on a separate device.  A homelab server is, by
+Pi-hole itself, but DHCP and DNS are such important pieces of infrastructure they really should run on a separate device. A homelab server is, by
 definition, something for experiments, you often need to reboot it and sometimes feel a need to rebuild it from scratch. Plus, if Pi-hole crashes
 (it never happened so far and I've been running it for months) when I'm away, it can be rebooted by pulling a plug.
 
@@ -50,22 +50,21 @@ way below current models, but more than enough for the job.
 The official operating system is **Raspberry Pi OS**, formerly called Raspbian. It's a port of Debian, my favourite distro. Perfect. I chose a 32-bit version
 (64-bit requires Pi 3 or 4), Lite edition, meaning no GUI. Unlike the PCs, on machines like this, you don't use the installer. Instead, you write the image
 to the micro-SD card using another computer. There is a special tool for that called Raspberry Pi Imager. It simplifies downloading and writing and
-even allows to do some customization. I chose the old school way - downloaded the image myself, wrote it with dd and customized the system later,
+even allows you to do some customisation. I chose the old school way - downloaded the image myself, wrote it with dd and customised the system later,
 but that's because I like the old way.
 
 ## Initial configuration
 
-My system is going to run headless, but I have to do the initial configuration. There are two options: you can temporarily connect a keyboard and monitor, 
-during the first boot you'll answer a few questions. Or you can mount the micro-SD card on the PC and modify a few config files. There's a third option
+My system is going to run headless, but I have to do the initial configuration. There are two options: you can temporarily connect a keyboard and monitor, during the first boot you'll answer a few questions. Or you can mount the micro-SD card on the PC and modify a few config files. There's a third option
 of using Raspberry Pi Imager, but I already skipped this. Since I like editing config files and I'm too lazy to go to another room and fetch an HDMI cable,
 I chose the second option. Again, feel free to use the other two if you don't feel like manually editing configs.
 
 There are two partitions on the micro-SD card, bootfs and rootfs. All I had to do was these 3 steps:
 
-- on bootfs, create a file called ssh or ssh.txt, it can be empty or has any content, just the presence of this file informs the system to start the SSH server,
+- on bootfs, create a file called ssh or ssh.txt, it can be empty or have any content, just the presence of this file informs the system to start the SSH server,
 - also on bootfs, create a file called userconf.txt containing a username and an encrypted password separated by a colon, to encrypt the password you use
 the command: openssl passwd -6
-- on rootfs (not bootfs this time!), edit file etc/dhcpcd.conf to provide network information (since the Pi is going to run the DHCP server, it obviously
+- on rootfs (not bootfs this time!), edit the file etc/dhcpcd.conf to provide network information (since the Pi is going to run the DHCP server, it obviously
 cannot get the configuration from DHCP)
 
 ```bash
@@ -113,14 +112,14 @@ worry, you can change all the settings later):
 
 ## Privacy versus security
 
-Do you want to keep logs of the DNS queries? It can be useful to see the activity on the network, eg. to debug something
+Do you want to keep logs of the DNS queries? It can be useful to see the activity on the network, e.g. to debug something
 or to find malware. But it also means you're logging all websites visited by you and other people in your home. Do you
 want it? I don't. Another problem with query logging is the size of logs - you're going to run out of disk space soon and
 you'll quickly wear out the SD card.
 
 My recommendation: answer "yes" during installation, but only keep this option on for a few minutes, to see that
 everything is running fine. Then, log in to the web interface, choose Settings/System, "Disable query logging", then
- "Flush logs" to delete those already written. Pi-hole will only keep completely anonymous statistics, eg. how many
+ "Flush logs" to delete those already written. Pi-hole will only keep completely anonymous statistics, e.g. how many
 clients are connected and how many DNS queries were sent. 
 
 ![Disabling query log]({static}/images/pihole-querylog.png)
@@ -148,13 +147,13 @@ Google and likely faster than your provider, despite being further from you. Wha
 doesn't log DNS queries. They have regular external audits to prove it.
 
 
-## Confguring DHCP
+## Configuring DHCP
 
 There needs to be exactly one DHCP server on the home network. Less than that and the devices won't get an IP address
 and won't connect. More than that, they will get confusing replies and likely also won't connect. Luckily, once the device gets the network configuration, it will keep it until it expires, so changing the DHCP server is simple and safe, provided
 that you do it in the correct order:
 
-- log in to the router and P-hole web UI,
+- log in to the router and Pi-hole web UI,
 - check the DHCP settings on the router, but don't disable it yet,
 - enter the same settings on the Pi-hole (except for DNS, which should be the address of the Pi-hole), but don't enable DHCP yet,
 - now, disable DHCP on the router and quickly, before someone complains that the network doesn't work, enable it on the Pi.
@@ -167,7 +166,7 @@ up on the dashboard.
 
 Some time later, you will see the "Currently active DHCP leases" list getting longer. On the right of every entry, you can see two icons.
 One to remove the device and the other to set a static lease (permanent address). It's a bit unintuitive: clicking this will move the entry
-to the list below  (Static DHCP leases configuration), but you need to click the + button next.
+to the list below (Static DHCP leases configuration), but you need to click the + button next.
 
 ## Filtering
 
@@ -182,13 +181,13 @@ regular expressions.
 Filtering with DNS is not as effective as using a browser extension. You can't block <https://example.com/ads/> while leaving the rest of <https://example.com/> .
 Of course, you can use both. Pi-hole can also increase security. Some malware connects to a specific domain. There are also lists of
 domains used by scammers - fake lotteries, SMS subscriptions, etc. Since I also visit Polish websites, I use a list that also includes
-Polish domains:  <https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-pihole-filters/KADhosts.txt>
+Polish domains: <https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-pihole-filters/KADhosts.txt>
 
 ![Configuring blocklists]({static}/images/pihole-listy.png)
 
 ## Local DNS
 
-Recommended domain for local use is **home.arpa**- not localdomain or example.com that many people use. To be fair, in most cases nothing bad would happen, but let's do it by the book. Simply add your devices in Local DNS -> DNS Records. Pity there's no option to automatically populate local DNS with DHCP entries. 
+Recommended domain for local use is **home.arpa** - not localdomain or example.com that many people use. To be fair, in most cases nothing bad would happen, but let's do it by the book. Simply add your devices in Local DNS -> DNS Records. Pity there's no option to automatically populate local DNS with DHCP entries.
 
 ## Backup
 
@@ -198,7 +197,7 @@ shared with other servers. It's much faster to use a web UI.
 But it's always a good idea to have backups. There are two ways to do it, for slightly different purposes. One is the option Teleporter in Settings.
 It allows you to save or revert configuration. It generates a small file containing things like DHCP and DNS settings, blocklists URLs (but not the blocklists), manually added entries. It's useful if you mess up the configuration or need to move the config to another device.
 
-The second option is to make an image of the micro-SD card. Take it out of Raspberry Pi, insert it into the reader, check (eg. with lsblk) which device name
+The second option is to make an image of the micro-SD card. Take it out of Raspberry Pi, insert it into the reader, check (e.g. with lsblk) which device name
 it got (I'll use sde in the example):
 
 ```bash
@@ -219,4 +218,4 @@ If you don't know dd, the options are:
 - conv=fsync ensures that data and metadata are really written before the program exits,
 - status=progress shows progress.
 
-It's enough to write it once, maybe repeat it occasionally (eg. once a year or before/after an OS upgrade).
+It's enough to write it once, maybe repeat it occasionally (e.g. once a year or before/after an OS upgrade).

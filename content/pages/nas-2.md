@@ -10,13 +10,13 @@ drive failures is RAID (note: RAID is not a backup, you should have both, or if 
 two, choose backup). RAID stands for Redundant Array of [Inexpensive|Independent] Disks. Linux can do
 RAID in software. In the past, software RAID was slow, but modern CPUs are so fast they don't really notice the
 extra load under normal conditions - although they could be a bottleneck during the array rebuild. Proper RAID
-controllers, eg. MegaRAID, offload everything from the CPU. I worked with them on the real servers (in those unusual
+controllers, e.g. MegaRAID, offload everything from the CPU. I worked with them on the real servers (in those unusual
 cases when you still use a physical server), but I'm not buying one for home. Some home motherboards offer hardware
 RAID, but do it so poorly that it's actually slower than software RAID. And I wouldn't trust them with my data.
 
 The most basic form is RAID1 or mirroring. The same information is written to each drive in a pair. If one
 fails, the other continues to function as if nothing happened. When both work, read throughput is increased
-compared to a single drive  (data can be read from both simultaneously), write throughput is similar to a single
+compared to a single drive (data can be read from both simultaneously), write throughput is similar to a single
 drive, maybe just a bit slower (need to write on both and it's mostly done simultaneously). Rebuilding the array
 after replacing the drive is a simple process of copying data. It's a very safe level, but wastes half of the disk space. 
 The nice thing about Linux software RAID is you can take out one disk from a pair, install it in a machine without
@@ -26,7 +26,7 @@ RAID5 stores parity information. Think of it like this. Disk 1: data set A, disk
 drive 2 fails, it can be recreated by calculating disk 3 - disk 1. Except the data and parity is distributed between the
 disks, not written on a dedicated one (that was RAID 3 and 4, but nobody uses them anymore). And you can have more
 disks than 3. And the operation is not the sum. But you get the idea. RAID5 can survive a failure of one drive in the array,
-if the other one fails before the rebuild is done, whole data is lost. RAID6 is similar but writes every parity block on 2
+if the other one fails before the rebuild is done, the whole data is lost. RAID6 is similar but writes every parity block on 2
 disks and survives the failure of 2 drives.
 
 A huge advantage of RAID5 is the efficient use of storage. RAID1 always has a 50% capacity of disks. RAID5 on 3 drives - 66%,
@@ -41,8 +41,8 @@ of them fails as well.
 For this reason, RAID5 is not recommended for professional use. For home uses, the opinions vary. I think that for small
 arrays (3-5 disks) the efficiency might be worth the risk. And you have a backup anyway, right? If you want to be
 extra safe, choose RAID1. What about RAID6? It only makes some sense for large arrays. Four disks are the minimum
-size and would give you the same efficiency as RAID1, but with more complexity. It's a level of choice for large arrays
-(that usually also have hot spares and replace disks every few years even if they don't show any problems, all to minimize
+number and would give you the same efficiency as RAID1, but with more complexity. It's a level of choice for large arrays
+(that usually also have hot spares and replace disks every few years even if they don't show any problems, all to minimise
 the risk of a second drive failure before the rebuild is done), but if you're managing one, you shouldn't be getting your
 knowledge from some random guy's blog.
 
@@ -63,14 +63,14 @@ and RAID, because it works like something in between the two:
 - you have between 1 and 6 parity disks, they need to be as large as the largest data disk.
 
 During normal operation, you only use the data disks, parity drives are not touched until you run the "snapraid sync" command
-(which is run either by cron, eg. at night, or manually after you changed something on the data drives, depending on the use case).
+(which is run either by cron, e.g. at night, or manually after you changed something on the data drives, depending on the use case).
 That works best for large files that are written once and never change - such as video files. Compared to proper RAID, there are some
 interesting advantages:
 
 - you can add and remove disks whenever you like and combine sizes,
 - the drives can already contain the data when added, they would still contain the data when removed,
 - you can also use it to restore files that were accidentally deleted (if you're fast),
-- there's very little disk space overhead (eg. if you use 1 parity disk for 4 data disks, that's only 20%)
+- there's very little disk space overhead (e.g. if you use 1 parity disk for 4 data disks, that's only 20%)
 - there's no slowdown and no CPU usage / extra IO during normal operation, only during sync,
 - you can setup your disks to power down and only the one that's currently accessed will spin up (RAID5 or 6 would spin up all disks)
 - if multiple disks break, you can still access the data on the other drives - unlike RAID5 and 6 when they would all be useless,
@@ -83,13 +83,13 @@ My choice? Standard Linux RAID1 for general-purpose storage, SnapRAID for videos
 
 It was inevitable that a disk would fail. In fact, two disks failed at once. How to deal with it?
 
-- unplug failed disks (they were both USB drives),
-- plug news disks of the same size (could be bigger, could probably be smaller if they weren't filled to the capacity, but I had the same size disks),
-- format them the same way (again, not necessary, but since the setup worked before, I didn't change anything), mount in the same place,
-- check the disk number in /etc/snapraid.conf, in my case these were d3 and d4,
-- run command to recover files: `snapraid -d d3 -l fix.log fix` for one disk and `snapraid -d d4 -l fix2.log fix`, or skip '-d DISKNAME' to fix everything (note: you should run it under screen or tmux as it will take a very long time - hours, maybe days)
-- run command to check the recovered files: `snapraid check` (again, many hours)
-- finally, re-synchronize the array: `snapraid sync` (should be quick)
+- I unplugged the failed disks (they were both USB drives),
+- plugged in new disks of the same size (could be bigger, could probably be smaller if they weren't filled to the capacity, but I had the same size disks),
+- formatted them the same way (again, not necessary, but since the setup worked before, I didn't change anything), mounted in the same place,
+- checked the disk number in /etc/snapraid.conf, in my case these were d3 and d4,
+- ran the command to recover files: `snapraid -d d3 -l fix.log fix` for one disk and `snapraid -d d4 -l fix2.log fix`, or skip '-d DISKNAME' to fix everything (note: you should run it under screen or tmux as it will take a very long time - hours, maybe days)
+- ran the command to check the recovered files: `snapraid check` (again, many hours)
+- finally, re-synchronised the array: `snapraid sync` (should be quick)
 
 ## Testing the drives
 
@@ -97,7 +97,7 @@ The disks I'm using are old, some of them more than 5 years old. But even with t
 can replace them under warranty. I did the following to quickly check the USB drives:
 
 - connected them to my laptop one by one,
-- run the short self-test:  `smartctl -t short /dev/sdb`
+- run the short self-test: `smartctl -t short /dev/sdb`
 - if there was already some data, checked the filesystem: `fsck -f /dev/sdb1`
 - short self-test takes about 2 minutes, after that time I would see the results plus all other SMART data: `smartctl -a /dev/sdb`
 
@@ -107,15 +107,15 @@ I copied the data, wiped the drives and threw them away.
 
 Should you immediately throw away the drive showing any errors in SMART data? It's up to you, if you trust your RAID and backup,
 you might take your chances. I'd say that one-digit numbers in Reallocated_Sector_Ct or Current_Pending_Sector are no cause for
-alarm. Some drives develop a few bad sectors early and then continue to work fine for years. But if you see the numbers raising
+alarm. Some drives develop a few bad sectors early and then continue to work fine for years. But if you see the numbers rising
 or SMART overall-health self-assessment goes bad, you better get a new drive soon. Remember that a drive can fail without
 a SMART warning anyway.
 
 In fact, two other drives were showing some "not great, not terrible" SMART attributes. I marked them as suspicious and made sure
 they are backed up. It's handy to have a label writer when you're dealing with 20 USB drives...
 
-Then after connecting the drives to the target system it was time for a proper checkup. First, a long SMART selftest which takes several
-hours:  `smartctl -t long /dev/sdX`
+Then after connecting the drives to the target system it was time for a proper checkup. First, a long SMART self-test which takes several
+hours: `smartctl -t long /dev/sdX`
 
 Another thing I did was a badblocks test overwriting the whole disk: `badblocks -b 4096 -wsv /dev/sdX`
 To reiterate, **it overwrites everything on the disk!** Only use it with an empty drive. And it takes days. It was quite a pain,
@@ -138,13 +138,13 @@ can become /dev/sdf on the next reboot. There are several ways to deal with it:
 I chose labels, they are easy to use and good enough for a small setup. All I needed was an extra parameter when creating the filesystem:
 `mkfs.ext4 -m 0 -T largefile4 -L 'video1' /dev/sde1`
 
-Then use the same label in /etc/fstab :
+Then use the same label in /etc/fstab:
 ```bash
 LABEL=video1     /media/video1    ext4   nodev,noexec,noatime,nofail,x-systemd.device-timeout=4 0 0
 ```
 
 A note on other mkfs options: `-m 0` disables reserving space for root - by default 5% is reserved, that's only possibly useful on a system disk.
-Option `-T largefile4` changes the inode size to 4MB from the default of 16KB. Inode is an allocation unit. 4MB is a good value for
+Option `-T largefile4` changes the inode size to 4MB from the default of 16KB. An inode is an allocation unit. 4MB is a good value for
 video files which are hundreds of MB to several GB in size, because unused inodes take up some disk space. But the size taken by each
 file is rounded up to the inode size, and if you run out of inodes you can't write anything to the disk even if it has free space, so for
 filesystems containing text documents, photos, applications, etc. - pretty much everything other than videos or filesystem images - you

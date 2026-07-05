@@ -8,7 +8,7 @@ Tags: storage
 
 There are some distributions of Linux or FreeBSD specially designed for NAS. Or you can use ordinary Linux
 (or Windows, I won't judge). NAS distribution simplifies management, you get something similar to a Synology
-or Qnap device. But you need to play by their rules, while ordinary Linux can be customized any way you like.
+or QNAP device. But you need to play by their rules, while ordinary Linux can be customised any way you like.
 I don't have a problem configuring Linux servers without a GUI. Plus, on my last two attempts, I chose a vanilla
 system and used Ansible. I can reuse the same playbook. That's the nice thing about Ansible: configuring my NAS for
 the first time took me more time than doing the same thing by hand, but the next attempts were almost fully automated.
@@ -51,7 +51,7 @@ It does quite a lot, so I split it for readability and once again the main file 
 - import_tasks: post-tasks.yml
 ```
 
-File tasks/samba.yml  is mostly taken from <https://github.com/bertvv/ansible-role-samba> with only minor modifications. I added three
+File tasks/samba.yml is mostly taken from <https://github.com/bertvv/ansible-role-samba> with only minor modifications. I added three
 files with tasks required before and after configuring Samba.
 
 Before:
@@ -62,15 +62,15 @@ Before:
 
 After:
 
-- install and configure wsdd, or  Web Service Discovery, software that allows Windows to find Samba shares,
+- install and configure wsdd, or Web Service Discovery, software that allows Windows to find Samba shares,
 - install and configure hd-idle, software that turns off inactive USB drives (video disks are going to be unused most of the time)
 
 
 ### Alternative to SnapRAID
 
 Before I discovered SnapRAID, when I tried to create a NAS only with USB drives, I used a different solution to keep my data safe from
-drive failure. I added the drives in pairs, eg. if a main drive was called "video1" there was also "video1-backup". And I generated a script
-to copy all data to the backup disk. That's where Ansible really shined. All I needed was a few lines in the playbook:
+drive failure. I added the drives in pairs, e.g. if a main drive was called "video1" there was also "video1-backup". And I generated a script
+to copy all data to the backup disk. That's where Ansible really shone. All I needed was a few lines in the playbook:
 
 ```yaml
   name: Generate backup script
