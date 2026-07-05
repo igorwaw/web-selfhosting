@@ -1,7 +1,9 @@
-Title: Storage server, part 2: disk drives, RAID and SnapRAID
-Date: 2023-04-14 17:36
-Status: published
-Tags: storage
+---
+title: "Storage server, part 2: disk drives, RAID and SnapRAID"
+date: 2023-04-14T17:36:00
+draft: false
+tags: ["storage"]
+---
 
 ## Which RAID is right?
 

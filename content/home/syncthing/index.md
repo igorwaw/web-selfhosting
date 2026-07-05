@@ -1,7 +1,9 @@
-Title: Syncthing, synchronising files between the devices
-Date: 2023-05-10 17:40
-Status: published
-Tags: services
+---
+title: "Syncthing, synchronising files between the devices"
+date: 2023-05-10T17:40:00
+draft: false
+tags: ["services"]
+---
 
 Sharing files between your devices using a cloud service such as Google Drive or Dropbox is incredibly convenient.
 Wouldn't it be nice to do the same locally, with complete privacy and without using your internet connection? Sure it would.

@@ -1,7 +1,9 @@
-Title: Why Self-hosting?
-Date: 2023-04-14 17:30
-Status: published
-Tags: intro
+---
+title: "Why Self-hosting?"
+date: 2023-04-14T17:30:00
+draft: false
+tags: ["intro"]
+---
 
 I think we're on the verge of a "back to the past" moment in IT. For the last 15 years or so, we heard that on-premises infrastructure is dead,
 desktop software is not needed, everything should run on the cloud. Preferably as a collection of microservices, utilising NoSQL databases

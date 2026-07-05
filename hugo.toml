@@ -1,0 +1,54 @@
+baseURL = 'https://selfhosting.too-many-machines.com/'
+locale = 'en'
+title = 'Self Hosting'
+theme = 'hugo-theme-stack'
+summaryLength = 40
+copyright = "© Igor Wawrzyniak"
+defaultContentLanguage = "en"
+enableRobotsTXT = true
+timeZone = "Europe/Stockholm"
+disableKinds = ["section", "taxonomy", "term"]
+
+[params]
+  mainSections = ["home", "internet", "general"]
+
+[params.comments]
+  enabled = true
+  provider = "remark42"
+
+[params.comments.remark42]
+  host = "https://comments.too-many-machines.com"
+  site = "selfhosting"
+  max_shown_comments = 100
+  locale = "en"
+  show_email_subscription = false
+
+[[menu.main]]
+  name = "Main"
+  url = "https://too-many-machines.com/"
+  weight = 1
+
+[[menu.main]]
+  name = "Selfhosting"
+  url = "https://selfhosting.too-many-machines.com/"
+  weight = 2
+
+[[menu.main]]
+  name = "Advent of Code"
+  url = "https://advent.too-many-machines.com/"
+  weight = 3
+
+[[menu.main]]
+  name = "Photo"
+  url = "https://photo.too-many-machines.com/"
+  weight = 4
+
+[[menu.main]]
+  name = "Random Stuff"
+  url = "https://random.too-many-machines.com/"
+  weight = 5
+
+[[menu.main]]
+  name = "Easy-DYI"
+  url = "https://easy-dyi.too-many-machines.com/"
+  weight = 6

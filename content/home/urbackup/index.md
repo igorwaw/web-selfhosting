@@ -1,7 +1,9 @@
-Title: UrBackup, local backup
-Date: 2024-11-24 17:40
-Status: draft
-Tags: backup
+---
+title: "UrBackup, local backup"
+date: 2024-11-24T17:40:00
+draft: true
+tags: ["backup"]
+---
 
 In the previous step, I configured my NAS to backup files to iDrive. Now I'll configure my computers to backup to the NAS, and include the location in the iDrive backup. How many copies of data will I get?
 

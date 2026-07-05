@@ -1,7 +1,9 @@
-Title: Pi-hole - DHCP and DNS
-Date: 2023-04-14 17:30
-Status: published
-Tags: network
+---
+title: "Pi-hole - DHCP and DNS"
+date: 2023-04-14T17:30:00
+draft: false
+tags: ["network"]
+---
 
 DHCP is a necessary component of the home network. You probably don't want to manually assign IPs. It would be quite inconvenient on the laptop
 that travels between several networks, even more on the smartphone. On IoT devices lacking proper screens and keyboards, it's plain impossible.
@@ -24,7 +26,7 @@ And if I have a DNS for the local network, it can also cache internet addresses.
 servers, so there's a noticeable difference when the DNS replies in 2 milliseconds as opposed to 200 milliseconds. I could use bind and isc-dhcpd
 like I did in the past when configuring "real" networks, but there are servers more tailored to the needs of home users.
 
-![Pi-hole GUI]({static}/images/pihole2.png)
+![Pi-hole GUI](pihole.png)
 
 **Pi-hole** was designed as a DNS sinkhole - a server that can block some content by replying "address unknown". Typical use is blocking ads and
 tracking: on websites, but also in mobile applications and IoT devices that can't use traditional ad-blocking software. It can also be used to
@@ -122,7 +124,7 @@ everything is running fine. Then, log in to the web interface, choose Settings/S
  "Flush logs" to delete those already written. Pi-hole will only keep completely anonymous statistics, e.g. how many
 clients are connected and how many DNS queries were sent. 
 
-![Disabling query log]({static}/images/pihole-querylog.png)
+![Disabling query log](pihole-querylog.png)
 
 Warning, there's another option in Settings/Privacy to disable *displaying* some private information, but if you don't
 disable logging, it will still be written.
@@ -158,7 +160,7 @@ that you do it in the correct order:
 - enter the same settings on the Pi-hole (except for DNS, which should be the address of the Pi-hole), but don't enable DHCP yet,
 - now, disable DHCP on the router and quickly, before someone complains that the network doesn't work, enable it on the Pi.
 
-![Enabling DHCP]({static}/images/pihole-dhcp.png)
+![Enabling DHCP](pihole-dhcp.png)
 
 It's a good idea to test. Get another device (not the one connected to the router and Pi) and force it to renew the IP, for example
 by enabling and disabling airplane mode. You should see a client appearing on the Pi-hole DHCP server and DNS queries showing
@@ -183,7 +185,7 @@ Of course, you can use both. Pi-hole can also increase security. Some malware co
 domains used by scammers - fake lotteries, SMS subscriptions, etc. Since I also visit Polish websites, I use a list that also includes
 Polish domains: <https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-pihole-filters/KADhosts.txt>
 
-![Configuring blocklists]({static}/images/pihole-listy.png)
+![Configuring blocklists](pihole-listy.png)
 
 ## Local DNS
 

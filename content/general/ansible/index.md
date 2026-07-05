@@ -1,7 +1,9 @@
-Title: Sidenote 1 - Using Ansible
-Date: 2023-11-19 17:40
-Status: published
-Tags: services
+---
+title: "Sidenote 1 - Using Ansible"
+date: 2023-11-19T17:40:00
+draft: false
+tags: ["services"]
+---
 
 I use Ansible to configure my home computers. I started doing it to learn the tool, but is it really worth using it at home other than for education? Maybe.
 
@@ -49,7 +51,7 @@ Which is why I prepared a role "linux_common". Then there's role "linux_dev" tha
 
 My home server Firefly gets many roles. There's one called firefly which contains settings specific to this machine, but there are also roles for Jellyfin and Prometheus. In future I might decide to move them elsewhere, so I'll remove those roles from Firefly and include them in another machine's playbook.
 
-![Ansible role directory tree]({static}/images/ansible-role.png)
+![Ansible role directory tree](ansible-role.png)
 
 Ansible uses some conventions about directory structure and file naming. You can ignore them, but adhering to them will make life easier for everyone. This is an example for a moderately complex role.
 

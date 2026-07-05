@@ -1,7 +1,9 @@
-Title: Sidenote 2 - Ansible fact gathering
-Date: 2024-03-22 17:40
-Status: published
-Tags: services
+---
+title: "Sidenote 2 - Ansible fact gathering"
+date: 2024-03-22T17:40:00
+draft: false
+tags: ["services"]
+---
 
 If you look closely at the playbook's output, you will see that it always begins with "Gathering facts". It takes a few seconds, which annoys many users - especially when you're developing and therefore running the same playbook many times.
 
