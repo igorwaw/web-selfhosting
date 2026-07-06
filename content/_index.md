@@ -25,3 +25,4 @@ comments: false
 
 - [Generating websites with Hugo](/internet/hugo/)
 - [(OUTDATED) Generating websites with Pelican](/internet/pelican/)
+- [Creating a photo gallery with Hugo and Mapael](/internet/gallery/)
