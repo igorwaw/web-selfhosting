@@ -26,7 +26,7 @@ Static websites often go together with git. If you're familiar with it, I highly
 
 ### Or let the AI do it
 
-The first time I used Hugo, I did all the steps below manually. This time I used Claude. It turned out it could competently handle most of the steps above on its own: install the theme, change configs, rebuild, check the result, correct if needed. It worked especially well for migrating from Pelican to Hugo, since it required some boring steps: converting front matter and fixing image paths. I also used it to check for typos and other language errors (English is not my first language).
+The first time I used Hugo, I did all the steps below manually. This time I used Claude. It turned out it could competently handle most of the steps on its own: install the theme, change configs, rebuild, check the result, correct if needed. It worked especially well for migrating from Pelican to Hugo, since it required some boring steps: converting front matter and fixing image paths. I also used it to check for typos and other language errors (English is not my first language).
 
 That doesn't mean you can skip reading this guide, though. Even if you don't run the commands, you need to understand the concepts. AI agents make mistakes and need pointing in the right direction.
 
@@ -51,11 +51,8 @@ I had used another website generator in the past - Pelican. In 2023 I wanted to 
 
 ### Some new vocabulary
 
-A handful of terms come up constantly:
-
-- **Markdown**: a simple, text-only file format that offers some formatting: headings, bold/italic, tables etc. Used by many static website generators and a plethora of other apps.
-- **Front matter**: a small block of metadata at the very top of a content file, between two lines of `---`. It's where you set things like the title, date, tags and whether the page is a draft.
-- **Section**: content is grouped into sections, one per top-level directory under `content`. For example, everything under `content/internet/` belongs to the "internet" section.
+- **Markdown**: a simple, text-only file format that offers some formatting: headings, bold/italic, tables etc. Used by many static website generators (plus GitHub, Jupyter and many other places, if you're in IT, you use it everyday).
+- **Front matter**: a block of metadata at the top of a content file. Here you set title, date, tags, draft status etc.
 - **Theme**: a separate package of layout and styling files that decides how your content looks, without touching the content itself. Swapping themes shouldn't require rewriting your posts.
 - **Archetype**: a template used when you create a new page, so it starts with some sensible front matter already filled in.
 - **Shortcode**: a small reusable snippet you can call from inside a Markdown file for things plain Markdown can't do on its own, such as embedding a video.
@@ -72,11 +69,11 @@ hugo new site my-website
 cd my-website
 ```
 
-This generates a skeleton directory: `content` for your pages, `layouts` for any template overrides, `static` for files copied verbatim (favicons, robots.txt), `archetypes` for new-page templates, and a configuration file (`hugo.toml`, or `.yaml`/`.json` if you prefer).
+This generates a skeleton directory: `content` for your pages, `layouts` for any template overrides, `static` for files copied verbatim (favicons, robots.txt), `archetypes` for new-page templates, and a configuration file (`hugo.toml` by default, or `.yaml`/`.json` if you prefer).
 
 ## Choosing a theme
 
-Browse the theme gallery on the Hugo website, then install your chosen one. There are several ways to do it, the recommended one is to use git submodule:
+Browse the theme gallery on the Hugo website and choose one. There are several ways to install the theme, the recommended one is to use git submodule:
 
 ```bash
 git submodule add https://github.com/some-author/some-theme themes/some-theme
@@ -92,7 +89,7 @@ Most themes ship an `exampleSite` folder with a sample configuration - copying t
 
 ## Configuring the site
 
-At a minimum, your `hugo.toml` needs a `baseURL` (the production URL of your site), a `title`, and the `theme` name. This is where you also configure how your sidebar/top menu will look and hook up external systems (e.g. for comments). Here's how hugo.toml for this website begins:
+At a minimum, your `hugo.toml` needs a `baseURL` (the production URL of your site), a `title`, and the `theme` name. This is where you also configure what your sidebar/top menu will contain and hook up external systems (e.g. for comments). Here's how hugo.toml for this website begins:
 
 ```toml
 baseURL = 'https://selfhosting.too-many-machines.com/'
@@ -111,7 +108,7 @@ Most variables are theme-specific and live under `[params]`. The first time I cr
 
 ## Page bundles: keeping content and images together
 
-In many older static site setups (Pelican included), your Markdown files live in one directory and your images live in another, and you glue them together with a path like `{static}/images/photo.png`. Hugo encourages a tidier approach called a page bundle: a directory containing an `index.md` plus any images or other files that the page needs, all sitting next to each other.
+In many older static site setups (Pelican included), your Markdown files live in one directory and your images live in another, and you glue them together with a path like `{static}/images/photo.png`. In Hugo, another approach is possible: every page is a directory, containing an `index.md` plus all images and other files that the page needs.
 
 ```text
 content/internet/hugo/
@@ -119,35 +116,25 @@ content/internet/hugo/
   screenshot.png
 ```
 
-Inside `index.md`, you reference the image with just its filename - `![Screenshot](screenshot.png)` - no need to know or care about the final URL. Hugo also uses this arrangement to automatically generate resized, responsive versions of your images at build time. This kind of bundle (one page, no children) is called a "leaf bundle". A "branch bundle" is the same idea but for a section front page - a directory with an `_index.md` that can have further pages underneath it, such as a section listing page.
+To use the image in a page, use just the filename - `![Screenshot](screenshot.png)` - no need to know the final URL. Hugo will take care of it. It will also automatically generate resized versions of your images.
+
+This kind of bundle (one page, no children) is called a "leaf bundle". A "branch bundle" is the same idea but for a section front page - a directory with an `_index.md` that can have further pages underneath it, such as a section listing page.
 
 ## Adding your first page
 
-You can create a new page bundle by hand, or let Hugo scaffold it from an archetype:
+You can create a new page bundle with the command: `hugo new content posts/my-first-post index.md`.
 
-```bash
-hugo new content posts/my-first-post/index.md
-```
+This creates the file with front matter based on `archetypes/default.md`. By default it has `draft: true` setting in the front matter so it won't accidentally get published. Open it, write your content in Markdown below the front matter, drop any images into the same directory, and change `draft` to `false` when you're ready to publish.
 
-This creates the file with front matter pre-filled from `archetypes/default.md`, defaulting to `draft: true` so it won't accidentally get published. Open it, write your content in Markdown below the front matter, drop any images into the same directory, and flip `draft` to `false` when you're ready to publish.
+You don't have to use this method though. You can just create a directory and write index.md by hand, or copy and modify an existing page, whatever is convenient for you.
 
 ## Previewing and building
 
-While writing, run the built-in development server, which rebuilds and refreshes your browser automatically as you save:
+Hugo has a built-in development server that runs on http://localhost:1313/. It rebuilds and refreshes your browser automatically when you save the markdown file.
 
 ```bash
 hugo server
 ```
-The server will run at http://localhost:1313/
-
 ![Screenshot](screenshot.png)
 
-When you're happy with the result, generate the final static files with:
-
-```bash
-hugo --minify
-```
-
-This writes everything to the `public` directory by default, ready to be uploaded to any static hosting provider or web server.
-
-You can automate building and uploading the website e.g. using a Continuous Deployment system, but that's a story for some other day.
+When you're done, generate the final static files with a simple `hugo` or `hugo --minify` to reduce size of CSS and scripts. This writes everything to the `public` directory, ready to be uploaded to your web server. You can automate building and uploading the website e.g. using a Continuous Deployment system, but that's a story for some other day.
