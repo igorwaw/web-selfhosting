@@ -1,5 +1,5 @@
 ---
-title: "Why Self-hosting?"
+title: "Why Self hosting?"
 date: 2023-04-14T17:30:00
 draft: false
 tags: ["intro"]
@@ -17,25 +17,25 @@ Now, don't get me wrong. All of these technologies have good uses, but they are 
 
 ## Good and bad reasons
 
-Education is one good reason. Many IT professionals maintain a "home lab" to experiment with technology. Isn't it convenient when the lab
+**Education** is one good reason. Many IT professionals maintain a "home lab" to experiment with technology. Isn't it convenient when the lab
 can also do something useful?
 
-Privacy is another good reason. I see some people declaring that privacy is lost anyway and they might as well share all their personal information.
+**Privacy** is another good reason. I see some people declaring that privacy is lost anyway and they might as well share all their personal information.
 I see others that meticulously control all their data to make sure it never leaves a system they control. I'm neither. I don't believe fully reclaiming
 your data is even possible and the more you try to control it, the more you hit the law of diminishing returns. But some things can and should be
 done.
 
-How about owning your data? Cloud service can be discontinued at any moment. Small companies go out of business, corporations
+How about **owning your data**? Cloud service can be discontinued at any moment. Small companies go out of business, corporations
 decide to cut the margins. Especially Google is famous for killing many of their projects, even if they achieved a moderate success.
 It is also a known problem with IoT devices - many people discovered their smart bulb or socket is no longer smart (or doesn't work at all)
 when it can't connect to the manufacturer's servers. 
 
-Less reliance on the internet. OK, I'm not making any plans for living offline, that would be way too uncomfortable. But if I have most
+**Less reliance on the internet**. OK, I'm not making any plans for living offline, that would be way too uncomfortable. But if I have most
 of my data and software locally, I can live with slow or unreliable connection. And yes, it is an issue even in the most developed regions
 of the world. Perhaps you would like to live in a village or spend some time in an RV or a boat one day? Outside the towns, mobile
 internet is often the only option. Just a few kilometres from the cell tower and you don't even get that. 
 
-Cutting cost is probably not a good reason. You may get some savings, but it's not guaranteed. You might cut down on cloud subscriptions,
+**Cutting cost is not a good reason**. You may get some savings, but it's not guaranteed. You might cut down on cloud subscriptions,
 but add the cost of hardware and electricity. Not to mention the time spent on configuring all this.
 
 ## Where am I now?
