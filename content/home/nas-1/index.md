@@ -5,173 +5,128 @@ draft: false
 tags: ["storage"]
 ---
 
-A house is not a home without a NAS. OK, maybe I'm not really that emotionally attached to my file server,
-but it's one of the first things you need if you want to rely less on the cloud. What can you use it for?
+(first published on 2023.03.14, rewritten on 2026.07.07)
+
+A house is not a home without a NAS. OK, maybe I'm not really that emotionally attached to my file server, but it's one of the first things you need if you want to rely less on the cloud. What can you use it for?
 
 - sharing files between the devices,
-- storing large data you create, such as photos and videos - laptops and even desktops tend to have
-smallish SSD drives these days, not really suitable for media content,
+- storing large data you create, such as photos and videos - laptops and even desktops tend to have smallish SSD drives these days, not really suitable for media content,
 - backups,
 - storing music, movies and TV shows.
 
-You can also use the same machine as an all-purpose server. With virtualization and containers, it's easy to
-separate different workloads (you can run everything on the same OS, but the system might get messy).
+You can also use the same machine as an all-purpose server. With virtualization and containers, it's easy to separate different workloads (you could run everything on the same OS, but the system might get messy).
 
-I'm trying to keep my IT green (see separate sidenote for details), which in short means:
+I'm trying to keep my IT green (see [separate post](/general/green-it/) for details), which in short means:
 
 - the fewer boxes running 24/7, the better,
 - prefer old hardware to new one.
 
+## What I have now
 
-## Commercial vs DIY
+Before going into details and considerations, this is my current setup
 
-The easiest option is to buy an off-the-shelf NAS such as Synology or QNAP. I had one in the past. The good thing
-about them is you can get them up and running in less than an hour and without much knowledge.
-Just install disks, plug it to the network and answer a few questions in the web UI. Even though I had the
-knowledge (it was actually my second NAS, the first one being a DIY), I chose Synology for convenience.
+| Part        | Model                    | source         |
+|-------------|--------------------------|----------------|
+| Case        | Corsair, unknown (huge) model  |  used    |
+| Motherboard | Asus H87I-PLUS, Mini-ITX | used           |
+| CPU         | Intel Pentium G3220T     | (came with MB) |
+| RAM         | 8GB                      | (came with MB) |
+| HDD         | 6 different ones         | new and already owned  |
+| SSD         | Plextor PX-256M6S        | already owned  |
+| PSU         | Thermaltake Smart BM2 450W | new          |
+| other       | extra SATA card          | new            |
 
-But the cheap models only have 2 disk bays, very little RAM and a pathetic CPU. They work fine as basic
-file servers, but doing anything in the GUI is an exercise in frustration. Click, wait for 10 seconds until it
-responds, click, wait again. You'll quickly miss the command line. I used RAID1 for storage so when I ran
-out of space, the only option would be to replace both disks with the bigger ones, old disks would be
-useless. Enough, back to the DIY.
+## My NAS history
 
+### Commercial vs DIY
 
-## To USB or not to USB?
+The easiest option is to buy an off-the-shelf NAS such as Synology or QNAP. I had one in the past (**Synology DS216se**). The good thing about them is you can get them up and running in less than an hour and without much knowledge. Just install disks, plug it into the network and answer a few questions in the web UI. 
 
-I also have a drawer full of USB HDDs. Few were mine, most I literally inherited. Many of them are small
-and not really worth bothering, but about a dozen are 1TB. I experimented with a NAS running on
-a single-board system (Odroid C1+, similar to Raspberry Pi 3 but much cheaper) and a small-form PC (Dell
-Wyse) and decided I REALLY don't want a NAS on USB drives. You can run one or two semi-reliably, but
-the more you have, the probability of problems approaches 1. Sometimes the plug moves in the socket and you
-end up with a corrupt filesystem. Or the cable cannot handle the power. Or the disks run fine when you
-initially connect them one by one, but during the next reboot they will start all at once drawing too
-much current (yes, I tried a powered USB hub) and only half of them will show up. Of course, you can't
-have RAID on USB (technically, it is possible, the system wouldn't stop you, but it's a really bad idea if your
-drives can disappear at any moment). 
+But the cheap models only have 2 disk bays, very little RAM and a pathetic CPU. They work fine as basic file servers, but doing anything in the GUI is an exercise in frustration. Click, wait for 10 seconds until it responds, click, wait again. You'll quickly miss the command line. If you want to run any extra services, you're limited by both hardware resources and software available. I used RAID1 for storage so when I ran out of space, the only option would be to replace both disks with the bigger ones, old disks would be useless. Enough, back to the DIY.
 
-## Choosing hardware
+### To USB or not to USB?
 
-Many people choose an advanced filesystem such as ZFS for the storage server. They have some advantages
-(e.g. built-in RAID and snapshots), but most of them can be imitated with underlying layers such as MD and LVM. And they
-need a lot of RAM and CPU power, in some cases also SSD for cache.
+I have a drawer full of USB HDDs. A few were mine, most I literally inherited. Many of them are small and not really worth bothering, but about a dozen are 1TB. I experimented with a NAS running on a single-board system (**Odroid C1+**) and a small-form PC (**Dell Wyse**) and decided I REALLY don't want a NAS on USB drives. You can run one or two semi-reliably, but the more you have, the probability of problems approaches 1. Sometimes the plug moves in the socket and you end up with a corrupt filesystem. Or the cable cannot handle the power. Or the disks run fine when you initially connect them one by one, but during the next reboot they will start all at once drawing too much current (yes, I tried a powered USB hub) and only half of them will show up. Of course, you can't have RAID on USB (technically, it is possible, the system wouldn't stop you, but it's a terrible idea if your drives can disappear at any moment). 
 
-If you can live with plain old filesystems, you don't really need much. Any reasonably modern (say, less than 15 years)
-mainline CPU from Intel or AMD is already way more powerful than the puny processor in commercial NAS, even most
-Atoms are. Faster CPUs generally draw more power and require more (louder) cooling, but that's only true if you compare 
-models from the same generation. Very old CPUs also couldn't scale down the power when idle (or not so effectively).
-Rule of the thumb for Intel CPUs: if it's called "Core i-some number" OR if it's called something else like Pentium or Xeon,
-but it's the same microarchitecture as "Core i-something" (check Wikipedia), it should be OK. Xeons are server CPUs, with high
-performance, bigger cache and more cores. In the past they were power hogs, these days some of them can scale
-down quite well. Check the specs to be sure.
+### Searching for a case
 
-BTW, I wish Intel used a more consistent naming convention as they did in the previous century. Now Core i5 is supposed
-to be faster than i3, but it's not true if i3 is several generations younger. Not to mention Pentium and Celeron brands which
-don't really mean anything as the same name is used for 20 or 30 years.
+For a NAS, you want a case that can hold many drives: preferably, more than you intend to install at the moment, to have space for extension. Such cases are relatively easy to buy in the USA, but not in Europe. It's quite a niche product after all, very few PCs use more than 1 or 2 drives. Those that can be found are twice as expensive as in the States, buying straight from the US vendor means paying for shipping and long waiting.
 
-As for RAM, even a small one like 1 GB is OK for the start, Linux would only need a few dozen MB anyway and use the rest for
-disk cache. You should connect the NAS using Ethernet, not Wi-Fi. 1Gbit is a reasonable choice, 100Mbit can sometimes slow
-things down (but if you have an old LAN, don't worry too much). Faster than 1Gbit is not needed for a generic file storage.
+But I found one interesting option: **Kolink Satellite Cube**. According to the specs, it had 4x 2.5" and 3x 3.5" bays and it held a mini-ITX motherboard - not perfect, but OK. It was cheap and quite small. I ordered the case and searched for the MB. Mini-ITX are hard to find, but I found a great second-hand option, with 8GB RAM, a Pentium CPU that's really a 4th generation Intel Core and best of all, 6 SATA ports!
 
-But I also wanted to run other services on the same box, in containers and VMs. To sum up: I was checking the second-hand
-market for a motherboard with:
+When I got the case, I discovered the specs were wrong in two ways. One, it could hold a mini-ITX or a micro-ATX motherboard, the latter is slightly larger and much more popular. Fine, if I knew that maybe I would have found the motherboard quicker, but I'm satisfied with the one I got. But the other thing was worse. Turned out I can have 4x 2.5" OR 3x 3.5", but not both.
 
-- a 64-bit CPU with virtualization extensions
-- preferably a home or low-power model rather than Xeon or Core i7,
-- at least 1GB of RAM with an option to expand to 8GB
-- multiple SATA ports,
-- USB3 ports,
-- PCI Express slots for further expansion if needed.
+I lived with this limited space until I got tired of it and searched eBay. I found a person nearby selling **Corsair gaming case** and the specs specifically mentioned multiple drive bays. I don't even know how many hard drives it can take, but I put 6 and there's some space left. Plus, the 5.25" drive bays can be reused for HDDs if I need even more.
 
-## The plan
+That also means I can switch to a full-size ATX motherboard in future. Currently, the mini-ITX one I have is enough and can be installed in a huge case, even if it looks funny sitting in one corner of it.
 
-So, I have two 3TB 3.5" disks from my Synology. I have a bunch of external disks, some of which could be removed
-from the case. The process is called shucking and it's quite popular among self-hosters. External drives are often
-cheaper than internal ones, despite the extra cost of the enclosure. It's for a reason: they are built with lower
-quality components (or they failed QA tests), they might live for years if they are only used occasionally, but won't
-last long with more intensive use. But I already got them and I'm prepared that any drive can fail at any moment.
-I might as well use them for the next year or two, when they all fail I will replace them with larger and more reliable
-drives.
+## Hardware considerations - mine and yours
 
-Unfortunately, some USB drives can't be shucked. They don't have SATA and power connectors and the USB port is
-soldered directly onto the board. So here's the plan:
+### CPU
 
-- I will use 2x3TB 3.5" HDDs as RAID1, for the generic storage, 
-- I will connect internally as many 2.5" drives as I can, the rest externally, and use them for videos, since the files wouldn't change often I can skip RAID and instead use Snapraid (see later parts)
-- One of the 2.5" will be used for backups of my other machines
+If you want only a storage server, or just a few small services on top of it, you don't need much processing power. Any reasonably modern (say, less than 15 years old) mainline CPU from Intel or AMD is already way more powerful than the puny processor in a commercial NAS. Rule of thumb for Intel CPUs: if it's called "Core i-some number", it should be OK. 
 
-These 2.5" will be off most of the time which is probably the right usage pattern for USB drives.
+If you want more processing power (e.g. for video transcoding), look for something slightly newer - not necessarily new and top of the line. Still more? If you have funds, you can pack an unreasonable amount of CPU power in one box. I used to work with servers that had 2x128 cores, they were used for physics simulations. But I don't have enough imagination to think why anyone would need that at home.
 
-## A case for the proper case
+On the other end of the spectrum, there are Intel Atom (for low power usage devices), Pentium and Celeron (budget versions of mainline CPUs). I really wish Intel used a more consistent naming convention. These brands have been in use for decades and without checking the exact model, you won't know if it's just slightly slower than a modern laptop, or a completely unusable 30-year-old junk.
 
-I need a case that can hold many drives. The cheapest option would be a second-hand server in a 19" rack-mountable
-case. They look very cool and in the past I wanted to have one at home, but then I worked in a datacenter and discovered
-how much noise they make. And their power usage is enormous. I need something more suitable for home:
-a case with many drive bays, but using a standard power supply, cooling and motherboard.
+My CPU is Intel Pentium G3220T, which is a slightly slower (no HT, no AVX) version of a 4th generation Core i3. Slow by today's standards, yet most of the time it's only used at 1%. 
 
-Searching the internet I found they are relatively easy to buy in the USA, but not in the UK where I live. It's quite a niche product after
-all, very few PCs use more than 1 or 2 drives. Those that can be found are twice as expensive as in the States, buying straight
-from the US vendor means paying for shipping and long waiting.
+Two things worth checking when buying used hardware:
 
-But I found one interesting option: *Kolink Satellite Cube*. According to the specs, it has 4x 2.5" and 3x 3.5" bays.
-It holds a mini-ITX motherboard - not perfect, but OK. It's cheap and quite small. I ordered the case and searched for the MB.
-Mini-ITX are hard to find, but I found a great second-hand option, with 8GB RAM, a Pentium CPU that's really a 4th generation
-Intel Core and best of all, 6 SATA ports!
+- Does the CPU have virtualization extensions? You need them to run VMs at reasonable speeds. All mainline CPUs since roughly 2015 have them, if it's older or unusual - check.
+- Intel Xeon and AMD EPYC are server CPUs. Some are power hogs, others scale down just as well as home models. If you find a good offer on them, there's a chance to buy some real processing power cheaply, but check idle power usage. Note that server motherboards might not fit standard PC cases.
 
-When I got the case, I discovered the specs were wrong in two ways. One, it can hold a mini-ITX or a micro-ATX
-motherboard, the latter is slightly larger and much more popular. Fine, if I knew that maybe I would have found 
-the motherboard quicker, but I'm satisfied with the one I got. But the other thing was worse. Turned out I can
-have 4x 2.5" OR 3x 3.5", but not both (some combinations possible: side frame can hold 1x3.5" or 2x2.5", top frame
-two disks of any size, pity there's no second side frame cause there's enough space for it).
-What a disappointment! But anything with more bays would be twice as expensive, much larger and I would have
-to wait again. I'll use 2x 3.5" and 2x 2.5" for now and maybe mod the case in the future. Or more likely, I'll just replace
-the drives with bigger ones.
+I also don't recommend buying CPU and motherboard separately, unless you know what you're doing and how to check the compatibility.
 
-Finally, I bought some SATA cables and a PSU. The smallest I could find was 450W and even that was difficult,
-probably because the only people who build PCs these days are gamers and crypto miners. I chose one that claims 90% efficiency
-when running with 10%-20% of the max load.
+### RAM
 
-## The system drive
+For a storage-only server, even small RAM like 1 GB is OK for the start, Linux would only need a few dozen MB anyway and use the rest for disk cache. If you want to run extra services, the answer can vary from "1GB is still enough" to "I have 128G and ran out of memory anyway". But realistically, 4GB should suffice if you don't run VMs. I have 8GB and use less than 2 most of the time.
+
+The situation changes if you want to use ZFS - a modern filesystem with some interesting features, popular among self hosters. 4GB is a minimum, 8GB is better. Personally, I don't like ZFS, more on that in later posts.
+
+### Network
+
+You should connect the NAS using Ethernet, not Wi-Fi. 1Gbit is a reasonable choice, 100Mbit is too slow these days, higher speeds are not necessary for most home users (if you're the one that needs it, you know).
+
+If you really insist on 10Gbit, you should use fibre. While the standard Ethernet cables (CAT6 and higher) theoretically support 10Gbit, the transceivers/NICs often overheat under high load, causing unstable connections. I'm speaking from experience of using 10Gbit at work.
+
+### SATA ports
+
+You'll need a lot of them. Most motherboards have 2 or 4, if you're lucky you might get 6. It's not a big issue: you can install additional controllers. Just make sure you have enough empty PCI Express slots. This is only a concern for small cases and mini-ITX/micro-ATX motherboards, full-size PCs can easily have an unreasonable number of SATA ports.
+
+### Hard drives
+
+3.5" are cheaper, faster, available in larger capacities and are considered more reliable (though it's mostly anecdotal evidence).
+
+2.5" are smaller (obviously). In some PC cases, you can fit more of them. In others, you just have to install a caddy around the 2.5" drive and you still use the same 3.5" bay.
+
+External USB disks are often cheaper than internal 2.5" drives, despite the extra cost of enclosure and electronics. Some can be removed and used as regular drives. The process is called shucking and it's quite popular among self hosters. But there's a reason for lower price: they are built with lower quality components (or they failed QA tests), they might live for years if they are only used occasionally, but won't last long with more intensive use.
+
+I inherited a bunch of USB drives. I shucked a few, used others as external drives (they couldn't be shucked, they are soldered directly to the USB electronics and have no SATA port). About half of them failed in a few months, the other half is just as reliable as regular HDDs. I don't recommend buying USB drives for a NAS, but if you already have them, you can reuse them, just be prepared for failure.
+
+### The system drive
 
 Should you place your OS with the data or use a separate disk? Both ways have some pros and cons.
 
-Sometimes you are forced to use a separate drive. If you use an old motherboard, it might not support booting
-from large disks - but once the operating system loads, it will access the drives just fine. 
-
-Most, if not all, NAS-specific distros require a separate system disk. Decoupling data from OS will generally
-make your life easier in the long run: you can replace data disks if they are too small, or you can move data
-to another server. You can also run the system from an SSD which is much faster - it doesn't make much
+- If you use an old motherboard, it might not support booting from large disks - but once the operating system loads, it will access the drives just fine. 
+- Most, if not all, NAS-specific distros require a separate system disk.
+- Decoupling data from OS will generally make your life easier in the long run: you can replace data disks if they are too small, or you can move data
+to another server.
+- You can also run the system from an SSD which is much faster - it doesn't make much
 difference if you use it only for NAS, but a huge one if you also want to host VMs or containers.
 
-On the other hand, keeping OS with the data means you don't waste precious drive bay in the case. And if your data is on
-RAID, the system is also protected from the drive failure.
+On the other hand, keeping OS with the data means you don't waste precious drive bay in the case. And if your data is on RAID, the system is also protected from the drive failure.
 
-After some considerations, I decided to use an SSD scavenged from an old laptop. Since my case has fewer bays
-than I expected, I just let it hang on the power cables. There are no moving parts anyway and it's very light. Will it get
-adequate cooling if it's in the part of the case that wasn't supposed to hold drives? Should be, there's still more airflow
-than inside the laptop.
+Tip: if you want to use a separate drive, but don't want to waste drive bay/SATA port/money on the extra disk, you can install Linux on a USB stick. Just remember they are way slower even than HDDs and wear out quickly. You should try to use them read-only (possible but tricky, requires combining read-only fs with a writable ramdisk on top
+of it, e.g. aufs) or almost read-only (e.g. disable swap, redirect logs to an external system). You can even install the stick internally - motherboards have USB connectors for use with the case's front ports. 
 
-Tip: if you want to use a separate drive, but don't want to waste drive bay/SATA port/money on the extra disk,
-you can install Linux on a USB stick. Just remember they are way slower even than HDDs and wear out quickly.
-You should try to use them read-only (possible but tricky, requires combining read-only fs with a writable ramdisk on top
-of it, e.g. aufs) or almost read-only (e.g. disable swap, redirect logs to an external system). You can even install the stick
-internally - motherboards have USB connectors for use with the case's front ports. 
+### PSU (power supply)
 
-Is the lack of RAID a real problem? The system disk is easy to backup. If it fails, I can replace the drive and restore
-the system from an image in minutes. And it's a home system, so the risk of some downtime is acceptable.
+Buy the **lowest** power PSU you can find. These days few people build PCs, it seems that these are mostly gamers and crypto miners, both use power-hungry GPUs. A NAS, even with multiple hard drives, will likely not exceed 100W at full load, much less at idle. Old PSUs were very inefficient at very low load, modern ones are better, but still waste a considerable amount of power.
 
-## Some assembly required
+There are certifications aimed exactly at this problem: **80+** means the PSU is at least 80% efficient at any load higher than 20%. The higher the level - they go from White (or just 80+ without a modifier) through Bronze, Silver, Gold, Platinum to Titanium - the better, but more expensive.
 
-The last time I built a PC, it had a 366 MHz CPU and 128MB of RAM and it wasn't because I used second-hand parts.
-But it's not rocket science. I screwed the board in, connected all the cables, turned on the power and... nothing
-happened. I checked the cables - still nothing. Took everything out of the case, connected only PSU to the
-motherboard, shorted the "power button" pins - same. That's what you get with used hardware, right?
+Other things worth paying for are reliability and low noise level. Good news: all three factors often go together. Bad news: they also go together with higher price.
 
-But I made one more check. You can start a power supply without a motherboard by shorting pin 14 with any
-of the ground pins. I did that - the fan didn't start spinning, the multimeter showed no voltage. Imagine my surprise:
-a second-hand motherboard is fine, but a brand-new PSU isn't. Returned it, got one from a more reputable brand
-(Thermaltake) - this time it worked.
-
-It's a pity that the case didn't come with a PSU. It has quite a different shape than a standard PC tower case,
-meaning the power cables could be much shorter. By comparison, one of my other computers - Lenovo Thinkstation - has a dedicated PSU with
-cables just the right length, it really helps to keep the inside tidy and improve the airflow.
+Brands recommended in self hosting circles: Seasonic, Corsair, be quiet!, FSP. The one I have (Thermaltake) is considered "not great, not terrible". 
