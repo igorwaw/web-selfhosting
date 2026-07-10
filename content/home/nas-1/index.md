@@ -46,7 +46,7 @@ But the cheap models only have 2 disk bays, very little RAM and a pathetic CPU. 
 
 ### To USB or not to USB?
 
-I have a drawer full of USB HDDs. A few were mine, most I literally inherited. Many of them are small and not really worth bothering, but about a dozen are 1TB. I experimented with a NAS running on a single-board system (**Odroid C1+**) and a small-form PC (**Dell Wyse**) and decided I REALLY don't want a NAS on USB drives. You can run one or two semi-reliably, but the more you have, the probability of problems approaches 1. Sometimes the plug moves in the socket and you end up with a corrupt filesystem. Or the cable cannot handle the power. Or the disks run fine when you initially connect them one by one, but during the next reboot they will start all at once drawing too much current (yes, I tried a powered USB hub) and only half of them will show up. Of course, you can't have RAID on USB (technically, it is possible, the system wouldn't stop you, but it's a terrible idea if your drives can disappear at any moment). 
+I have a drawer full of USB HDDs. A few were mine, most I literally inherited. Many of them are small and not really worth bothering, but about a dozen are 1TB. I experimented with a NAS running on a single-board system (**Odroid C1+**) and a small-form PC (**Dell Wyse**) and decided I REALLY don't want a NAS on USB drives. You can run one or two semi-reliably, but the more you have, the probability of problems approaches 100%. Sometimes the plug moves in the socket and you end up with a corrupt filesystem. Or the cable cannot handle the power. Or the disks run fine when you initially connect them one by one, but during the next reboot they will start all at once drawing too much current (yes, I tried a powered USB hub) and only half of them will show up. Of course, you can't have RAID on USB (technically, it is possible, the system wouldn't stop you, but it's a terrible idea if your drives can disappear at any moment). 
 
 ### Searching for a case
 
@@ -74,7 +74,7 @@ My CPU is Intel Pentium G3220T, which is a slightly slower (no HT, no AVX) versi
 
 Two things worth checking when buying used hardware:
 
-- Does the CPU have virtualization extensions? You need them to run VMs at reasonable speeds. All mainline CPUs since roughly 2015 have them, if it's older or unusual - check.
+- Does the CPU have **virtualization extensions**? You need them to run VMs at reasonable speeds. All mainline CPUs since roughly 2015 have them, if it's older or unusual - check.
 - Intel Xeon and AMD EPYC are server CPUs. Some are power hogs, others scale down just as well as home models. If you find a good offer on them, there's a chance to buy some real processing power cheaply, but check idle power usage. Note that server motherboards might not fit standard PC cases.
 
 I also don't recommend buying CPU and motherboard separately, unless you know what you're doing and how to check the compatibility.
@@ -101,6 +101,20 @@ You'll need a lot of them. Most motherboards have 2 or 4, if you're lucky you mi
 
 2.5" are smaller (obviously). In some PC cases, you can fit more of them. In others, you just have to install a caddy around the 2.5" drive and you still use the same 3.5" bay.
 
+#### SMR controversy
+
+Traditional hard drives use **CMR** (Conventional Magnetic Recording), where each data track is written independently with a small gap between tracks. **SMR** (Shingled Magnetic Recording) drives instead overlap tracks like roof shingles. This allows packing the data more densely, and therefore lower the price of high capacity disks.
+
+But there's a tradeoff. Writes to SMR drives are 3-10x slower than to CMR. Hard drives use write caching to offset this. In normal use, you might not notice the difference. But if you try to write gigabytes at a time, you'll notice write speed begins at reasonable levels such as 250MB/s, but in a few seconds, once the cache is full, slows down to 40MB/s. It's not only an issue for copying large files, but also for RAID rebuilds.
+
+Most budget large-capacity HDDs these days are SMR. Whether you want to pay more for CMR, depends on your use case.
+
+There are several types of SMR, the most popular in consumer hardware is called Drive Managed (DM-SMR). It is invisible to the host, there's no attribute that flags it. Some drives might have SMR in their identification that you can read with `dmesg | grep sda` or `smartctl -i /dev/sda`, but most don't. The only semi-reliable way to check your HDDs is to read the model number (from smartctl data) and look it up on the internet. Semi-reliable, because several manufacturers were caught quietly swapping technology in previously-CMR product lines.
+
+Personally, I have a mixture. Some drives are CMR, because they predate SMR technology. New ones are a mix of both SMR and CMR, when I bought them, I didn't know the difference.
+
+#### USB drives and shucking
+
 External USB disks are often cheaper than internal 2.5" drives, despite the extra cost of enclosure and electronics. Some can be removed and used as regular drives. The process is called shucking and it's quite popular among self hosters. But there's a reason for lower price: they are built with lower quality components (or they failed QA tests), they might live for years if they are only used occasionally, but won't last long with more intensive use.
 
 I inherited a bunch of USB drives. I shucked a few, used others as external drives (they couldn't be shucked, they are soldered directly to the USB electronics and have no SATA port). About half of them failed in a few months, the other half is just as reliable as regular HDDs. I don't recommend buying USB drives for a NAS, but if you already have them, you can reuse them, just be prepared for failure.
@@ -111,19 +125,17 @@ Should you place your OS with the data or use a separate disk? Both ways have so
 
 - If you use an old motherboard, it might not support booting from large disks - but once the operating system loads, it will access the drives just fine. 
 - Most, if not all, NAS-specific distros require a separate system disk.
-- Decoupling data from OS will generally make your life easier in the long run: you can replace data disks if they are too small, or you can move data
-to another server.
+- Decoupling data from OS will generally make your life easier in the long run: you can replace data disks if they are too small, or you can move data to another server.
 - You can also run the system from an SSD which is much faster - it doesn't make much
-difference if you use it only for NAS, but a huge one if you also want to host VMs or containers.
+difference if you use it only for NAS, but a could be noticable if you also want to host VMs or containers.
 
 On the other hand, keeping OS with the data means you don't waste precious drive bay in the case. And if your data is on RAID, the system is also protected from the drive failure.
 
-Tip: if you want to use a separate drive, but don't want to waste drive bay/SATA port/money on the extra disk, you can install Linux on a USB stick. Just remember they are way slower even than HDDs and wear out quickly. You should try to use them read-only (possible but tricky, requires combining read-only fs with a writable ramdisk on top
-of it, e.g. aufs) or almost read-only (e.g. disable swap, redirect logs to an external system). You can even install the stick internally - motherboards have USB connectors for use with the case's front ports. 
+Tip: if you want to use a separate drive, but don't want to waste drive bay/SATA port/money on the extra disk, you can install Linux on a USB stick. Just remember they are way slower even than HDDs and wear out quickly. You should try to use them read-only (possible but tricky, requires combining read-only fs with a writable ramdisk on top of it, e.g. aufs) or almost read-only (e.g. disable swap, redirect logs to an external system). You can even install the stick internally - motherboards have USB connectors for use with the case's front ports. 
 
 ### PSU (power supply)
 
-Buy the **lowest** power PSU you can find. These days few people build PCs, it seems that these are mostly gamers and crypto miners, both use power-hungry GPUs. A NAS, even with multiple hard drives, will likely not exceed 100W at full load, much less at idle. Old PSUs were very inefficient at very low load, modern ones are better, but still waste a considerable amount of power.
+Buy the **lowest** power PSU you can find. It won't be easy. These days few people build PCs, it seems that these are mostly gamers and crypto miners, both use power-hungry GPUs. A NAS, even with multiple hard drives, will likely not exceed 100W at full load, much less at idle. Old PSUs were very inefficient at very low load, modern ones are better, but still waste a considerable amount of power.
 
 There are certifications aimed exactly at this problem: **80+** means the PSU is at least 80% efficient at any load higher than 20%. The higher the level - they go from White (or just 80+ without a modifier) through Bronze, Silver, Gold, Platinum to Titanium - the better, but more expensive.
 

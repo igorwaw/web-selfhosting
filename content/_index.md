@@ -14,7 +14,9 @@ comments: false
 
 - [Pi-hole - DHCP and DNS](/home/pi-hole/)
 - [Storage server, part 1: hardware](/home/nas-1/)
-- [Storage server, part 2: disk drives, RAID and SnapRAID](/home/nas-2/)
+- [Storage server, part 2: disk drives, RAID and SnapRAID, encryption](/home/nas-2/)
+- [Storage server, part 3: ZFS and btrfs vs traditional filesystems](/home/nas-3/)
+- [Storage server, part 4: putting it all together](/home/nas-4/)
 - [Jellyfin, a streaming server for home](/home/jellyfin/)
 - [Syncthing, synchronising files between the devices](/home/syncthing/)
 - [Prometheus and Grafana, monitoring - part 1](/home/prometheus-1/)

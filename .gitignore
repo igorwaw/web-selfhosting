@@ -8,3 +8,6 @@
 
 # Editors
 .vscode/
+
+# Other
+/tmp/
