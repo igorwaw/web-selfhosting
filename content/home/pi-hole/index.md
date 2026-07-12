@@ -17,7 +17,7 @@ it: at some point, you'll need to point your browser or SSH client at a specific
 Of course, every home router contains a DHCP server which allows setting some addresses as static. It's often a good choice. There's
 one important advantage of keeping your DHCP server on the router: fewer points of failure. DHCP is needed for the network to
 function and so is the router, if they're the same device, that's only one device that really needs to work all the time. But a good reason to move
-DHCP out of the router is the possibility to backup configuration. Are you going to keep using the same router? I certainly don't, as the
+DHCP out of the router is the possibility to back up configuration. Are you going to keep using the same router? I certainly don't, as the
 one I got from my internet provider is terrible and I'm going to replace it soon. I don't want to configure all the addresses manually again
 and home routers don't allow you to export/import DHCP configuration, certainly not between different brands.
 

@@ -56,12 +56,12 @@ on Android it's just installing the package from either Play Store or F-Droid.
 
 Syncthing isn't really well suited for automated configuration. It stores its settings in ~/.config/syncthing/config.xml.
 You could generate this file if you really wanted to, but a more sane option is to configure using the web GUI and then
-backup this file so you can recreate the setup if needed. For configuring your computer, just point your browser to
+back up this file so you can recreate the setup if needed. For configuring your computer, just point your browser to
 <http://localhost:8384>.
 
 It's a bit more tricky with the NAS. By default, syncthing only listens on the local interface. You can change this
 option in your config file or, since it's only needed for a moment and the default is better for security, you can
-setup an SSH tunnel. On my laptop, I typed `ssh -L 8385:localhost:8384 firefly` and pointed the browser to <http://localhost:8385>.
+set up an SSH tunnel. On my laptop, I typed `ssh -L 8385:localhost:8384 firefly` and pointed the browser to <http://localhost:8385>.
 How does the tunnel work? It means that ssh will forward local port 8385 through firefly to localhost:8384 - but that's localhost
 from the firefly's point of view. Note that I can open the tunnel *through* firefly *to* another server, sysadmins often use this
 technique to connect to servers using IPs through one jumphost available on the internet.

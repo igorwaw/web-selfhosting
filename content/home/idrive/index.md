@@ -1,11 +1,11 @@
 ---
-title: "IDrive, backup to the cloud"
+title: "Backup, part 1: IDrive, backup to the cloud"
 date: 2023-11-20T17:40:00
 draft: false
 tags: ["backup"]
 ---
 
-That is against the spirit of self-hosting, but keeping data safe is more important than keeping purity. Your computers can backup to your NAS (I'll cover that in the next step), that protects you from disk failure, ransomware, accidental deletion and losing your laptop on a train. But a fire or flood can destroy both at the same moment. A proper disaster recovery plan requires 3 copies of data: 1 working copy, 1 on-site backup for quick restore and 1 off-site backup if the previous backup fails. One option is to find another self-hoster and arrange for mutual backup to each other's NAS, another is to use a cloud service.
+That is against the spirit of self-hosting, but keeping data safe is more important than keeping purity. Your computers can back up to your NAS (I'll cover that in the next step), that protects you from disk failure, ransomware, accidental deletion and losing your laptop on a train. But a fire or flood can destroy both at the same moment. A proper disaster recovery plan requires 3 copies of data: 1 working copy, 1 on-site backup for quick restore and 1 off-site backup if the previous backup fails. One option is to find another self-hoster and arrange for mutual backup to each other's NAS, another is to use a cloud service.
 
 ## Cloud storage choices
 
@@ -25,7 +25,7 @@ Sending or receiving terabytes of data takes days, even on a fast broadband. IDr
 
 Sign up for an account. It's also wise to turn on 2FA, preferably with a TOTP app. Now, the Windows and Mac clients are available for download, but for the Linux scripts you need to contact support. I'm not sure why, do they need to enable any special options for the account? Anyway, I asked on the live chat and got a download URL in 2 minutes. Beware of IDrive scripts you can find on the internet - I found some, they were so old they failed to connect - and even failed to auto-update.
 
-Following the documentation at <https://www.idrive.com/readme> I unpacked the client to the directory of my choice. I used /opt and ran the client as root. If you don't need to backup files belonging to different users, you can use a standard account. After unpacking you need to make the scripts executable: `chmod a+x *.pl`.
+Following the documentation at <https://www.idrive.com/readme> I unpacked the client to the directory of my choice. I used /opt and ran the client as root. If you don't need to back up files belonging to different users, you can use a standard account. After unpacking you need to make the scripts executable: `chmod a+x *.pl`.
 
 First script to run is `account_setting.pl`. It detected some missing dependencies, tried to install them - some with apt, some using Perl CPAN - and failed. I ran the script again and chose not to install dependencies, but list them instead. I tried manual installation to see what was wrong. The first Perl module tried to create a directory in /usr/local/man, but on my system it wasn't a directory, but a dead symlink. I fixed it, tried automatic installation again - it worked. I then logged in to my account and answered a few questions - default choice should work most of the time.
 
