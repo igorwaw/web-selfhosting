@@ -13,7 +13,7 @@ Again, before going into details, this is my current setup.
 
 - System drive: 256GB SSD (no redundancy)
 - Array for miscellaneous data: software RAID1 (btrfs) on 2x3TB drives
-- Array for video files: SnapRAID on 4 HDDs, mixed sizes (1TB, 1.5TB, 2x4TB), one of them USB
+- Array for video files: SnapRAID on 4 HDDs, mixed sizes (1TB, 3x4TB)
 - Data drives encrypted with LUKS, using method 2: providing the password later
 
 ## Do you need RAID?

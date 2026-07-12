@@ -87,7 +87,7 @@ After:
 
 ### USB drives
 
-My first attempt ran on Odroid and used only USB drives. It didn't work well. Later when I moved to a PC case, I still used several USB drives. It still didn't work well. Now there's only one left. When it fails or runs out of space, I plan to replace it with an internal drive.
+My first attempt ran on Odroid and used only USB drives. It didn't work well. Later when I moved to a PC case, I still used several USB drives. When they failed or ran out of space, I replaced them with internal drives. I don't have any USB drives connected to NAS anymore.
 
 The only reason I used USB drives is that I already had a large number of them.
 

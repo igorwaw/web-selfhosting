@@ -117,7 +117,7 @@ Personally, I have a mixture. Some drives are CMR, because they predate SMR tech
 
 External USB disks are often cheaper than internal 2.5" drives, despite the extra cost of enclosure and electronics. Some can be removed and used as regular drives. The process is called shucking and it's quite popular among self hosters. But there's a reason for lower price: they are built with lower quality components (or they failed QA tests), they might live for years if they are only used occasionally, but won't last long with more intensive use.
 
-I inherited a bunch of USB drives. I shucked a few, used others as external drives (they couldn't be shucked, they are soldered directly to the USB electronics and have no SATA port). About half of them failed in a few months, the other half is just as reliable as regular HDDs. I don't recommend buying USB drives for a NAS, but if you already have them, you can reuse them, just be prepared for failure.
+I inherited a bunch of USB drives. I shucked a few, used others as external drives (they couldn't be shucked, they are soldered directly to the USB electronics and have no SATA port). About half of them failed in a few months, the other half worked just as reliable as regular HDDs for a few years. I don't use them with the NAS now, though some are still usable. I don't recommend buying USB drives for a NAS, but if you already have them, you can reuse them, just be prepared for failure.
 
 ### The system drive
 

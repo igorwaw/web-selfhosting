@@ -17,6 +17,7 @@ comments: false
 - [Storage server, part 2: disk drives, RAID and SnapRAID, encryption](/home/nas-2/)
 - [Storage server, part 3: ZFS and btrfs vs traditional filesystems](/home/nas-3/)
 - [Storage server, part 4: putting it all together](/home/nas-4/)
+- [Storage server, part 5: migrating from unencrypted mdadm to encrypted btrfs](/home/nas-5/)
 - [Jellyfin, a streaming server for home](/home/jellyfin/)
 - [Syncthing, synchronising files between the devices](/home/syncthing/)
 - [Prometheus and Grafana, monitoring - part 1](/home/prometheus-1/)
