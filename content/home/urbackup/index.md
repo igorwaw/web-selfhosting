@@ -5,7 +5,7 @@ draft: true
 tags: ["backup"]
 ---
 
-In the previous step, I configured my NAS to backup files to iDrive. Now I'll configure my computers to backup to the NAS, and include the location in the iDrive backup. How many copies of data will I get?
+In the previous step, I configured my NAS to back up files to iDrive. Now I'll configure my computers to back up to the NAS, and include the location in the iDrive backup. How many copies of data will I get?
 
 - For files stored on the NAS only: local copy (on either RAID1 or Snapraid) on the NAS and iDrive - I think that counts for 2.5 copies
 - For files on other computers: local copy, potentially a copy on my other computer, potentially a cloud copy (e.g. on GitHub), backup on the NAS (on RAID1) and backup of the backup on the iDrive - that would be 3.5 copies or more
