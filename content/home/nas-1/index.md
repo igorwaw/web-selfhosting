@@ -3,6 +3,7 @@ title: "Storage server, part 1: hardware"
 date: 2023-04-14T17:35:00
 draft: false
 tags: ["storage"]
+image: firefly.jpg
 ---
 
 (first published on 2023.03.14, rewritten on 2026.07.07)
@@ -40,19 +41,25 @@ Before going into details and considerations, this is my current setup
 
 ### Commercial vs DIY
 
-The easiest option is to buy an off-the-shelf NAS such as Synology or QNAP. I had one in the past (**Synology DS216se**). The good thing about them is you can get them up and running in less than an hour and without much knowledge. Just install disks, plug it into the network and answer a few questions in the web UI. 
+The easiest option is to buy an off-the-shelf NAS such as Synology or QNAP. I had one in the past (**Synology DS216se**). The good thing about them is you can get them up and running in less than an hour and without much knowledge. Just install disks, plug it into the network and answer a few questions in the web UI. It's also more compact than even a smallest PC.
 
-But the cheap models only have 2 disk bays, very little RAM and a pathetic CPU. They work fine as basic file servers, but doing anything in the GUI is an exercise in frustration. Click, wait for 10 seconds until it responds, click, wait again. You'll quickly miss the command line. If you want to run any extra services, you're limited by both hardware resources and software available. I used RAID1 for storage so when I ran out of space, the only option would be to replace both disks with the bigger ones, old disks would be useless. Enough, back to the DIY.
+![Synology DS216se](synology.jpg)
+
+But the cheap models only have 2 disk bays, very little RAM and a pathetic CPU. They work fine as basic file servers, but doing anything in the GUI is an exercise in frustration. Click, wait for 10 seconds until it responds, click, wait again. You'll quickly miss the command line. If you want to run any extra services, you're limited by both hardware resources and software available. I used RAID1 for storage so when I ran out of space, the only option would be to replace both disks with the bigger ones, old disks would be useless (or add a USB drive, but that means no RAID). Enough, back to the DIY.
 
 ### To USB or not to USB?
 
-I have a drawer full of USB HDDs. A few were mine, most I literally inherited. Many of them are small and not really worth bothering, but about a dozen are 1TB. I experimented with a NAS running on a single-board system (**Odroid C1+**) and a small-form PC (**Dell Wyse**) and decided I REALLY don't want a NAS on USB drives. You can run one or two semi-reliably, but the more you have, the probability of problems approaches 100%. Sometimes the plug moves in the socket and you end up with a corrupt filesystem. Or the cable cannot handle the power. Or the disks run fine when you initially connect them one by one, but during the next reboot they will start all at once drawing too much current (yes, I tried a powered USB hub) and only half of them will show up. Of course, you can't have RAID on USB (technically, it is possible, the system wouldn't stop you, but it's a terrible idea if your drives can disappear at any moment). 
+I have a drawer full of USB HDDs. A few were mine, most I literally inherited. Many of them are small and not really worth bothering, but about a dozen were 1-2TB. I experimented with a NAS running on a single-board system (**Odroid C1+**) and a small-form PC (**Dell Wyse**) and decided I REALLY don't want a NAS on USB drives. You can run one or two semi-reliably, but the more you have, the probability of problems approaches 100%. Sometimes the plug moves in the socket and you end up with a corrupt filesystem. Or the cable cannot handle the power. Or the disks run fine when you initially connect them one by one, but during the next reboot they will start all at once drawing too much current (yes, I tried a powered USB hub) and only half of them will show up. Of course, you can't have RAID on USB (technically, it is possible, the system wouldn't stop you, but it's a terrible idea if your drives can disappear at any moment).
+
+![Odroid C1+](odroid.jpg)
 
 ### Searching for a case
 
 For a NAS, you want a case that can hold many drives: preferably, more than you intend to install at the moment, to have space for extension. Such cases are relatively easy to buy in the USA, but not in Europe. It's quite a niche product after all, very few PCs use more than 1 or 2 drives. Those that can be found are twice as expensive as in the States, buying straight from the US vendor means paying for shipping and long waiting.
 
-But I found one interesting option: **Kolink Satellite Cube**. According to the specs, it had 4x 2.5" and 3x 3.5" bays and it held a mini-ITX motherboard - not perfect, but OK. It was cheap and quite small. I ordered the case and searched for the MB. Mini-ITX are hard to find, but I found a great second-hand option, with 8GB RAM, a Pentium CPU that's really a 4th generation Intel Core and best of all, 6 SATA ports!
+But I found one interesting option: **Kolink Satellite Cube**. According to the specs, it had 4x 2.5" and 3x 3.5" bays. And it held a mini-ITX motherboard - not perfect, but OK. It was cheap and quite small. I ordered the case and searched for the MB. Mini-ITX are hard to find, but I found a great second-hand option, with 8GB RAM, a Pentium CPU that's really a 4th generation Intel Core and best of all, 6 SATA ports!
+
+![Kolink Satellite Cube](kolink.jpg)
 
 When I got the case, I discovered the specs were wrong in two ways. One, it could hold a mini-ITX or a micro-ATX motherboard, the latter is slightly larger and much more popular. Fine, if I knew that maybe I would have found the motherboard quicker, but I'm satisfied with the one I got. But the other thing was worse. Turned out I can have 4x 2.5" OR 3x 3.5", but not both.
 
@@ -113,23 +120,30 @@ There are several types of SMR, the most popular in consumer hardware is called 
 
 Personally, I have a mixture. Some drives are CMR, because they predate SMR technology. New ones are a mix of both SMR and CMR, when I bought them, I didn't know the difference.
 
+#### Brands and reliability
+
+You've probably met someone who says never to buy Seagate and get Western Digital instead. Or the other way around. The truth, if you look at reliability data (e.g. [famous Backblaze stats](https://www.backblaze.com/cloud-storage/resources/hard-drive-test-data)), is that all manufacturers had some models that failed early and some that exceeded expectations. If you want to shop for reliability, look for specific model, not just the brand. Even that doesn't guarantee that 2026 WD Red 4TB is the same thing as 2024 WD Red 4TB.
+
+Personally, I don't care much. I'm just prepared for any drive to fail at any moment. Instead, if I buy two HDDs at the same time - especially if I plan to use them in RAID1 - I choose two different manufacturers. It's not optimal for array performance (ideally, you would have 2 drives with the same specs), but I'm reducing the chance of both drives failing at the same time.
+
 #### USB drives and shucking
 
 External USB disks are often cheaper than internal 2.5" drives, despite the extra cost of enclosure and electronics. Some can be removed and used as regular drives. The process is called shucking and it's quite popular among self hosters. But there's a reason for lower price: they are built with lower quality components (or they failed QA tests), they might live for years if they are only used occasionally, but won't last long with more intensive use.
 
-I inherited a bunch of USB drives. I shucked a few, used others as external drives (they couldn't be shucked, they are soldered directly to the USB electronics and have no SATA port). About half of them failed in a few months, the other half worked just as reliable as regular HDDs for a few years. I don't use them with the NAS now, though some are still usable. I don't recommend buying USB drives for a NAS, but if you already have them, you can reuse them, just be prepared for failure.
+Since I had many USB drives, I shucked a few. I used others as external drives (they couldn't be shucked, they are soldered directly to the USB electronics and have no SATA port). About half of them failed in a few months, the other half worked just as reliable as regular HDDs for a few years. I don't use them with the NAS now, though some are still usable. I don't recommend buying USB drives for a NAS, but if you already have them, you can reuse them, just be prepared for failure.
 
-### The system drive
+#### The system drive
 
 Should you place your OS with the data or use a separate disk? Both ways have some pros and cons.
 
 - If you use an old motherboard, it might not support booting from large disks - but once the operating system loads, it will access the drives just fine. 
 - Most, if not all, NAS-specific distros require a separate system disk.
-- Decoupling data from OS will generally make your life easier in the long run: you can replace data disks if they are too small, or you can move data to another server.
-- You can also run the system from an SSD which is much faster - it doesn't make much
-difference if you use it only for NAS, but a could be noticable if you also want to host VMs or containers.
+- Decoupling data from OS will generally make your life easier in the long run: you can replace data disks if they are too small while keeping the system. Or you can move all your data drives to another machine.
+- You can also run the system from an SSD which is much faster - it doesn't make much difference if you use it only for NAS, but it could be noticeable if you also want to host VMs or containers.
 
 On the other hand, keeping OS with the data means you don't waste precious drive bay in the case. And if your data is on RAID, the system is also protected from the drive failure.
+
+All things considered, I'd recommend a separate drive.
 
 Tip: if you want to use a separate drive, but don't want to waste drive bay/SATA port/money on the extra disk, you can install Linux on a USB stick. Just remember they are way slower even than HDDs and wear out quickly. You should try to use them read-only (possible but tricky, requires combining read-only fs with a writable ramdisk on top of it, e.g. aufs) or almost read-only (e.g. disable swap, redirect logs to an external system). You can even install the stick internally - motherboards have USB connectors for use with the case's front ports. 
 

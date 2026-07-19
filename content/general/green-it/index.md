@@ -1,8 +1,9 @@
 ---
 title: "Green IT"
 date: 2026-07-07T00:00:00
-draft: true
+draft: false
 tags: ["green-it"]
+image: laptops.jpg
 ---
 
 I try to keep my IT usage reasonably environmentally friendly. Not in an extreme way - not using the computers at all would be the best for the planet, but quite impractical - but I do think about the footprint of what I run, and I think most of the community talks about the wrong part of it.
@@ -15,7 +16,7 @@ Note: power usage is *secondary*, not *irrelevant*. Especially if you're running
 
 ## Reuse what you already have
 
-Before buying anything, I look at my pile of old hardware. An old laptop that's too slow for daily use is often still perfectly capable of being an experimental machine. An old Android phone or tablet, too slow for a multi-purpose device or with a dead battery, still has a microphone, good quality camera, high-DPI screen and a multi-core CPU in GHz range. You can repurpose it as a dashcam/security camera/wildlife camera, a wall-mounted dashboard for a smart home or a media player.
+Before buying anything, I look at my pile of old hardware. An old laptop that's too slow for daily use is often still perfectly capable of being an experimental machine. An old Android phone or tablet, too slow for a multi-purpose device or with a dead battery, still has a microphone, good quality camera, high-DPI screen and a multi-core CPU in GHz range. You can repurpose it as a dashcam/security camera/wildlife camera, a wall-mounted dashboard for a smart home, or a media player.
 
 ## Buying second hand
 
@@ -25,7 +26,7 @@ When I do need something I don't already have, second hand is the default, not n
 
 That doesn't mean any old hardware will do - there's a balance. A 20-year-old machine will have a fraction of the processing power of a newer one and you would likely end up using several of them. The risk of failure is high and parts are hard to buy. At some point the electricity and hassle cost outweighs the manufacturing cost you're avoiding.
 
-Specifically, for a daily-use laptop, I look for one powered by USB-C. It's really convenient to use the same charger for laptops, phones and 90% of other rechargeable devices. Many, but not all, laptops made after 2018 have one. For experimental devices that I only use at home, I might accept a proprietary barrel connector, but not for the one I travel with.
+Specifically, for a daily-use laptop, I look for one powered by USB-C. It's really convenient to use the same charger for laptops, phones and 90% of other rechargeable devices. Many, but not all, laptops made after 2018 are USB powered. For experimental devices that I only use at home, I might accept a proprietary barrel connector, but not for the one I travel with.
 
 If you use Windows, remember that Windows 11 requires a newish CPU (8th gen Intel Core, AMD Ryzen 2000). There's a lot of compatible used devices available (most laptops from 2018 onwards), just be aware when buying. And if you use Linux, that means you can buy a perfectly usable laptop with a 7th gen Core really cheaply.
 
@@ -34,7 +35,7 @@ The same balance applies to routers and switches. A second-hand enterprise switc
 ### What's actually worth buying new
 
 - **PC Power supplies.** They don't last as long as most computer hardware. They have fans and large capacitors which wear down with use, so an old PSU might not have much life left. Then there's an issue of power efficiency. Old PSUs were horrible when running at low power, when the computer needed 40W, they drew twice as much. New ones are usually certified, 80+ means they are at least 80% efficient. Higher certifications such as 80+ Gold or Platinum are even better, but also considerably more expensive, so do your maths - if they save you $10 per year but cost $100 more, that doesn't look like a good deal.
-- **Hard drives.** Hard drives have a limited lifespan. Considering that their platters spin at 5400 RPM or more, their heads fly just some nanometers above them and have to be positioned with an almost atomic-level precision, it's a wonder they work at all!  But inevitably they fail. If you can get them very cheaply (free is a good price) and are prepared for failure (you should be anyway, even with new drives) then go ahead. There's also a matter of capacity. When you need 2TB of storage, would you rather use a 2TB drive or 10x 200GB? Multiple disks take more power and use precious space in the case. Anything smaller than 1TB is probably useless for a NAS. Though an old and small disk might still be useful for an experimental device.
+- **Hard drives.** Hard drives have a limited lifespan. Considering that their platters spin at 5400 RPM or more, their heads fly just some nanometers above them and have to be positioned with an almost atomic-level precision, it's a wonder they work at all!  But inevitably they fail. If you can get them very cheaply (free is a good price) and are prepared for failure (you should always be,even with new drives) then go ahead. There's also a matter of capacity. When you need 2TB of storage, would you rather use a 2TB drive or 10x 200GB? Multiple disks take more power and use precious space in the case. Anything smaller than 1TB is probably useless for a NAS. Though an old and small disk might still be useful for an experimental device.
 - **Flash-based storage.** Such as SSDs, SD cards, thumb drives. You need to be even more careful than with HDDs. While they don't wear down mechanically, they have a limited number of writes. An old SSD might be already useless. And unlike HDDs which usually show some bad sectors but continue to work, they often fail rapidly.
 - **Batteries.** Batteries degrade even sitting unused on a shelf. When you buy a used laptop, it always has reduced capacity. It could be acceptable. But when it isn't and you want to replace the battery, get a new one. It can be a 3rd party, doesn't need to be original - as long as it comes from a trusted supplier.
 - **Small components.** I wouldn't bother trying to find a used SATA-to-NVMe adapter or a 3.5" to 2.5" HDD caddy. It's not worth the hassle and I doubt it's even possible in most cases.
@@ -86,4 +87,4 @@ They have one great feature: the ability to upgrade or replace hardware. You pro
 
 ### Second-hand servers
 
-I don't recomment them, unless you know what you're doing. It's a surprisingly cheap way to buy really powerful hardware - you can buy one with multiple CPUs, huge RAM and a rack-mountable case for the price of one Pi. But that's because nobody wants them at home. Some old servers take a few hundred watts even when idle and possibly more than 1kW under load. That's about the same as a hairdryer, no wonder they make a similar noise! You might consider one if it's only going to be on occasionally, e.g. if you need a powerful machine for rendering videos or compiling. Having said that, some newer servers are more efficient. Another problem with servers is hardware compatibility: you can get replacement parts for standard PCs everywhere, servers have proprietary power supplies, need hard drive caddies etc.
+I don't recommend them, unless you know what you're doing. It's a surprisingly cheap way to buy really powerful hardware - you can buy one with multiple CPUs, huge RAM and a rack-mountable case for the price of one Pi. But that's because nobody wants them at home. Some old servers take a few hundred watts even when idle and possibly more than 1kW under load. That's about the same as a hairdryer, no wonder they make a similar noise! You might consider one if it's only going to be on occasionally, e.g. if you need a powerful machine for rendering videos or compiling. Having said that, some newer servers are more efficient. Another problem with servers is hardware compatibility: you can get replacement parts for standard PCs everywhere, servers have proprietary power supplies, need hard drive caddies etc.

@@ -8,21 +8,21 @@ comments: false
 - [Why self hosting?](/general/why-self-hosting/)
 - [Sidenote 1 - Using Ansible](/general/ansible/)
 - [Sidenote 2 - Ansible fact gathering](/general/ansible-facts/)
-- [Green IT: hardware first, electricity bill second](/general/green-it/)
+- [Green IT](/general/green-it/)
 
 ## Self hosting at home
 
-- [Pi-hole - DHCP and DNS](/home/pi-hole/)
+- [Pi-hole: DHCP and DNS](/home/pi-hole/)
 - [Storage server, part 1: hardware](/home/nas-1/)
 - [Storage server, part 2: disk drives, RAID and SnapRAID, encryption](/home/nas-2/)
 - [Storage server, part 3: ZFS and btrfs vs traditional filesystems](/home/nas-3/)
 - [Storage server, part 4: putting it all together](/home/nas-4/)
-- [Storage server, part 5: migrating from unencrypted mdadm to encrypted btrfs](/home/nas-5/)
-- [Jellyfin, a streaming server for home](/home/jellyfin/)
-- [Syncthing, synchronising files between the devices](/home/syncthing/)
-- [Prometheus and Grafana, monitoring - part 1](/home/prometheus-1/)
-- [Prometheus and Grafana, monitoring - part 2](/home/prometheus-2/)
-- [IDrive, backup to the cloud](/home/idrive/)
+- [Storage server, part 5: migrating from mdadm to btrfs and unencrypted to encrypted](/home/nas-5/)
+- [Jellyfin: a streaming server for home](/home/jellyfin/)
+- [Syncthing: synchronising files between the devices](/home/syncthing/)
+- [Prometheus and Grafana: monitoring - part 1](/home/prometheus-1/)
+- [Prometheus and Grafana: monitoring - part 2](/home/prometheus-2/)
+- [IDrive: backup to the cloud](/home/idrive/)
 
 ## Self hosting on the internet
 

@@ -16,6 +16,8 @@ Again, before going into details, this is my current setup.
 - Array for video files: SnapRAID on 4 HDDs, mixed sizes (1TB, 3x4TB)
 - Data drives encrypted with LUKS, using method 2: providing the password later
 
+![Hard drives](hdd.jpg)
+
 ## Do you need RAID?
 
 RAID stands for Redundant Array of (Inexpensive|Independent) Disks. Which means the data is stored on more than one disk. If one HDD fails, the array will continue to operate, your data will be still available. When you replace the failed drive, the array will rebuild.
@@ -136,7 +138,7 @@ The downsides: your files are not protected from drive failure until you run "sn
 Some of the hard drives I use are old, maybe even 10 years old. But even with the new drives it's a good idea to test them. Especially if you can replace them under warranty. I had some old USB drives too and did the following to quickly check them:
 
 - connected them to my laptop one by one,
-- run the short self-test: `smartctl -t short /dev/sdb`
+- ran the short self-test: `smartctl -t short /dev/sdb`
 - if there was already some data, checked the filesystem: `fsck -f /dev/sdb1`
 - short self-test takes about 2 minutes, after that time I would see the results plus all other SMART data: `smartctl -a /dev/sdb`
 
@@ -149,7 +151,7 @@ In fact, two other drives were showing some "not great, not terrible" SMART attr
 
 Then after connecting the drives to the target system it was time for a proper checkup. First, a long SMART self-test which takes several hours: `smartctl -t long /dev/sdX`
 
-Another thing I did was a badblocks test overwriting the whole disk: `badblocks -b 4096 -wsv /dev/sdX`. To reiterate, **it overwrites everything on the disk!** Only use it with an empty drive. And it takes days on large and slow drive. It was quite a pain, especially since some drives already had data, so I had to copy it around. But once it was done, I could be reasonably sure that every sector of the disk works properly. And if any errors were discovered and corrected by the drive firmware, they should show up in the SMART data.
+Another thing I did was a badblocks test overwriting the whole disk: `badblocks -b 4096 -wsv /dev/sdX`. To reiterate, **it overwrites everything on the disk!** Only use it with an empty drive. And it takes days on a large and slow drive. It was quite a pain, especially since some drives already had data, so I had to copy it around. But once it was done, I could be reasonably sure that every sector of the disk works properly. And if any errors were discovered and corrected by the drive firmware, they should show up in the SMART data.
 
 ## Disk encryption
 
@@ -183,6 +185,6 @@ Password is the most common type of LUKS key, but there are other possibilities.
 - **LUKS key in the TPM.** TPM will only release the key if certain conditions are met. You can also configure it to always release the key, which works similar to the previous point, but addresses the weakness: if you move the drives to another machine, the TPM won't contain the key anymore. Downsides: it's the most complex option.
 - **Authorization server on the network.** You'll be surprised how much you can pack into initramfs to manage the way the system boots. One way is to contact Tang server to authorize unlocking the disk. If the server is moved away from the LAN, it won't reach it. Tang server (and related Clevis client) are free and open source, in theory you could run it at home, but I've never heard of anyone doing it. 
 
-Are these methods practical? First two rely on removing your key after the system boots, leave it with the servers and you completely defeated the encryption. The others are much more complex. There's a real risk of making your system unbootable due to configuration error or a failed update - you should an additional LUKS key (e.g. a complex password you keep in your password manager) for recovery. There's also a risk of leaving a way in if you miss one step (and the 3rd method already leaves a huge known vulnerability).
+Are these methods practical? First two rely on removing your key after the system boots, leave it with the servers and you completely defeated the encryption. The others are much more complex. There's a real risk of making your system unbootable due to configuration error or a failed update - you should have an additional LUKS key (e.g. a complex password you keep in your password manager) for recovery. There's also a risk of leaving a way in if you miss one step (and the 3rd method already leaves a huge known vulnerability).
 
 I don't recommend passwordless LUKS unless you're a seasoned sysadmin. Actually, I am a seasoned sysadmin and decided it's not worth it for home use.

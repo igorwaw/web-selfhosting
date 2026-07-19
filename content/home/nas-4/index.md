@@ -80,14 +80,14 @@ Before:
 
 After:
 
-- install and configure wsdd, or Web Service Discovery, software that allows Windows to find Samba shares,
+- install and configure wsdd, or Web Services Dynamic Discovery, software that allows Windows to find Samba shares,
 - install and configure hd-idle, software that turns off inactive USB drives (video disks are going to be unused most of the time)
 
 ## Historical notes
 
 ### USB drives
 
-My first attempt ran on Odroid and used only USB drives. It didn't work well. Later when I moved to a PC case, I still used several USB drives. When they failed or ran out of space, I replaced them with internal drives. I don't have any USB drives connected to NAS anymore.
+My first attempt ran on Odroid and used only USB drives. It didn't work well. Later when I moved to a PC case, I still used several USB drives. When they failed or ran out of space, I replaced them with internal drives. I don't have any USB drives connected to the NAS anymore.
 
 The only reason I used USB drives is that I already had a large number of them.
 
@@ -96,7 +96,7 @@ The only reason I used USB drives is that I already had a large number of them.
 It was inevitable that a disk would fail. In fact, two disks failed at once (at that time, I had more USB drives and didn't trust them, so I used two parity drives). How I dealt with it:
 
 - I unplugged the failed disks (they were both USB drives).
-- Plugged new disks of the same size (could be bigger, could probably be smaller if they weren't filled to the capacity, but I had the same size disks).
+- Plugged new disks of the same size (could be bigger, could probably be smaller if they weren't filled to capacity, but I had the same size disks).
 - Formatted them the same way (again, not necessary, but since the setup worked before, I didn't change anything), mounted in the same place.
 - Checked the disk number in /etc/snapraid.conf, in my case these were d3 and d4.
 - Ran the command to recover files: `snapraid -d d3 -l fix.log fix` for one disk and `snapraid -d d4 -l fix2.log fix` (I could have skipped '-d DISKNAME' to fix everything at once). Note: you should run it under screen or tmux as it will take a very long time - hours, maybe days.

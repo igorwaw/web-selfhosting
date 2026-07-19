@@ -1,5 +1,5 @@
 ---
-title: "How I build this site"
+title: "(OUTDATED) Generating websites with Pelican"
 date: 2023-03-27T17:30:00
 draft: false
 tags: ["python", "website"]

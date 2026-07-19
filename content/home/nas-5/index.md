@@ -1,11 +1,13 @@
 ---
-title: "Storage server, part 5: migrating from unencrypted mdadm to encrypted btrfs"
+title: "Storage server, part 5: migrating from mdadm to btrfs and unencrypted to encrypted"
 date: 2026-07-10T14:00:00
-draft: true
+draft: false
 tags: ["storage"]
 ---
 
-In [part 3](/home/nas-3/) and [part 4](/home/nas-4/) I explained how I configured my NAS with encrypted drives and btrfs in RAID1 mode. Strictly speaking, it wasn't true. When I originally built this server a few years ago, I used mdadm RAID1 and no encryption. Later, I decided to improve the setup. This post is the actual migration, done live on my NAS ("firefly") without buying any new hardware.
+In [part 3](/home/nas-3/) and [part 4](/home/nas-4/) I explained how I configured my NAS with encrypted drives and btrfs in RAID1 mode. Strictly speaking, it wasn't true. When I originally built this server a few years ago, I used mdadm RAID1 and no encryption. I soon regretted the decision.
+
+Some time later, when I replaced some old hard drives with higher-capacity ones, I decided now it's a good time. Changing the setup requires moving the data around. Having some drives less than 50% full simplifies it. This post is the actual migration, done live on my NAS ("firefly") without buying any new hardware.
 
 ## The starting point
 
@@ -22,7 +24,27 @@ Target state:
 - every SnapRAID disk: LUKS on each disk individually too, ext4 on top of it
 - one password unlocks everything, via a script run manually over SSH after boot, never at boot itself
 
-## Step 1: local copy
+## The process
+
+### Step 1: make sure nothing writes to the drives
+
+A few things on this NAS (Grafana, Jellyfin, Syncthing, Samba) read or write to `/data/other` or `/data/noshare`. I didn't want files to change mid-process. And later, those paths will be empty until the unlock script runs. I stopped them and disabled autostart:
+
+```bash
+for container in "${DOCKER_CONTAINERS[@]}"; do
+  docker stop "$container" || true
+  docker update --restart no "$container"
+done
+
+for service in "${SYSTEMD_SERVICES[@]}"; do
+  systemctl stop "$service" || true
+  systemctl disable "$service"
+done
+```
+
+I also disabled IDrive scheduler, so it wouldn't back up my local copies.
+
+### Step 2: local copy
 
 Reformatting `sdb`/`sde` destroys everything on them, so I needed a temporary local copy (I have an offsite backup on IDrive, but restoring would be slow, plus 2 copies are safer than 1). I decided to use one of the SnapRAID video volumes which had enough free space:
 
@@ -30,21 +52,18 @@ Reformatting `sdb`/`sde` destroys everything on them, so I needed a temporary lo
 cp -a /data/other /data/filmy/backup/
 cp -a /data/noshare /data/filmy/backup/
 ```
-
-This is where I learned more than I wanted to about my own hardware. The first attempt (on /data/seriale) started at 250MB/s, but in a few seconds dropped to 30MB/s. `iostat -x` showed that the destination disk, not the source RAID1, was the bottleneck - high `%util`, huge `w_await`. Turned out the disk I'd picked was an SMR model. And that's exactly what's expected from SMR drives - once their write cache fills up, write speed drops to unacceptable values. I checked my HDDs, luckily one of my CMR drives (WD Red Plus) also had enough free space. Copying speed was a more sensible 100MB/s (the bottleneck was now the source drive, and I couldn't achieve anything better from this hardware).
-
-Later in the same copy job, speed dropped to just a few MB/s for a different reason: a scheduled mdadm RAID consistency check had started and was competing for reads on the same array. `cat /proc/mdstat` confirmed it was active and would take 10 hours to complete; `echo idle > /sys/block/md0/md/sync_action` paused it. I didn't need the check, in a moment I'd be wiping the array anyway.
-
-But before that, I verified the copy rather than trusting `cp -a`. There went another few hours.
+Before wiping the old array, I verified the copy was bit-for-bit correct. There went another few hours.
 
 ```bash
 rsync -ac --dry-run --stats /data/noshare/ /data/filmy/backup/noshare/
 rsync -ac --dry-run --stats /data/other/ /data/filmy/backup/other/
 ```
 
-## Step 2: tearing down the old mdadm/LVM
+No files listed means both copies are identical. You might wonder why I used rsync for verification only, but not for doing the actual copy. Rsync has many features - it can resume, transfer over a network, copy only changed parts etc. But it also means for a simple task of copying files to an empty directory on the same machine, it's noticeably slower. And, when you're moving back and forth hundreds of gigabytes, a slower tool could mean an extra few hours.
 
-Now when I had two copies of data, `sdb`/`sde` could be wiped. I prepared a script, supported by Claude Code. Nobody reviews my home scripts and there's no test environment. Which is why I don't trust the AI agent, but I don't trust myself either (I don't hallucinate, but I make typos and can mix up device names). Here's the relevant part.
+### Step 3: tearing down the old mdadm/LVM
+
+Now that I had a local copy, `sdb`/`sde` could be wiped. I prepared a script, supported by Claude Code. Nobody reviews my home scripts and there's no test environment. Which is why I don't trust the AI agent, but I don't trust myself either (I don't hallucinate, but I make typos and can mix up device names). Here's the relevant part.
 
 ```bash
 for mp in "${OLD_LV_MOUNTPOINTS[@]}"; do
@@ -68,7 +87,7 @@ The few `|| true` parts and the `if` check give a bit of idempotency: if the scr
 
 What it does is: unmount the filesystems, deactivate and remove the volume group, stop the array, zero the mdadm superblock on each member disk, `wipefs` to clear any remaining LVM/mdadm signatures, and remove the array from `mdadm.conf` so it doesn't try (and fail) to reassemble it on the next boot.
 
-## Step 3: LUKS on each disk
+### Step 4: LUKS on each disk
 
 The order of layers is important: physical disks, LUKS, then btrfs. For the "one password for everything" requirement, I generated a single random keyfile once and used it directly as the LUKS key material on every disk in the whole setup (this pair and the SnapRAID ones later):
 
@@ -109,7 +128,7 @@ done
 unset RECOVERY_PASSPHRASE
 ```
 
-## Step 4: btrfs RAID1 on top of LUKS devices
+### Step 5: btrfs RAID1 on top of LUKS devices
 
 With both disks open as `/dev/mapper/luks-btrfs1` and `luks-btrfs2`, creating the actual RAID1 pool is a single command:
 
@@ -137,7 +156,7 @@ for entry in "${BTRFS_SUBVOLUMES[@]}"; do
 done
 ```
 
-Notice both subvolumes mount through `mapper_devices[0]` (the first disk) - with a multi-device btrfs filesystem you only ever mount one member, and btrfs itself finds the rest.
+Notice both subvolumes mount through `mapper_devices[0]` (the first disk). With a multi-device btrfs filesystem you only mount one member - any of them - and btrfs deals with finding the other one and keeping them in sync.
 
 Finally, the script added `/etc/fstab` entries for both mountpoints, but with `noauto` so they're not mounted at boot. I removed the old entries from fstab manually.
 
@@ -150,43 +169,25 @@ for entry in "${BTRFS_SUBVOLUMES[@]}"; do
 done
 ```
 
-## Step 5: disabling autostart of dependent services
+### Step 6: moving the data back
 
-A few things on this NAS (Grafana, Jellyfin, Syncthing, Samba) read or write to `/data/other` or `/data/noshare`. Since those paths are empty until the unlock script runs, I stopped them and disabled autostart:
-
-```bash
-for container in "${DOCKER_CONTAINERS[@]}"; do
-  docker stop "$container" || true
-  docker update --restart no "$container"
-done
-
-for service in "${SYSTEMD_SERVICES[@]}"; do
-  systemctl stop "$service" || true
-  systemctl disable "$service"
-done
-```
-
-## Step 6: moving the data back
-
-With the new pool mounted and empty, I copied the data back from its temporary home. This time I used a `tar` pipe instead of `cp -a`. Since both directories have a lot of small files and `tar` avoids the per-file overhead, I was hoping it would be faster. It was, actually, a bit slower. Oh well. The important part, whether you use cp or tar, is to run it under screen or tmux so it survives if SSH disconnects:
+With the new pool mounted and empty, I copied the data back from its temporary home. This time I used a `tar` pipe instead of `cp -a`. Since both directories have a lot of small files and `tar` avoids the per-file overhead, I was hoping it would be faster. It was, actually, a bit slower. Oh well.
 
 ```bash
 tar -cf - -C /data/filmy/backup/other . | tar -xf - -C /data/other
 tar -cf - -C /data/filmy/backup/noshare . | tar -xf - -C /data/noshare
 ```
 
-Once both finished, I verified with `rsync` in checksum dry-run mode - it reads every byte on both sides and reports any mismatch without touching anything:
+Once both finished, I verified with `rsync` again:
 
 ```bash
 rsync -ac --dry-run --stats /data/filmy/backup/other/ /data/other/
 rsync -ac --dry-run --stats /data/filmy/backup/noshare/ /data/noshare/
 ```
 
-No files listed means a byte-for-byte match. Since source and destination are on completely separate physical disks, this verification pass ran close to full disk speed on each side rather than fighting itself for I/O. Only after both came back clean did I delete the temporary copy on `/data/filmy`.
+Only after both came back clean did I delete the temporary copy on `/data/filmy`.
 
-You might wonder why I used rsync for verification only, but not for the initial copy. Rsync has many features - it can resume, transfer over a network, copy only changed parts etc. But it also means for a simple task of copying files to an empty directory on the same machine, it's noticeably slower. And, when you're moving back and forth hundreds of gigabytes, a slower tool could mean an extra few hours.
-
-## Step 7: verifying the RAID1 pool
+### Step 7: verifying the RAID1 pool
 
 Btrfs hides some of its internal structure from standard Linux tools (though not as much as ZFS). The `lsblk` command that's very useful on a machine with many hard drives only shows mount points on one of the underlying devices:
 
@@ -207,7 +208,7 @@ They confirm the RAID1 setup. Another command you might be used to: `df -h`, is 
 
 Also worth noting, the btrfs commands above on /data/noshare and /data/other give exactly the same results. That's because these are subvolumes of the same filesystem.
 
-## Step 8: the deferred, single-password unlock script
+### Step 8: the deferred, single-password unlock script
 
 The LUKS keyfile gets GPG-encrypted with a human passphrase, and the plaintext copy gets shredded once every disk (this pair, and eventually the SnapRAID disks) is formatted with it.
 
@@ -246,11 +247,11 @@ for service in "${SYSTEMD_SERVICES[@]}"; do
 done
 ```
 
-## Step 9: encrypting the first SnapRAID disk
+### Step 9: encrypting the first SnapRAID disk
 
-Similarly to the mdadm device, I had to make local copies using free space on the other drives. This means working one disk at a time. Luckily, the largest drives were only 40% used.
+Similarly to the mdadm device, I had to make local copies using free space on the other drives. This means working one disk at a time.
 
-First up: `/data/seriale` on `/dev/sdg1`. Once its contents were safely copied to `/mnt/backup/filmy`, the disk itself could be wiped and re-encrypted. I turned the relevant part of the setup script into something reusable, since I'll be running it four times (the remaining video disks, plus the parity disk):
+First up: `/data/seriale` on `/dev/sdg1`. Once its contents were safely copied to `/data/filmy/backup`, the disk itself could be wiped and re-encrypted. I turned the relevant part of the setup script into something reusable, since I'll be running it four times (the remaining video disks, plus the parity disk):
 
 ```bash
 umount "$MOUNTPOINT" 2>/dev/null || true
@@ -258,7 +259,7 @@ awk -v mp="$MOUNTPOINT" '$2 != mp' /etc/fstab > /etc/fstab.tmp && mv /etc/fstab.
 wipefs -a "$PARTITION"
 ```
 
-I switched the fstab cleanup from a `sed` pattern match to an `awk` filter on the exact mountpoint field - a substring match could accidentally catch something like `/data/seriale1` (in the past, I used more, but smaller drives, old paths were still present here and there).
+I switched the fstab cleanup from a `sed` pattern match to an `awk` filter on the exact mountpoint field - a substring match could accidentally catch something like `/data/seriale1`. In the past, I used more, but smaller drives; old paths were still present here and there.
 
 Same key setup as the btrfs pair: the same `master.key`, and the same recovery passphrase added as a second key slot.
 
@@ -279,9 +280,9 @@ echo "/dev/mapper/$MAPPER_NAME $MOUNTPOINT ext4 noauto,nofail,nodev,noatime 0 0"
 
 Next, the data goes back onto `/data/seriale`, verified the same way as step 6, and its LUKS UUID gets added to the (still commented-out) `SNAPRAID_DISKS` block in the unlock script. 
 
-## Step 10: encrypting the rest of the SnapRAID disks
+### Step 10: encrypting the rest of the SnapRAID disks
 
-Then it's the same routine again for `filmy`, `video2` and `parity1`. Only once it was done, I uncommented the SnapRAID block from the `unlock-mount.sh` script. I ran `snapraid sync` to confirm the array's fine and shredded the unencrypted `master.key`. Then came time to reboot, to confirm everything was working as planned. It was!
+Then it's the same routine again for `filmy`, `video2` and `parity1`. Only once it was done, I uncommented the SnapRAID block from the `unlock-mount.sh` script. I ran `snapraid --force-uuid check | tee snapraid.log 2>&1` to confirm the array's fine. SnapRAID refuses to run when more than one disk changes, so the force parameter is needed. Then I shredded the unencrypted `master.key`. Finally, a reboot, to confirm everything was working as planned. It was!
 
 ## Summary
 
@@ -290,3 +291,32 @@ The whole process took three days. Most of that was waiting for the file copy or
 As a result, I got bitrot protection on my main array, plus all the nice features of btrfs. I'm not enabling compression (most space is used by already compressed files, such as JPEG photos, MP3 audio or archives). I'm surely going to use snapshots.
 
 Encryption was the most important goal. Most files on the NAS aren't confidential - I wouldn't care if my music collection leaks. But some are personal. My laptops have been encrypted for years, by encrypting the NAS I closed a major hole. Even if it was unlikely to be exploited, it didn't feel proper.
+
+## Tips
+
+I doubt anyone would be doing exactly the same thing, but maybe something similar?
+
+### Drive letters can change
+
+After a reboot, /dev/sda can become /dev/sde. There are several ways to deal with it:
+
+- **UUIDs** are the best permanent solution to use in /etc/fstab or scripts. They don't change, unless you reformat the filesystem.
+- **lsblk** is your friend. For the commands you type manually, short drive paths are convenient, `lsblk` is the quickest way to check all drives. Or, a less handy `lsblk -o NAME,TRAN,UUID,FSTYPE,MOUNTPOINT` gives you UUIDs and transport type (usb, sata, nvme and others).
+- **Filesystem labels** can be used in fstab or mount commands, but on an encrypted machine, they're only visible once the drives are unlocked.
+- **LVM**, if used, can scan all devices for PVs, with the same caveat about encrypted drives.
+
+### Use screen or tmux
+
+All the copying or verification commands take hours to run. If your server is running headless and you log in with ssh from another machine, you need to make sure the commands won't be stopped if your connection is interrupted.
+
+### Have more than one copy
+
+I only worked on local copies during the migration. But it's easy to make a slip and type "wipefs /dev/sdf1/" when you actually meant "sdg1". It didn't happen to me, but I was prepared for it. Off-site backup gives peace of mind, local backup is faster, have both.
+
+### Monitor hard drive throughput
+
+Two useful commands: `iotop` shows which process reads/writes most data. If the throughput is lower than expected, `iostat -x 1` will show whether source or target is to blame - look for high *%util* and *w_await*.
+
+In my case, the first attempt to make a local copy started at 250MB/s, but in a few seconds dropped to 30MB/s. Iostat showed that the destination disk was the bottleneck. Turned out the disk I'd picked was an SMR model. And that's exactly what's expected from SMR drives - once their write cache fills up, write speed drops to unacceptable values. I checked my HDDs, luckily one of my CMR drives (WD Red Plus) also had enough free space. Copying speed was a more sensible 100MB/s (the bottleneck was now the source drive, and I couldn't achieve anything better from this hardware).
+
+Later in the same copy job, speed dropped to just a few MB/s for a different reason: a scheduled mdadm RAID consistency check had started and was competing for reads on the same array. That was more tricky to find, since the kernel task didn't show up on iotop. `cat /proc/mdstat` showed what was happening and that the task would take 10 hours to complete; `echo idle > /sys/block/md0/md/sync_action` paused it. I didn't need the check, in a moment I'd be wiping the array anyway.
