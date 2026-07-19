@@ -16,7 +16,9 @@ I noticed that the modern backup solutions can be broadly divided into 2 groups:
 
 Nothing in between. What if you need to back up several machines - because you're a geek with several computers, because you have a family, or both? I'd say it's still better to use personal tools and configure a few copies, maybe with some kind of automation or templating. The big systems make it easy to add another machine, but the initial setup is more complex. At some point they might be worth the initial time investment, but it's probably around a few dozen clients, not 5 or 10.
 
-## Features obligatory for me
+## Features of backup software
+
+### Features obligatory for me
 
 - Backup over LAN to a hard drive on another machine (I'm not interested in tapes, optical media or clay tablets)
 - Server for Linux/x86-64
@@ -30,11 +32,13 @@ Nothing in between. What if you need to back up several machines - because you'r
 - Generally secure (some kind of authentication, CVE history not terrible)
 - Client cannot directly access the backup files
 
-The last point is important to protect against ransomware. If it encrypts my laptop but can't touch my backups, no big deal: I could reinstall the OS and restore my files from the last clean backup. But if it's able to encrypt or delete my backups, I'm doomed. A typical ransomware would encrypt files on a mounted network drive. Would it scan the local network for available SMB (Windows file sharing) servers? Maybe. Would it scan a machine for SSH keys and configs? I seriously doubt it, most malware is designed for common environments, not something that's used by 0.0001% of users. Therefore, I plainly reject all solutions that back up files to an SMB share. But SSH based access (SFTP, rsync over SSH) is acceptable for me. In all such cases you can further reduce the risk by using non-default SSH keys, limiting rights of the remote user etc. However, if you think you're at risk of being targeted by APT groups (Advanced Persistent Threat, e.g. an intelligence agency), you need higher security.
+#### Ransomware protection
 
-## Features nice to have
+The last point is important to protect against ransomware. If it encrypts my laptop but can't touch my backups, no big deal: I can restore my files from the last clean backup. But if it's able to encrypt or delete my backups, I'm doomed. A typical ransomware would encrypt files on a mounted network drive. Would it scan the local network for available SMB (Windows file sharing) servers? Maybe. Would it scan a machine for SSH keys and configs? I seriously doubt it, most malware is designed for common environments, not something that's used by 0.0001% of users. Therefore, I plainly reject all solutions that back up files to an SMB share. But SSH based access (SFTP, rsync over SSH) is acceptable for me. In all such cases you can further reduce the risk by using non-default SSH keys, limiting rights of the remote user etc. However, if you think you're at risk of being targeted by APT groups (Advanced Persistent Threat, e.g. an intelligence agency), you need higher security.
 
-- Installable with apt or Docker
+### Features nice to have
+
+- Installable with apt (preferably) or Docker
 - Configurable with Ansible
 - GUI (for less common operations, eg. choosing a version to restore, GUI can be more convenient than a CLI)
 - Client for Windows (I currently have only one Windows machine and it's not my daily driver, I can live without automated backups on it)
@@ -46,7 +50,7 @@ The last point is important to protect against ransomware. If it encrypts my lap
 
 GUIs come in two flavours: a traditional client and a web-based interface. The former can sit in a tray to notify about problems and be within reach all the time, the latter is also useful for headless machines (servers). Since it's network accessible, it needs to be kept secure (password, listen on loopback only if not needed on the network / filtered by a firewall if needed). 
 
-## Features that some people might need but are not important for me
+### Features that some people might need but are not important for me
 
 Note that some software I considered have these features anyway, I don't mind them as long as they don't get in the way.
 
@@ -58,7 +62,7 @@ Note that some software I considered have these features anyway, I don't mind th
 
 ## Software considered
 
-In alphabetical order. Some solutions I immediately rejected, some made it to the second round, until I found something that was less terrible for my needs than the others. YMMV.
+In alphabetical order. Some solutions I immediately rejected, some made it to the second round. YMMV.
 
 Here's the summary, some details below.
 
@@ -67,13 +71,13 @@ Here's the summary, some details below.
 | Amanda | Rejected | No - hard even by backup-software standards | Yes | Yes | Yes | only via paid Zmanda add-ons | Yes  | Harder than it should be |
 | BackupPC | Rejected | Moderate | Yes | Yes (any rsync/SSH host) | Yes | Yes (web) | Yes | Harder than it should be |
 | Bacula | Rejected | No - even worse than Amanda | Yes | Yes | Yes | GUI/web (Bacula Enterprise, Baculum) are add-ons | Yes | Harder than it should be |
-| Borg | Maybe | Moderate, tedious per client (Ansible playbook exists) | Yes, if hardened (append-only repo) | Yes | Yes | Yes (3rd party) | Yes | Yes |
-| Custom rsync scripts | Rejected | No - every change means editing the script | If carefully hardened | Yes (runs on anything that can run Linux) | No dedicated tools, standard Linux utilities | No | Yes | Yes |
-| Duplicati | Rejected | Yes | If carefully hardened | Yes | Yes | Yes | Yes | Yes (GUI or CLI) |
+| Borg | Maybe | Moderate | If hardened (easy process) | Yes | Yes | 3rd party | Yes | Yes |
+| Custom rsync scripts | Rejected | No - every change means editing the script | If hardened (manually) | Yes (runs on anything that can run Linux) | No dedicated tools, standard Linux utilities | No | Yes | Yes |
+| Duplicati | Rejected | Yes | If hardened | Yes | Yes | Yes | Yes | Yes (GUI or CLI) |
 | Duplicity | Maybe | Moderate | If hardened | Yes | Yes | 3rd party | Yes | Yes |
 | LuckyBackup | Rejected | Presumably moderate (it's a GUI wrapper around rsync), but unmaintained for years | No | Mainly x86 desktop Linux; ARM packaging unlikely given it's unmaintained | No | Yes | Yes | Yes |
-| restic | Maybe | Yes | Yes, if hardened  | Yes | Yes | Yes (3rd party) | Yes | Yes |
-| UrBackup | Maybe | Moderate | Yes | Yes  | Yes (client) / no (server) | Yes (web)  | Yes | Harder than it should be |
+| restic | Maybe | Moderate | If hardened  | Yes | Yes | 3rd party | Yes | Yes |
+| UrBackup | Maybe | Yes | Yes | Yes  | Yes (client) / no (server) | Yes (web)  | Yes | Harder than it should be |
 
 ### Amanda
 rejected
@@ -96,7 +100,9 @@ It's an unusual solution since it reverses a common pattern. Most network backup
 - No special support for open files.
 - No support for image backups.
 
-BackupPC would be a terrible option for an enterprise. You need to configure each client to accept incoming connections with enough access rights to read all files, without being prompted for passwords. That means using SSH keys for SSH-based protocols, storing unencrypted passwords for FTP/SMB; plus some careful configuration on the client side in all cases. Can you do it securely? Taking into account that a laptop might also connect to other, untrusted networks? Maybe, on a small scale and if you control all the devices. For anything larger than a home network, I'd rather have a single point - the backup server - that needs to be kept secure, and most of the client devices should have all their ports closed and filtered. Even just adding/removing new devices and configuring custom exclude lists in one place would be a pain. For home, especially a geeky home where Linux machines outnumber Windows systems, it might be acceptable.
+BackupPC would be a terrible option for an enterprise. You need to configure each client to accept incoming connections with enough access rights to read all files, without being prompted for passwords. That means using SSH keys for SSH-based protocols, storing unencrypted passwords for FTP/SMB; plus some careful configuration on the client side in all cases.
+
+Can you do it securely? Taking into account that a laptop might also connect to other, untrusted networks? Maybe, on a small scale and if you control all the devices. For anything larger than a home network, I'd rather have a single point - the backup server - that needs to be kept secure, and most of the client devices should have all their ports closed and filtered. Even just adding/removing new devices and configuring custom exclude lists in one place would be a pain. For home, especially a geeky home where Linux machines outnumber Windows systems, it might be acceptable. But the alternatives seemed better.
 
 ### Bacula
 rejected
@@ -115,12 +121,12 @@ Maintaining a multi-machine setup is a bit tedious. For every client you need to
 ### Custom rsync scripts for snapshot-style backups
 rejected
 
-I used such scripts in the past, they work well, but these days there are better ways. This solution doesn't scale well, but might work for a small environment. What I have in mind is a script that runs on a client and copies files to a server using rsync over SSH, using hardlinks so that each backup looks complete, but unchanged files are only stored once. 
+What I have in mind is a script that runs on a client and copies files to a server using rsync over SSH, using hardlinks so that each backup looks complete, but unchanged files are only stored once. I used such scripts in the past, they work well, but these days there are better ways. This solution doesn't scale well, but might work for a small environment.
 
 - Ransomware protection - see the note about SSH access.
 - Linux client - sure, all features would work.
 - Windows client - you'd need to install some Linux-style software. Doable, but a pain.
-- Since you don't need any special binaries, it works with x86, ARM and anything else that can run Linux (or even another system). Big plus.
+- Since you don't need any special binaries, it works with x86, ARM and anything else that can run Linux (or even another unix-like system). Big plus.
 - Support for open files - possible, if you script it yourself (e.g. with LVM or btrfs snapshots), most people wouldn't bother. 
 - No GUI or even CLI for restore, you'd need to copy files with standard utilities such as SFTP. But, since any incremental backup looks like a full one, it's easy to find files.
 - Every new machine, every change in the backup set, every new feature you'd like - require customising the script. 
@@ -139,13 +145,13 @@ maybe
 
 Despite the near-identical name, Duplicity is a different, older project, and reportedly one of the influences behind Duplicati's design. The core idea is similar: an initial full backup followed by incremental diffs computed with the same rsync algorithm, encrypted with GPG rather than Duplicati's own built-in AES. The differences compared to Duplicati:
 
-- CLI ony, no built-in scheduler
+- CLI ony, no GUI and no built-in scheduler.
 - Python-based rather than Mono/.NET - no special requirements on most Linux systems.
-- The full+incremental chain needs periodic re-basing (a fresh full backup) to keep restores fast and avoid an ever-growing chain of diffs - Duplicati's local database and block-level deduplication sidestep that specific issue, though at the cost of Duplicati's own history of database-corruption complaints.
+- The full+incremental chain needs periodic re-basing (a fresh full backup) to keep restores fast and avoid an ever-growing chain of diffs. Duplicati's local database and block-level deduplication sidestep that specific issue, though at the cost of Duplicati's own history of database-corruption complaints.
 
 Backend support (SFTP, S3-compatible, WebDAV, various cloud providers) is similar do Duplicati.
 
-If the daemon/GUI/scheduler is what you like about Duplicati, Duplicity won't win you over. If you'd rather have a lighter, GPG-based, cron-driven tool with no background service, it might be worth a look - I haven't run it myself, so take this as "worth investigating" rather than a recommendation.
+If the daemon/GUI/scheduler is what you like about Duplicati, Duplicity won't win you over. If you'd rather have a lighter, cron-driven tool with no background service, it might be worth a look - I haven't run it myself, so take this as "worth investigating" rather than a recommendation.
 
 ### LuckyBackup
 rejected
@@ -182,3 +188,7 @@ Downsides:
 ## Summary
 
 I ended up installing and trying two products: UrBackup and Borg. Neither filled all of my required points - especially around the ease of use and automation. Perfect backup software simply doesn't exist.
+
+Borg, Duplicity and restic have similar features. I read the docs and had the slight preference for Borg. UrBackup has a different philosophy - GUI driven, with more control on the server side. I wanted to check which approach works better for me.
+
+In the end, Borg won. But it was a matter of taste, not features.
