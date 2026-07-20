@@ -35,7 +35,7 @@ instead of setting *BORG_PASSPHRASE* directly - Borg runs that command whenever 
 
 ### Coping with a laptop that isn't always on
 
-My laptop travels with me, so it often ends up on another network than my NAS. Rather than let every missed connection page me as a failed backup, the script sets a short connect timeout and inspects what Borg's output actually says before deciding whether to fail:
+My laptop travels with me, so it often ends up on another network than my NAS. Rather than let every missed connection be treated as a failed backup, the script sets a short connect timeout and inspects what Borg's output actually says before deciding whether to fail:
 
 ```bash
 BORG_RSH="ssh -o ConnectTimeout=10 -o BatchMode=yes ..."
@@ -43,18 +43,19 @@ BORG_RSH="ssh -o ConnectTimeout=10 -o BatchMode=yes ..."
 
 Timeout, refused, unreachable, DNS failure - logged and treated as "nothing to do this run" (exit 0). Anything else - a real auth failure, a full disk, repo corruption - still exits non-zero.
 
-Everything is scheduled through systemd timers rather than cron, mainly for `Persistent=true` - a laptop that's asleep at 2am simply runs its backup on next wake instead of silently skipping it. Pruning runs afterwards, on firefly, well clear of any backup that might still be in progress.
+Everything is scheduled through systemd timers rather than cron, mainly for `Persistent=true` - a laptop that's asleep at 2am simply runs its backup on next wake instead of silently skipping it.
 
 The end result: every night, each machine pushes an encrypted, deduplicated, tamper-resistant backup to firefly, and I don't have to think about it again until I actually need a restore.
 
 ## What I didn't like
 
-- My perfect backup software would have both a full-featured CLI and the GUI. I want CLI for scripting, GUI would be better for less-used operations, such as "find and compare several past versions of this file to see which one I need". There are 3rd party GUIs, I might try one some day.
+- My perfect backup software would have both a full-featured CLI and a GUI. I want CLI for scripting, but GUI would be better for less-used operations, such as "find and compare several past versions of this file to see which one I need". There are 3rd party GUIs, I might try one some day.
 - Some server-side configuration is done by the client role. I couldn't find any other sane way.
-- I have to keep passwords in plain text in one file on the server. That is a tough choice. I want per-client encryption, but also the scripts running on the server need a way to access the repository for pruning and compacting (since all clients use append-only mode, they can't handle that, it has to be done server-side).
+- I have to keep passwords in plain text in one file on the server (readable only by root, but still). That is a tough choice. I want per-client encryption, but also the scripts running on the server need a way to access the repository for pruning and compacting, so they need to have access to the encryption key (since the clients use append-only mode, they can't handle that, it has to be done server-side).
 
 ## What I liked
 
 - Borg plays well with the way I already use my Linux machines: it uses SSH, it's scriptable, doesn't need a GUI, it can be easily configured with Ansible. I expected that since every client needs a separate user account, SSH keypair and cron/systemd jobs, adding another machine would be a long process. I admit I spent an hour or two writing the playbook. But after that, it's now dead simple: just add borg_client role to the new client's playbook, add new password to the vault, configure includes/excludes if you want to back up something more than /etc - and that's it, Ansible will do the rest.
-- Borg deduplicates and compresses at the chunk level, so daily backups of mostly-unchanged data cost very little extra space. Encryption and authentication is always on - another layer of security, maybe an overkill for an encrypted NAS on a trusted LAN, but I'm getting it for free.
+- Borg deduplicates and compresses at the chunk level, so daily backups of mostly-unchanged data cost very little extra space.
+- Encryption and authentication is always on - another layer of security, maybe overkill for an encrypted NAS on a trusted LAN, but I'm getting it for free.
 - The append-only mode is a killer feature. A client only gets permission to add new archives to its repository on the server, never to delete or rewrite existing ones. If a client machine is ever compromised (e.g. by ransomware), the attacker can't destroy the backups along with the live data.

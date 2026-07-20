@@ -21,7 +21,7 @@ Probably the cheapest way to store several TB of data at the time of writing thi
 
 Downside of IDrive: this service doesn't provide S3-compatible API, REST interface or any other standard way that's supported by various backup programs. You have to use their own client. Good sides? It's cheap, it's reasonably fast, it offers pretty good security (2FA, encrypted storage and transfer), and it works.
 
-**Update 2026:** current list pricing is $83.88/year for 5TB and $125.88/year for 10TB (there's also 20/50/100TB now), with a first-year or first-two-years discount usually on offer rather than a fixed affiliate rate - check the pricing page for whatever the current promo is rather than trusting the numbers above for long. The bigger change is on Linux: the old set of separate Perl scripts is gone, replaced by a single installer with proper `--install`/`--update`/`--uninstall` flags. See below.
+**Update 2026:** current list pricing is $83.88/year for 5TB and $125.88/year for 10TB (there's also 20/50/100TB now), with a first-year or first-two-years discount usually on offer rather than a fixed affiliate rate - check the pricing page for whatever the current promo is rather than trusting the numbers above for long. The bigger change is on Linux: the old set of separate Perl scripts is gone, replaced by a single installer. See below.
 
 Sending or receiving terabytes of data takes days, even on a fast broadband. IDrive gives an option of using a USB drive for a restore or for initial backup. I haven't used this option, so I can't rate it.
 
@@ -29,7 +29,7 @@ Sending or receiving terabytes of data takes days, even on a fast broadband. IDr
 
 Sign up for an account. It's also wise to turn on 2FA, preferably with a TOTP app.
 
-The whole Linux install story is different now, and much less painful. Debian/Ubuntu and Fedora/CentOS get proper deb/rpm packages from the download page; for anything else there's still a generic package, but it's now a single idriveforlinux.bin. Make it executable and let it install itself:
+The whole Linux install story is now easy. Debian/Ubuntu and Fedora/CentOS get proper deb/rpm packages from the download page; for anything else there's a generic package, but it's a single binary. Make it executable and let it install itself:
 
 ```bash
 chmod a+x idriveforlinux.bin
@@ -50,4 +50,4 @@ For restoring (even on another machine), you can also use the web UI.
 
 Back in 2023, getting the Linux client at all meant asking support for a download link - it wasn't just available on the site like the Windows/Mac ones. What you got was a pile of separate Perl scripts, one per job: `account_setting.pl` to set up the account (which tried to install its own Perl/CPAN dependencies and could fail halfway through), `edit_supported_files.pl` for backup sets, `Backup_Script.pl` to actually run a backup, `Restore_Script.pl` to restore, `scheduler.pl` to set up the schedule, `status_retrieval.pl` to check on it. 
 
-Neither old nor new version is easily scriptable/configurable with Ansible.
+Neither old nor new version is easily scriptable/configurable with Ansible, which I would prefer.
