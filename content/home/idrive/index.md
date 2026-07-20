@@ -1,11 +1,13 @@
 ---
-title: "Backup, part 1: IDrive, backup to the cloud"
+title: "Backup, part 3: IDrive, backing up to the cloud"
 date: 2023-11-20T17:40:00
 draft: false
 tags: ["backup"]
 ---
 
-That is against the spirit of self-hosting, but keeping data safe is more important than keeping purity. Your computers can back up to your NAS (I'll cover that in the next step), that protects you from disk failure, ransomware, accidental deletion and losing your laptop on a train. But a fire or flood can destroy both at the same moment. A proper disaster recovery plan requires 3 copies of data: 1 working copy, 1 on-site backup for quick restore and 1 off-site backup if the previous backup fails. One option is to find another self-hoster and arrange for mutual backup to each other's NAS, another is to use a cloud service.
+(first written on 2023.11.20, updated on 2026.07.20)
+
+That is against the spirit of self-hosting, but keeping data safe is more important than keeping purity. Your computers can back up to your NAS, that protects you from disk failure, ransomware, accidental deletion and losing your laptop on a train. But a fire or flood can destroy both at the same moment. A proper disaster recovery plan requires 3 copies of data: 1 working copy, 1 on-site backup for quick restore and 1 off-site backup if the previous backup fails. One option is to find another self-hoster and arrange for mutual backup to each other's NAS, another is to use a cloud service.
 
 ## Cloud storage choices
 
@@ -17,26 +19,35 @@ Another way is to use an object storage such as Amazon S3, Google Cloud Storage,
 
 Probably the cheapest way to store several TB of data at the time of writing this (November 2023) is IDrive. Their personal plan starts from $99 per year for 5TB, $149 for 10TB, but you can find some affiliate links with a special offer: $4 for the first year. I got mine at <https://www.tomsguide.com/reviews/idrive-cloud-storage-review>. 
 
-Downside of IDrive: this service doesn't provide S3-compatible API, REST interface or any other standard way that's supported by various backup programs. You have to use their own client. In the case of Linux, it's a set of scripts. They have limited functionality compared to a Windows version. There's also no way of automating installation and configuration. Good sides? It's cheap, it's reasonably fast, it offers pretty good security (2FA, encrypted storage and transfer), and it works.
+Downside of IDrive: this service doesn't provide S3-compatible API, REST interface or any other standard way that's supported by various backup programs. You have to use their own client. Good sides? It's cheap, it's reasonably fast, it offers pretty good security (2FA, encrypted storage and transfer), and it works.
 
-Sending or receiving terabytes of data takes days, even on a fast broadband. IDrive gives an option of using USB drive for a restore or for initial backup. I haven't used this option, so I can't rate it.
+**Update 2026:** current list pricing is $83.88/year for 5TB and $125.88/year for 10TB (there's also 20/50/100TB now), with a first-year or first-two-years discount usually on offer rather than a fixed affiliate rate - check the pricing page for whatever the current promo is rather than trusting the numbers above for long. The bigger change is on Linux: the old set of separate Perl scripts is gone, replaced by a single installer with proper `--install`/`--update`/`--uninstall` flags. See below.
+
+Sending or receiving terabytes of data takes days, even on a fast broadband. IDrive gives an option of using a USB drive for a restore or for initial backup. I haven't used this option, so I can't rate it.
 
 ## Getting started
 
-Sign up for an account. It's also wise to turn on 2FA, preferably with a TOTP app. Now, the Windows and Mac clients are available for download, but for the Linux scripts you need to contact support. I'm not sure why, do they need to enable any special options for the account? Anyway, I asked on the live chat and got a download URL in 2 minutes. Beware of IDrive scripts you can find on the internet - I found some, they were so old they failed to connect - and even failed to auto-update.
+Sign up for an account. It's also wise to turn on 2FA, preferably with a TOTP app.
 
-Following the documentation at <https://www.idrive.com/readme> I unpacked the client to the directory of my choice. I used /opt and ran the client as root. If you don't need to back up files belonging to different users, you can use a standard account. After unpacking you need to make the scripts executable: `chmod a+x *.pl`.
+The whole Linux install story is different now, and much less painful. Debian/Ubuntu and Fedora/CentOS get proper deb/rpm packages from the download page; for anything else there's still a generic package, but it's now a single idriveforlinux.bin. Make it executable and let it install itself:
 
-First script to run is `account_setting.pl`. It detected some missing dependencies, tried to install them - some with apt, some using Perl CPAN - and failed. I ran the script again and chose not to install dependencies, but list them instead. I tried manual installation to see what was wrong. The first Perl module tried to create a directory in /usr/local/man, but on my system it wasn't a directory, but a dead symlink. I fixed it, tried automatic installation again - it worked. I then logged in to my account and answered a few questions - default choice should work most of the time.
+```bash
+chmod a+x idriveforlinux.bin
+./idriveforlinux.bin --install
+```
+
+The installer creates a default backup set (your home directory) with a daily schedule already attached, so you technically have a working backup the moment it finishes - though I still went in and pointed it at what I actually wanted backed up.
 
 ## First backup
 
-Next script to run is `edit_supported_files.pl`. It is used for editing backup sets, exclude lists etc. I chose a reasonably sized directory (few GB) for a first test and added more directories later.
+The actual app is `/opt/IDriveForLinux/bin/idrive`. It uses a text-mode menu to change settings, restore files, schedule backups or run an immediate backup. I picked a reasonably sized directory (a few GB) for a first test backup, confirmed I could restore it, then went back into the schedule option and pointed it at what I actually wanted backed up long-term.
 
-Manual backup is started with `Backup_Script.pl`. Remember to run it under cron or tmux if you expect your job to run longer than a few minutes. It shows progress, has an option to pause/resume backup and to set bandwidth limit.
-
-Make sure you can restore your data. You can use `Restore_Script.pl` on your Linux machine or the web interface.
-
-Last thing to do is to run `scheduler.pl` to schedule automatic backup. Choose your frequency (hourly/daily/weekly) and time to start. Once the scheduled job starts, you can watch its progress and pause/resume/throttle using `status_retrieval.pl`.
+For restoring (even on another machine), you can also use the web UI.
 
 ![IDrive web UI](idrive.png)
+
+## What changed since I started using it
+
+Back in 2023, getting the Linux client at all meant asking support for a download link - it wasn't just available on the site like the Windows/Mac ones. What you got was a pile of separate Perl scripts, one per job: `account_setting.pl` to set up the account (which tried to install its own Perl/CPAN dependencies and could fail halfway through), `edit_supported_files.pl` for backup sets, `Backup_Script.pl` to actually run a backup, `Restore_Script.pl` to restore, `scheduler.pl` to set up the schedule, `status_retrieval.pl` to check on it. 
+
+Neither old nor new version is easily scriptable/configurable with Ansible.

@@ -1,13 +1,15 @@
 ---
-title: "Backup, part 2: considerations for local backup"
-date: 2026-07-12T17:40:00
-draft: true
+title: "Backup, part 1: considerations for local backup"
+date: 2026-07-20T17:40:00
+draft: false
 tags: ["backup"]
 ---
 
 There's an old saying that there are two categories of people: those who do backups and those who will. It is, of course, completely false. There are also people who lost their data but it didn't teach them anything, people who don't care because they keep most of their stuff in the cloud... Last but not least, people who did backups in the past, know the importance, want to do them, just not today.
 
 Why are so many people reluctant to back up? Simple: it's because all backup solutions are horrible - and I actually wanted to use other words, but I'm trying to keep this blog family friendly. Since I was in the last group, but I wanted to find a better solution than previously used, I started by listing the features I'd like to have. Then I checked open source backup software. Most didn't have all the features, and those that had were even more of a pain to configure. I had some experience with commercial software and it's no better when it comes to the pain part.
+
+## Types of backup systems
 
 I noticed that the modern backup solutions can be broadly divided into 2 groups:
 
@@ -40,11 +42,11 @@ The last point is important to protect against ransomware. If it encrypts my lap
 
 - Installable with apt (preferably) or Docker
 - Configurable with Ansible
-- GUI (for less common operations, eg. choosing a version to restore, GUI can be more convenient than a CLI)
+- GUI (for less common operations, e.g. choosing a version to restore, GUI can be more convenient than a CLI)
 - Client for Windows (I currently have only one Windows machine and it's not my daily driver, I can live without automated backups on it)
 - Client and server for other OSes/devices (I don't need them now, but I might in future)
 - Image backups in addition to file backups (not obligatory, since I can use another tool for that)
-- Basic ability to back up open files, eg. by taking an LVM snapshot on Linux, using VSS on Windows (it would be more important for Windows clients, on Linux you can safely copy most of the open files; if I occasionally miss some latest changes - whatever, it doesn't need to be perfect)
+- Basic ability to back up open files, e.g. by taking an LVM snapshot on Linux, using VSS on Windows (it would be more important for Windows clients, on Linux you can safely copy most of the open files; if I occasionally miss some latest changes - whatever, it doesn't need to be perfect)
 - Data deduplication (useful, but disk space is cheap and I'm not backing up dozens of almost identical machines)
 - Encryption, at rest or in transit. (I'm not paranoid enough to implement Zero Trust Architecture at home, but might use the same solution elsewhere)
 
@@ -82,7 +84,7 @@ Here's the summary, some details below.
 ### Amanda
 rejected
 
-Fails on the "easy to set up" point, so I only did a very casual check for the rest of the points. It's a really old system, dating to the early 1990s. Designed with tape backups in mind, later expanded to back up to hard drives or even cloud services, eg. S3. It has a lot of features that are usually found only in commercial products - it can back up several different DBs, can authenticate using various enterprise services, can control tape libraries. Combine age with lots of features and you'll get something that's really difficult to set up.
+Fails on the "easy to set up" point, so I only did a very casual check for the rest of the points. It's a really old system, dating to the early 1990s. Designed with tape backups in mind, later expanded to back up to hard drives or even cloud services, e.g. S3. It has a lot of features that are usually found only in commercial products - it can back up several different DBs, can authenticate using various enterprise services, can control tape libraries. Combine age with lots of features and you'll get something that's really difficult to set up.
 
 ### BackupPC
 rejected
@@ -112,7 +114,7 @@ Similar to Amanda, slightly more modern (created in 2000). Complex solution for 
 ### Borg
 maybe
 
-Borg can be used to back up some files to another directory on the same system (eg. an external hard drive or a mounted network share). But it can also talk to a Borg process on another machine using SSH (there's no separate client and server package, it's the same binary run with different parameters). You don't even need to run a daemon, just create a user account and configure SSH (in ~/.ssh/authorized_keys) to run borg instead of a full-featured shell. Linux clients are fully supported, for Windows some bending over backwards is required. There are no official GUIs (there are 3rd party packages), but the CLI makes it easy to restore a specific version. Borg can also be used in the reversed way, like BackupPC, where the server pulls data from the client. The Borg project puts a strong emphasis on security, eg. backups are properly encrypted, and on the efficient use of space and bandwidth, with deduplication and compression.
+Borg can be used to back up some files to another directory on the same system (e.g. an external hard drive or a mounted network share). But it can also talk to a Borg process on another machine using SSH (there's no separate client and server package, it's the same binary run with different parameters). You don't even need to run a daemon, just create a user account and configure SSH (in ~/.ssh/authorized_keys) to run borg instead of a full-featured shell. Linux clients are fully supported, for Windows some bending over backwards is required. There are no official GUIs (there are 3rd party packages), but the CLI makes it easy to restore a specific version. Borg can also be used in the reversed way, like BackupPC, where the server pulls data from the client. The Borg project puts a strong emphasis on security, e.g. backups are properly encrypted, and on the efficient use of space and bandwidth, with deduplication and compression.
 
 Since the client needs to connect to the server using SSH, ransomware protection depends on configuration, but Borg makes it easy to harden the setup. You can use a special account only for backups, with limited rights so it can only run borg, and set the repository in append-only mode so backups can't be deleted.
 
@@ -134,22 +136,22 @@ What I have in mind is a script that runs on a client and copies files to a serv
 ### Duplicati
 Rejected
 
-Duplicati has no server component. It can back up files to a locally attached drive (eg. USB disk), cloud service or a network drive using several common protocols (SMB, SFTP, FTP and a few others). The usual caveat about ransomware protection applies. Since cloud is the usual target, files are properly encrypted by default. Backups are incremental with supposedly strong deduplication WITHIN ONE MACHINE. Duplicati specifically warns not to back up multiple computers to one location, so if you want to save space when backing up many similar machines, look somewhere else.
+Duplicati has no server component. It can back up files to a locally attached drive (e.g. USB disk), cloud service or a network drive using several common protocols (SMB, SFTP, FTP and a few others). The usual caveat about ransomware protection applies. Since cloud is the usual target, files are properly encrypted by default. Backups are incremental with supposedly strong deduplication WITHIN ONE MACHINE. Duplicati specifically warns not to back up multiple computers to one location, so if you want to save space when backing up many similar machines, look somewhere else.
 
 A nice thing about Duplicati is that it gives choice. There's a daemon with a web GUI, it allows you to configure the whole backup process, browse backups and will even run its own scheduler. Or you can use CLI tools for configuration and restore, run backups with cron, save some RAM and CPU cycles. Or anything in between.
 
-Duplicati works well with both Linux and Windows. It's heavier on resource usage than traditional Unix tools - it's written in C# (on Linux you'll need to install Mono, it's available for all common CPU architectures, check if you're running something exotic) and keeps a small DB on the client. Not an issue for my laptop or any other modern computers. But I didn't feel like installing Mono just for one tool, if there were lighter alternatives.
+Duplicati works well with both Linux and Windows. It's heavier on resource usage than traditional Unix tools - it's written in C# (on Linux you'll need to install Mono, it's available for all common CPU architectures, check if you're running something exotic) and keeps a small DB on the client. Not an issue for my laptop or any other modern computers. But I didn't feel like installing Mono just for one tool, given there were lighter alternatives.
 
 ### Duplicity
 maybe
 
 Despite the near-identical name, Duplicity is a different, older project, and reportedly one of the influences behind Duplicati's design. The core idea is similar: an initial full backup followed by incremental diffs computed with the same rsync algorithm, encrypted with GPG rather than Duplicati's own built-in AES. The differences compared to Duplicati:
 
-- CLI ony, no GUI and no built-in scheduler.
+- CLI only, no GUI and no built-in scheduler.
 - Python-based rather than Mono/.NET - no special requirements on most Linux systems.
 - The full+incremental chain needs periodic re-basing (a fresh full backup) to keep restores fast and avoid an ever-growing chain of diffs. Duplicati's local database and block-level deduplication sidestep that specific issue, though at the cost of Duplicati's own history of database-corruption complaints.
 
-Backend support (SFTP, S3-compatible, WebDAV, various cloud providers) is similar do Duplicati.
+Backend support (SFTP, S3-compatible, WebDAV, various cloud providers) is similar to Duplicati.
 
 If the daemon/GUI/scheduler is what you like about Duplicati, Duplicity won't win you over. If you'd rather have a lighter, cron-driven tool with no background service, it might be worth a look - I haven't run it myself, so take this as "worth investigating" rather than a recommendation.
 

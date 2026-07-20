@@ -24,7 +24,9 @@ comments: false
 - [Syncthing: synchronising files between the devices](/home/syncthing/)
 - [Prometheus and Grafana: monitoring - part 1](/home/prometheus-1/)
 - [Prometheus and Grafana: monitoring - part 2](/home/prometheus-2/)
-- [IDrive: backup to the cloud](/home/idrive/)
+- [Backup, part 1: considerations for local backup](/home/backup-choices/)
+- [Backup, part 2: Borg, backing up to the NAS](/home/borg/)
+- [Backup, part 3: IDrive, backing up to the cloud](/home/idrive/)
 
 ## Self hosting on the internet
 
