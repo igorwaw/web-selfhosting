@@ -17,15 +17,14 @@ Now, don't get me wrong. All of these technologies have good uses, but they are 
 
 ## Good and bad reasons
 
-**Education** is one good reason. Many IT professionals maintain a "home lab" to experiment with technology. Isn't it convenient when the lab
-can also do something useful?
+**Education** is one good reason. Many IT professionals maintain a homelab to experiment with technology. Isn't it convenient when the lab can also do something useful?
 
 **Privacy** is another good reason. I see some people declaring that privacy is lost anyway and they might as well share all their personal information.
 I see others that meticulously control all their data to make sure it never leaves a system they control. I'm neither. I don't believe fully reclaiming
 your data is even possible and the more you try to control it, the more you hit the law of diminishing returns. But some things can and should be
 done.
 
-How about **owning your data**? Cloud service can be discontinued at any moment. Small companies go out of business, corporations
+How about **owning your data**? A cloud service can be discontinued at any moment. Small companies go out of business, corporations
 decide to cut the margins. Especially Google is famous for killing many of their projects, even if they achieved a moderate success.
 It is also a known problem with IoT devices - many people discovered their smart bulb or socket is no longer smart (or doesn't work at all)
 when it can't connect to the manufacturer's servers. 
@@ -37,6 +36,17 @@ internet is often the only option. Just a few kilometres from the cell tower and
 
 **Cutting cost is not a good reason**. You may get some savings, but it's not guaranteed. You might cut down on cloud subscriptions,
 but add the cost of hardware and electricity. Not to mention the time spent on configuring all this.
+
+## Self hosting vs homelab
+
+IT people are weird. Accountants don't reconcile a second set of books for fun, neurosurgeons almost never do brain surgery at home. Hand someone a career debugging servers, though, and a suspicious number of them go home and set up more servers. I'm one of them.
+
+I mention self hosting and homelab on this blog. I do both, often on the same server, but they're not the same thing.
+
+- **Self hosting** is about running a service that's actually useful - storage, backups, DNS.
+- **Homelab** is about experimenting for its own sake. Running Kubernetes at home makes little practical sense.
+
+The distinction isn't always clear and arguably, all self hosting is educational and not very practical.
 
 ## Where am I now?
 

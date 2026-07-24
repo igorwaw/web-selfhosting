@@ -5,7 +5,7 @@ draft: true
 tags: ["security"]
 ---
 
-In [part 1](/home/wazuh-1/) I explained what Wazuh is and admitted it's overkill for a home network. Here's how I actually set it up on Firefly, my NAS.
+In [part 1](/homelab/wazuh-1/) I explained what Wazuh is and admitted it's overkill for a home network. Here's how I actually set it up on Firefly, my NAS.
 
 ## Installation choices
 

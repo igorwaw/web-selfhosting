@@ -10,7 +10,7 @@ timeZone = "Europe/Stockholm"
 disableKinds = ["section", "taxonomy", "term"]
 
 [params]
-  mainSections = ["home", "internet", "general"]
+  mainSections = ["home", "internet", "general", "homelab"]
 
 [params.comments]
   enabled = true
