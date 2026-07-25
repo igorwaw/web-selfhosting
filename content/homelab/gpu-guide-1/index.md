@@ -19,7 +19,7 @@ CUDA is a platform - compiler, libraries, drivers - for using those cores for co
 
 ### Beyond neural networks: what else I might use it for
 
-- Gaming is the obvious use case, but I'm not much of a gamer.
+- Gaming is the obvious use case, but I'll probably skip this one.
 - Hardware video encode/decode (NVENC/NVDEC) - transcoding for [Jellyfin](/home/jellyfin/).
 - Photo and video processing - denoising, upscaling and similar operations can be GPU-accelerated.
 - Password/hash cracking experiments with tools like Hashcat - a good way to learn why hash algorithm choice and password length actually matter.
@@ -49,6 +49,8 @@ NVIDIA has made hundreds of models and their naming convention is hard to follow
 This matters because drivers and toolkits gradually drop support for old architectures. CUDA 13.0, released in 2026, requires **Compute Capability 7.5** or higher, which is **Turing** architecture (the RTX 20-series and GTX 16-series). 
 
 Older cards can run older CUDA and drivers. But older drivers might not work with current Linux kernel and C compiler.
+
+Note: this is not the only approach. Just hours after publishing my guide, I stumbled upon [this post about old datacentre GPUs](https://esologic.com/benchmarking-tesla-gpus/). If you're chasing pure power (and especially VRAM capacity) and don't mind running older software, decomissioned enterprise GPUs are the cheapest way in. You can have your cards cheap, powerful or modern, choose 2 out of 3.
 
 NVIDIA doesn't publish a roadmap of which Compute Capability gets dropped when. What happens instead is a one-cycle warning buried in release notes: an architecture gets marked "to be removed in the next release" in one CUDA version, then it's actually gone in the next one. Maxwell/Pascal/Volta got exactly that treatment - flagged in CUDA 12.9, removed in CUDA 13.0.
 

@@ -30,6 +30,7 @@ comments: false
 ## Homelab
 
 - [GPU for CUDA experiments, part 1: buying](/homelab/gpu-guide-1/)
+- [GPU for CUDA experiments, part 2: driver and Docker setup](/homelab/gpu-guide-2/)
 - [Minikube: Kubernetes for learning and experiments](/homelab/minikube/)
 
 ## Self hosting on the internet
