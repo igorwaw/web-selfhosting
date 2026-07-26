@@ -5,19 +5,22 @@ draft: true
 tags: ["ai"]
 ---
 
-After [text generation](/homelab/gpu-guide-3/) and [transcription](/homelab/whisper/), the third obvious thing to try is the other direction: turning text into an image. Diffusion models work nothing like an LLM under the hood, which was reason enough on its own to give this a go.
+Personally, I think the world would be a better place without the flood of AI-generated images. But diffusion networks have other uses than generating fake photos, and the way they work is genuinely interesting. I should, at the very least, run a short experiment to see how they cope with hardware limitations.
 
-## How this differs from the LLM posts
+## How this differs from language models
 
-An LLM predicts the next token, one at a time. A diffusion model starts from pure noise and repeatedly denoises it, guided by the prompt, over some number of steps - 20 to 50 is typical - until an image falls out the other end. There's no equivalent of GGUF quantisation carrying over directly, but the same underlying pressure applies: the base model is a few GB of weights, and VRAM is what limits resolution and batch size rather than context length.
+An LLM predicts the next token, one at a time. A diffusion model starts from pure noise and repeatedly denoises it, guided by the prompt, over some number of steps - 20 to 50 is typical - until it makes an image. There's no equivalent of GGUF quantisation: the base model is a few GB of weights, and VRAM is what limits resolution and batch size.
 
-SD1.5, the older and smaller family, fits on 6GB without any fuss. SDXL - bigger, generally better output - is tighter, though far from impossible with the right settings, covered below.
+SD1.5, the older and smaller family, fits on 6GB comfortably. SDXL - bigger model with better output - is at the limit of what's possible, but with right settings it works.
 
 ## Software choice
 
-[AUTOMATIC1111's stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) is the closest thing to Ollama's role here: a wrapper that turns "downloading a checkpoint and writing a Python script" into a web UI and a `pip install`. [ComfyUI](https://github.com/comfyanonymous/ComfyUI) is the other big option, node-based and more flexible, more the tool for someone building a specific repeatable pipeline rather than poking around. A1111 was the better starting point for exploring what this even does before building anything more deliberate.
+[AUTOMATIC1111's stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) is the closest thing to Ollama +  Open WebUI - a wrapper that runs everything in one convenient package.
 
-Unlike Ollama, there's no official Docker image from the project itself, but [AbdBarho/stable-diffusion-webui-docker](https://github.com/AbdBarho/stable-diffusion-webui-docker) packages it well enough that it fits the same Docker-first approach as the rest of this series.
+Unlike Ollama, there's no official Docker image from the project itself, but [AbdBarho/stable-diffusion-webui-docker](https://github.com/AbdBarho/stable-diffusion-webui-docker) packages it well enough.
+
+Another choice could be [ComfyUI](https://github.com/comfyanonymous/ComfyUI) - it's node-based and gives full control over every possible parameter. The right tool for someone building a specific repeatable pipeline rather than just playing.
+
 
 ## Installing
 
@@ -27,7 +30,7 @@ cd stable-diffusion-webui-docker
 docker compose --profile auto up --build
 ```
 
-First run downloads a default SD1.5 checkpoint and builds the image, which takes a while. After that, the UI is on `localhost:7860`.
+First run downloads models. Expect to wait at least a few minutes, even on a very fast broadband. After that, the UI is on `localhost:7860`.
 
 ## Configuring for 6GB
 

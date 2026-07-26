@@ -2,10 +2,10 @@
 title: "GPU for CUDA experiments, part 1: buying"
 date: 2026-07-24T09:00:00
 draft: false
-tags: ["hardware"]
+tags: ["hardware", "gpu"]
 ---
 
-I'm not much of a gamer. I buy laptops with Intel video, my desktops mostly had integrated adapters. There were some exceptions, but not too many. When I decided I need a GPU for experiments, I looked at what I had at home. The only one I found was NVS 315 from 2013. That won't do.
+I'm not much of a gamer. I buy laptops with Intel video, my desktops mostly had integrated adapters. There were some exceptions, but not too many. When I decided I need a GPU for AI experiments, I looked at what I had at home. The only one I found was NVS 315 from 2013. That won't do.
 
 ![NVS 315, the only card I found](nvs315.jpg)
 
@@ -13,16 +13,18 @@ The first part is a shopping guide, next up in part 2 (coming soon) is actually 
 
 ## What is CUDA
 
-A GPU (Graphics Processing Unit) has hundreds or thousands of small cores. Each of them is slower and simpler than the computer's main CPU, but they do the same operation on lots of data at once. Originally, it was for shading millions of pixels in video games, but the same type of processing works for anything that splits into many independent, parallel pieces: machine learning, video encoding, hash cracking (one secret: almost all of that is just matrix multiplication).
+A GPU (Graphics Processing Unit) has hundreds or thousands of small cores. Each of them is slower and simpler than the computer's main CPU, but they do the same operation on lots of data at once. Originally, it was for shading millions of pixels in video games, but the same type of processing works for anything that splits into many independent, parallel pieces: Machine Learning, video encoding, hash cracking (one secret: almost all of that is just matrix multiplication).
 
 CUDA is a platform - compiler, libraries, drivers - for using those cores for computation instead of display. It's proprietary to NVIDIA - AMD and Intel have their own equivalents (ROCm, oneAPI) - but CUDA got there first, and most libraries, tutorials and tools are written only for it. Which is why this entire shopping list is NVIDIA-only.
 
-### Beyond neural networks: what else I might use it for
+### Beyond Machine Learning: what else I might use it for
+
+After the machine learned something, I could try other things:
 
 - Gaming is the obvious use case, but I'll probably skip this one.
 - Hardware video encode/decode (NVENC/NVDEC) - transcoding for [Jellyfin](/home/jellyfin/).
 - Photo and video processing - denoising, upscaling and similar operations can be GPU-accelerated.
-- Password/hash cracking experiments with tools like Hashcat - a good way to learn why hash algorithm choice and password length actually matter.
+- Password/hash cracking experiments with tools like Hashcat - a good way to learn why hash algorithm choice and password length matter.
 
 ## Setting expectations
 
@@ -30,7 +32,7 @@ For the last few years, gamers have been complaining about GPU availability. New
 
 If you want to run a large neural network (not to mention training one), you need some serious hardware - an A100, an H100, or at a minimum, the very top of the consumer range, an RTX 5090. The RTX 5090 launched at an MSRP of £1919, and even that was optimistic - it's not unusual to see UK retail prices north of £3500, assuming they're even available.
 
-If you want a budget option, you need to look for a used card. But even those aren't exactly cheap. Calling the current market "crazy" doesn't do it justice. Some 10-year-old GPUs are now more expensive than when they were new! 
+If you want a budget option, you need to look for a used card. But even those aren't exactly cheap. Calling the current market "crazy" doesn't do it justice. Some used GPUs are now more expensive than when they were new! 
 
 Luckily, I don't need to train anything large, I want to run CUDA code on a small dataset to learn different ways of GPU computing. For that, a card that's slow by today's standards but CUDA-capable is enough. Technically, even my NVS 315 could run CUDA, but it's not practical even for learning. More on that below.
 
@@ -50,7 +52,7 @@ This matters because drivers and toolkits gradually drop support for old archite
 
 Older cards can run older CUDA and drivers. But older drivers might not work with current Linux kernel and C compiler.
 
-Note: this is not the only approach. Just hours after publishing my guide, I stumbled upon [this post about old datacentre GPUs](https://esologic.com/benchmarking-tesla-gpus/). If you're chasing pure power (and especially VRAM capacity) and don't mind running older software, decomissioned enterprise GPUs are the cheapest way in. You can have your cards cheap, powerful or modern, choose 2 out of 3.
+Note: this is not the only approach. Just hours after publishing my guide, I stumbled upon [this post about old datacentre GPUs](https://esologic.com/benchmarking-tesla-gpus/). If you're chasing pure power (and especially VRAM capacity) and don't mind running older software, decommissioned enterprise GPUs are the cheapest way in. You can have your cards cheap, powerful or modern, choose 2 out of 3.
 
 NVIDIA doesn't publish a roadmap of which Compute Capability gets dropped when. What happens instead is a one-cycle warning buried in release notes: an architecture gets marked "to be removed in the next release" in one CUDA version, then it's actually gone in the next one. Maxwell/Pascal/Volta got exactly that treatment - flagged in CUDA 12.9, removed in CUDA 13.0.
 
@@ -76,7 +78,7 @@ Some entry-level cards don't have those extra cores. Worth checking if you plan 
 
 **VRAM type** also matters for real workloads. Memory bandwidth is often a bottleneck in GPU computing, older cards use GDDR5 at 192 GB/s, while GDDR6 goes up to 288-336 GB/s.
 
-[^1]: Strictly speaking, it's not THAT hard requirement. Tools like llama.cpp or DeepSpeed's ZeRO-Offload can shuffle part of a model (extra layers, optimizer state) back and forth between system RAM and VRAM. It's how people run models bigger than their GPU alone would allow, just slower. You need a sizeable RAM for that (32GB is the reasonable minimum) but that's easier to obtain than VRAM.
+[^1]: Strictly speaking, it's not THAT hard a requirement. Tools like llama.cpp or Stable Diffusion can offload some layers to the CPU or shuffle part of data back and forth between system RAM and VRAM. The tradeoff is significant speed decrease. You need a sizeable RAM for that (32GB is the reasonable minimum) but that's easier to obtain than VRAM.
 
 #### Floating point formats
 
@@ -102,7 +104,7 @@ What to check before buying:
 - **Physical inspection** - dust in the heatsink (mining rigs often run open), bent pins on the PCIe edge connector from repeated swaps.
 - **Stress test after buying** - There's no error counter to check; actual stability under load is the only real test. On Linux, use `gpu-burn` - run it for an hour and watch for thermal throttling, clock drops, or visual artifacts, and compare the temperatures against published reviews for that model.
 
-A private seller who can show a card's history as a gaming card is worth to pay a few quid more than the average market price. But on the current market, buying a card with unknown history might be the only affordable way into this hobby.
+A private seller who can show a card's history as a gaming card is worth paying a few quid more than the average market price. But on the current market, buying a card with unknown history might be the only affordable way into this hobby.
 
 ## Hardware gotchas
 
@@ -150,7 +152,7 @@ Turing cards (CC 7.5, 2018) are the oldest I would consider. Still supported by 
 
 - The original (6 GB, 240 Tensor cores, 160W) is a good choice.
 - The Super (8 GB, 272 Tensor cores, 175W) is even better. 
-- The RTX 2060 12GB (a late-2021 release) has the same core count as the Super but doubles the VRAM, which sounds tempting. Until you discover that large VRAM compared to core count was exactly what miners needed, and (unlike its Ampere contemporaries) it was never fitted with a mining hash-rate limiter. The odds that a 12GB 2060 was used as a mining card are very high.
+- The RTX 2060 12GB (a late-2021 release) has the same core count as the Super more VRAM, which sounds tempting. Until you discover that large VRAM compared to core count was exactly what miners needed, and (unlike its Ampere contemporaries) it was never fitted with a mining hash-rate limiter. The odds that a 12GB 2060 was used as a mining card are very high.
 
 ### Medium range - Ampere
 

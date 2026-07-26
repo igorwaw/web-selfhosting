@@ -104,7 +104,13 @@ minikube start --driver=docker
 
 `minikube delete` throws away the whole node and starting again gives me a clean slate in a few minutes. For something that only exists to be experimented on, that's usually faster than trying to fix it.
 
-## GPU passthrough
+## July 2027 update
+
+### Dedicated machine
+
+My experiments grew larger and I decided I need a separate computer for experiments. Firefly is no longer hosting my Minikube, it lives on another machine - Serenity.
+
+### GPU passthrough
 
 Before Minikube can hand the GPU to the node at all, you need the NVIDIA driver and the Container Toolkit. I covered that in the GPU guide.
 
@@ -115,6 +121,7 @@ minikube start --driver=docker --container-runtime=docker --gpus=all
 ```
 
 You need all these flags here (see Minikube's [own guide on using NVIDIA GPUs](https://minikube.sigs.k8s.io/docs/tutorials/nvidia/) for the full set of prerequisites):
+
 - *--gpus=all* attaches the devices to the outer container - the one in which the K8s cluster is running
 - *--container-runtime=docker* switches K8s from the default runtime (Containerd) to Docker. GPUs can only be used with the Docker runtime.
 
