@@ -49,6 +49,8 @@ Disabling Secure Boot in UEFI setup is the easiest option. In fact, probably the
 
 But let's do it by the book, for education. It's not that hard. A few extra (and slightly awkward) steps during the first installation, on updates, the driver will be signed automatically.
 
+I actually do it with an Ansible playbook - see [Secure Boot and driver signing](/general/secure-boot/). But if you configure your machines manually, here's how to do it.
+
 First, generate a signing key and a self-signed certificate. A hundred-year expiry is the usual convention here (although I don't think I'll keep using this machine in the 22nd century). The certificate is for local use only, so no need to worry about rotation.
 
 ```bash

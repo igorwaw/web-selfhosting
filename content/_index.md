@@ -9,6 +9,7 @@ comments: false
 - [Sidenote 1 - Using Ansible](/general/ansible/)
 - [Sidenote 2 - Ansible fact gathering](/general/ansible-facts/)
 - [Green IT](/general/green-it/)
+- [Secure Boot and driver signing](/general/secure-boot/)
 
 ## Self hosting at home
 

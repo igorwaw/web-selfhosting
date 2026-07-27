@@ -1,0 +1,44 @@
+---
+- name: Install MOK signing prerequisites
+  ansible.builtin.apt:
+    name:
+      - dkms
+      - mokutil
+      - openssl
+      - python3-pexpect
+    state: latest
+
+- name: Ensure the DKMS tree directory exists
+  ansible.builtin.file:
+    path: /var/lib/dkms
+    state: directory
+    mode: '0755'
+
+- name: Generate DKMS module signing key and certificate
+  ansible.builtin.command:
+    cmd: >-
+      openssl req -new -x509 -nodes -days 36500 -subj "/CN=DKMS module signing key"
+      -newkey rsa:2048 -keyout {{ mok_signing_key }}
+      -addext "extendedKeyUsage=codeSigning"
+      -outform DER -out {{ mok_signing_cert }}
+  args:
+    creates: "{{ mok_signing_key }}"
+
+- name: Restrict permissions on the MOK private key
+  ansible.builtin.file:
+    path: "{{ mok_signing_key }}"
+    mode: '0600'
+
+- name: Check whether the MOK certificate is already enrolled
+  ansible.builtin.command: "mokutil --test-key {{ mok_signing_cert }}"
+  register: mok_enrollment_check
+  changed_when: false
+
+- name: Stage MOK certificate for enrollment
+  ansible.builtin.expect:
+    command: "mokutil --import {{ mok_signing_cert }}"
+    responses:
+      "[Ii]nput password:": "{{ mok_signing_passphrase }}"
+      "[Ii]nput password again:": "{{ mok_signing_passphrase }}"
+  when: "'is not enrolled' in mok_enrollment_check.stdout"
+  no_log: true
