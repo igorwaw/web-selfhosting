@@ -9,6 +9,8 @@ I've [already written on my other blog](https://random.too-many-machines.com/pos
 
 You might need to go into your UEFI/BIOS settings and turn it on there. Some motherboards ship with it off by default. Check `mokutil --sb-state` to see if it is enabled.
 
+![Secure Boot setting in UEFI](uefi.jpg)
+
 ## Kernel module signing
 
 If Secure Boot is on, the kernel will refuse to load any module that isn't signed by a key it trusts. Distro kernel and modules are already signed by the distro. But if you have DKMS-built drivers (e.g. NVIDIA or VirtualBox), the system will boot, but the modules won't be loaded.
@@ -79,6 +81,8 @@ Walking through what it does:
 6. If it isn't, stages it for enrolment with `mokutil --import`. This is the one interactive-feeling step: `mokutil --import` asks you to set a password, which the playbook answers via `ansible.builtin.expect`. That way I can keep it in Ansible Vault.
 
 After the playbook runs, you have to reboot and go through that MokManager prompt manually - "Enroll MOK" -> select the certificate -> enter the password -> confirm. There's no way around that step, it's a deliberate physical-presence check so malware can't silently enrol its own keys.
+
+![MokManager](mokmanager.jpg)
 
 ## I don't have 3rd party modules or I'm not sure
 
