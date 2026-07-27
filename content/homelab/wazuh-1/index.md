@@ -5,9 +5,9 @@ draft: false
 tags: ["security"]
 ---
 
-Wazuh is an open-source SIEM[^1]/XDR[^2]: agents on your hosts (and, via syslog, your network devices) send logs and events to a central manager. I used Wazuh at work, so part of the reason I'm running it at home is to keep those skills sharp. Let's not pretend it's a sensible choice for a typical home network. Unless you're a genuinely high-risk target, nobody is mounting a targeted attack against your home LAN. The realistic home threats are dealt much better by patching, network segmentation, backups and password hygiene. So, that goes into homelab category.
+Wazuh is an open-source SIEM[^1]/XDR[^2]: agents on your hosts (and, via syslog, your network devices) send logs and events to a central manager. I used Wazuh at work but I don't anymore, so part of the reason I'm running it at home is to keep those skills sharp. Let's not pretend it's a sensible choice for a typical home network. Unless you're a high-risk target, nobody is doing a targeted attack against your home LAN. The realistic home threats are dealt much better by patching, network segmentation, backups and password hygiene. So, Wazuh goes into homelab category.
 
-Wazuh is free - which made it a popular choice for small companies and government organisations which are forced to run SIEM, e.g. by EU regulations like [NIS2](https://digital-strategy.ec.europa.eu/en/policies/nis2-directive) for critical/important sectors, or [DORA](https://www.eiopa.europa.eu/digital-operational-resilience-act-dora_en) for financial entities. Certifications push the same way: [ISO/IEC 27001](https://www.iso.org/standard/27001) - specifically Annex A controls 8.15 (Logging) and 8.16 (Monitoring activities) in the 2022 revision. None of these specifically mention a SIEM by name, but auditors expect to see logs centralised and correlated.
+Wazuh is free - which made it a popular choice for small companies and government organisations which are forced to run SIEM, e.g. by EU regulations like [NIS2](https://digital-strategy.ec.europa.eu/en/policies/nis2-directive) for critical/important sectors, or [DORA](https://www.eiopa.europa.eu/digital-operational-resilience-act-dora_en) for financial entities. Certifications push the same way: [ISO/IEC 27001](https://www.iso.org/standard/27001) - specifically Annex A controls 8.15 (Logging) and 8.16 (Monitoring activities) in the 2022 revision. None of these specifically mention a SIEM by name, but they require centralised log storage and correlation.
 
 [^1]: SIEM - Security Information and Event Management. The older concept: collect logs and events from lots of systems, correlate them against rules, send alerts.
 [^2]: XDR - Extended Detection and Response. The newer concept: it adds automated response (blocking, isolating, killing a process) on top of detection. Wazuh, and most SIEMs marketed today, blur the line between the two.
@@ -49,7 +49,13 @@ These rules are prone to false positives. A race condition is a classic reason: 
 
 ### Configuration assessment
 
-The SCA (Security Configuration Assessment) module runs periodic checks against compliance frameworks - PCI DSS, HIPAA, GDPR, NIST 800-53 and so on. It checks stuff like password requirements, SSH configuration, filesystem permissions. None of those frameworks mean anything for a home network, they weren't ever directly relevant to my work. But you can treat them as a hardening guide, not a checklist you need to follow.
+The SCA (Security Configuration Assessment) module runs periodic checks against compliance frameworks - PCI DSS, HIPAA, GDPR, NIST 800-53 and so on. It checks stuff like password requirements, SSH configuration, filesystem permissions. None of those frameworks mean anything for a home network, they weren't even directly relevant to my work. But you can treat them as a hardening guide, not a checklist you need to follow.
+
+### Office365
+
+Wazuh's Office 365 module polls Microsoft's Management Activity API - the same API commercial SIEMs use - across five content types: Audit.AzureActiveDirectory (sign-ins, MFA changes), Audit.Exchange (mailbox access, forwarding rule changes), Audit.SharePoint, Audit.General (Teams and everything else), and DLP.All (data loss prevention policy hits, if you've configured any). It needs an Azure AD app registration - Application ID, Tenant ID and a client secret - with the ActivityFeed.Read permission granted under Office 365 Management APIs (ActivityFeed.ReadDlp too, if you want the DLP category). The module itself can run on the manager or on an agent; Wazuh's own docs recommend an agent, to keep the polling load off the server.
+
+Microsoft is already doing a good job of detecting genuinely malicious activity, but Wazuh goes a step further. You can configure it to watch for events that aren't suspicious in general, but you don't expect them on your account: e.g. a sign-in from a country none of the users have been to. Or a mail forwarding rule appearing on an account in order to silently exfiltrate emails.
 
 ## Downsides of Wazuh
 
