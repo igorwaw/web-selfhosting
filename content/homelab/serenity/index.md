@@ -50,11 +50,11 @@ A few things are interesting.
 
 **All the old CPUs get flattened per-core by a current budget chip.** The difference is over 3x. There's a reason why old machines feel sluggish. Single-thread performance matters for anything that doesn't parallelise well - which, inconveniently, also includes some "glue" work around a GPU job (some of the control/monitoring/data loading code of the framework).
 
-**Multithreaded, the old Xeons do well but still don't win.** A single current i5 beats the *combined* score of two Sandy Bridge-EP Xeons by roughly 4.3x, and two Westmere-EP Xeons by close to 4x.
+**Multithreaded, the old Xeons do well but still don't win.** A single current i5 beats the *combined* score of two old Xeons by about 4x.
 
-### Memory bandwidth: two buses doesn't always mean double speed
+### Memory bandwidth: two buses isn't the same as double speed
 
-The combined memory bandwidth of C30's (34.1 GB/s per socket, so 68.2 GB/s) is only slightly below the modern i5's 76.8 GB/s. But these are two separate 34.1 GB/s flows. Using both at once at maximum capacity would take a very lucky scheduling. 
+The combined memory bandwidth of C30's (34.1 GB/s per socket, so 68.2 GB/s) is only slightly below the modern i5's 76.8 GB/s. But these are two separate 34.1 GB/s flows. Using both at once at maximum capacity would need a very lucky scheduling. 
 
 ### PCIe lanes: same trap, different reason
 
@@ -89,7 +89,7 @@ In my ThinkStations NUMA can be disabled in UEFI settings. But obviously it does
 
 ## Dual boot, just in case
 
-The C30 had 500GB HDD already fitted. I installed Windows 10 on it. Not 11: the E5-2609 isn't on Microsoft's supported CPU list for Windows 11, and the TPM is 1.2 (TPM 2.0 didn't exist yet). I don't really plan to run Windows on it, but I left it just in case.
+The C30 had 250GB HDD already fitted. I installed Windows 10 on it. Not 11: the E5-2609 isn't on Microsoft's supported CPU list for Windows 11, and the TPM is 1.2 (TPM 2.0 didn't exist yet). I don't really plan to run Windows on it, but I left it just in case.
 
 I had another hard drive in my box of parts: a 4TB I bought for NAS upgrade, but in the end I didn't need that much space. I installed Debian on it and configured it in my preferred way: with [Ansible](/general/ansible/).
 
