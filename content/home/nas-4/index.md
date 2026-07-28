@@ -47,12 +47,14 @@ As I wrote before, I keep video files on several drives protected by SnapRAID. I
 
 ## How to share files
 
-The two main contenders are Samba and NFS. NFS allows using Linux-specific attributes such as file ownership and ACLs while Samba does the same for Windows. You can run both services on the same machine and even share the same files, if you need both Windows and Linux file permissions then go for it. If you have only one OS on your network, then the choice is obvious too. 
+The two main contenders are **Samba** and **NFS**. NFS allows using Linux-specific attributes such as file ownership and ACLs while Samba does the same for Windows. You can run both services on the same machine and even share the same files, if you need both Windows and Linux file permissions then go for it. If you have only one OS on your network, then the choice is obvious too. 
 
 The less common choice is iSCSI, which exports a block device instead of a filesystem. From the point of view of the connected client, it will look a lot like a local drive which can be formatted and used in any way. Very useful for many professional settings, for example for live migrating VMs between hosts. Not so much for the home, unless you mostly want to hone your sysadmin skills.
 
-For now, I went with Samba only. I don't really need any permissions, I'm OK with making all files on the share accessible to all systems and users on my LAN. If I need it later, I can get NFS running in a few minutes.
+I decided to use both:
 
+- On Samba, I'm only sharing media files and most share are read-only
+- On NFS, I share more stuff and everything is read-write
 
 ## Configuration with Ansible
 

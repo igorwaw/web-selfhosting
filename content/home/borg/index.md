@@ -59,3 +59,70 @@ The end result: every night, each machine pushes an encrypted, deduplicated, tam
 - Borg deduplicates and compresses at the chunk level, so daily backups of mostly-unchanged data cost very little extra space.
 - Encryption and authentication is always on - another layer of security, maybe overkill for an encrypted NAS on a trusted LAN, but I'm getting it for free.
 - The append-only mode is a killer feature. A client only gets permission to add new archives to its repository on the server, never to delete or rewrite existing ones. If a client machine is ever compromised (e.g. by ransomware), the attacker can't destroy the backups along with the live data.
+
+## Verifying backups and restoring files
+
+A good backup system doesn't get in your way - it just does its job silently. Which means until you test the backup, you can't be sure if it works.
+
+### Checking if the backup ran
+
+Since I use a systemd timer, it's easy to get status of the last run:
+
+```bash
+systemctl status borg-backup.timer
+systemctl status borg-backup.service
+```
+
+If the service failed, `journalctl -u borg-backup.service` has more details - including the "nothing to do this run" cases from a laptop that was offline, which exit 0.
+
+### Viewing the Borg repo from the client
+
+Append-only mode doesn't stop a client reading its own repository - it only blocks deleting or overwriting existing archives, read-only commands work fine. I need to set 3 environment variables to provide SSH key, password and server hostname. That's too much typing. My Ansible playbook, in addition to the backup script and systemd configs, also generates a script for accessing the borg repo, with proper content for each client. It's placed at /usr/local/sbin/borg-access.sh with 0700 permissions.
+
+```bash
+#!/bin/bash
+set -uo pipefail
+
+export BORG_REPO="ssh://{{ borg_client_user }}@{{ borg_server_host }}:{{ ssh_port }}{{ borg_repo_root }}/{{ inventory_hostname }}"
+export BORG_RSH="ssh -i {{ borg_client_ssh_key_path }} -o StrictHostKeyChecking=accept-new -o ConnectTimeout=10 -o BatchMode=yes -p {{ ssh_port }}"
+export BORG_PASSCOMMAND="cat {{ borg_client_passphrase_file }}"
+
+exec borg "$@"
+```
+
+Now, as root or with sudo:
+
+- `borg-access.sh list` shows all archives on the server
+- `borg-access.sh info` shows original, compressed and deduplicated size of all archives combined (the last one is how much disk space it uses)
+- `borg-access.sh info ood-2026-07-27_02:34:20` shows the same values, but for a specific archive
+- `borg-access.sh list ood-2026-07-27_02:34:20` lists all files in a specific archive (add a specific path you're looking for, or pipe to grep or less)
+
+All of these are also possible on the server. I would use local paths instead of SSH. But I didn't prepare a script for that.
+
+
+### Testing a restore (or: restoring a specific file for real)
+
+The most definitive way to prove the backup system is working is to restore some files. Company policies usually mandate regular restore tests, it's a good idea to do it at home too. Of course, if you accidentally deleted a file or want to go back to a previous version, the procedure is the same.
+
+The same script also does the restore. I can restore a specific file if I know the exact path. Borg restores relative to the current directory, if I want to restore in-place, I need to `cd /` first. If I don't want to replace the existing file (e.g. to compare current and archived version), I just need to cd somewhere else. Then I run `borg-access.sh extract ::ood-2026-07-20_20:31:05 home/igor/.bash_history`
+
+![Restoring one file with Borg](borg-restore.png)
+
+If I want to look around the archive, I can mount it with FUSE: `borg-access.sh mount ::ood-2026-07-20_20:31:05 /mnt/`
+
+### Restoring everything
+
+If the machine is gone, I can't use this way anymore. Even after I reinstall (I don't back up the whole system, just the data). SSH private key, stored in /root, is not backed up anywhere and not stored in Ansible. That's intentional, a tradeoff between security and easy bare metal restore. I decided it's unlikely, so I don't need an easy process.
+
+What I would need to do instead is log in to firefly, which doesn't need SSH - it can use local paths */data/noshare/borg/<client>*. It needs the passphrase, but it's stored in firefly and in Ansible vault. 
+
+Or: I can replace the SSH keypair manually. That would probably work, I haven't tested it though.
+
+### How this could be automated
+
+Automating the checks is left as an exercise for the reader. What is possible, and would make it close to an enterprise backup system:
+
+- I already run [Prometheus and Grafana](/home/prometheus-2/). I could make the backup script write its exit status, timestamp and archive size to a file via node exporter's textfile collector and scrape that. Then, a Grafana dashboard to see backup jobs and Alertmanager rule to notify of a failed backup.
+- An automated restore test: a script run by the systemd timer that extracts a known canary file from the latest archive, checksums it, and notifies if something is wrong.
+
+I haven't done it and currently I have no plans to do it. I think my system is robust enough for home use.
