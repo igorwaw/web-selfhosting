@@ -15,7 +15,7 @@ But I want to experiment with Kubernetes, because I use it for my job, and the o
 
 ## Choosing Kubernetes distribution
 
-Kubernetes consists of several components that communicate over TLS. You can install all of them manually, generate certificates, configure everything - a famous [Kubernetes The Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way) describes that.
+Kubernetes consists of several components that communicate over TLS. You can install all of them manually, generate certificates, configure everything - a famous [Kubernetes The Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way) guide describes that.
 
 The first time I used Kubernetes was soon after the project was first announced. I worked for IBM, supporting several customers and one of them wanted to try it. At that time, that guide didn't exist, and I ended up installing Kubernetes The Even Harder Way.
 
@@ -104,7 +104,7 @@ minikube start --driver=docker
 
 `minikube delete` throws away the whole node and starting again gives me a clean slate in a few minutes. For something that only exists to be experimented on, that's usually faster than trying to fix it.
 
-## July 2027 update
+## July 2026 update
 
 ### Dedicated machine
 
