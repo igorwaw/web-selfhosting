@@ -36,6 +36,7 @@ comments: false
 - [GPU for CUDA experiments, part 2: driver and Docker setup](/homelab/gpu-guide-2/)
 - [Ollama plus Open WebUI: running a local LLM](/homelab/ollama-openwebui/)
 - [Wazuh, part 1: what it is](/homelab/wazuh-1/)
+- [DebGPT: an LLM assistant for Debian work](/homelab/debgpt/)
 
 
 ## Self hosting on the internet
