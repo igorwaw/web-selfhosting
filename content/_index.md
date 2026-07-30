@@ -37,6 +37,7 @@ comments: false
 - [Ollama plus Open WebUI: running a local LLM](/homelab/ollama-openwebui/)
 - [Wazuh, part 1: what it is](/homelab/wazuh-1/)
 - [DebGPT: an LLM assistant for Debian work](/homelab/debgpt/)
+- [Slurm: an experimental HPC cluster at home](/homelab/slurm/)
 
 
 ## Self hosting on the internet
