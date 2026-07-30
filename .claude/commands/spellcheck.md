@@ -10,12 +10,12 @@ Spellcheck and proofread `content/$ARGUMENTS/index.md`. Follow these rules exact
 **Leave untouched:**
 - Words written in ALL CAPS — assume intentional for emphasis
 - The author's voice, sentence structure, and phrasing
+- Factual claims — that's handled by /factcheck, not this command
 
 **Suggest but do not change:**
 - Stylistic improvements (sentence restructuring, clarity, flow)
-- Factual claims that seem questionable
 - Phrasing that is grammatically correct but awkward
 
 After editing the file, output two sections:
 1. **Fixed** — a bullet list of every change made, showing the before and after
-2. **Suggestions** — a bullet list of stylistic or factual observations, each with a short explanation
+2. **Suggestions** — a bullet list of stylistic observations, each with a short explanation
