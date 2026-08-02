@@ -172,6 +172,8 @@ I decided that RTX 3050 6GB is a sweet spot. Only slightly more expensive than T
 
 After some searching I found a good deal on a new GPU. About £10 more than non-shady used GPUs, but comes with warranty and invoice. Against my usual rule of buying used, but hey, it's the first new GPU I bought in this century.
 
+![RTX 3050 unboxed](rtx3050.jpg)
+
 ## What about high-end cards and multi-GPU?
 
 Everything above assumes one budget card in an ordinary desktop, because that's what I have at home. But I work with high-end and multi-GPU setups, and a few things are different:
@@ -181,4 +183,4 @@ Everything above assumes one budget card in an ordinary desktop, because that's 
 - **PCIe lanes become the bottleneck.** A consumer desktop CPU only has 16-24 lanes total. One GPU at x16 is fine; two usually means both drop to x8. Full-bandwidth multi-GPU needs a workstation/server platform.
 - **ECC VRAM and NVLink** show up on high-end and datacentre cards, neither of which exist anywhere in the tier this guide covers.
 
-![Dual RTX A5000 - high-end workstation in 2021](rtx-a5000.jpg)
+![Dual RTX A5000 - high-end workstation in 2021, not so high-end in 2026](rtx-a5000.jpg)

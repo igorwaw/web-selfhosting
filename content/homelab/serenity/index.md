@@ -93,7 +93,11 @@ The C30 had 250GB HDD already fitted. I installed Windows 10 on it. Not 11: the 
 
 I had another hard drive in my box of parts: a 4TB I bought for NAS upgrade, but in the end I didn't need that much space. I installed Debian on it and configured it in my preferred way: with [Ansible](/general/ansible/).
 
-It's been 20 years since I ran a dual-boot machine. Later, I used VMs, WSL or just a separate cheap laptop. One advice hasn't changed since then: install Windows first, Linux next. Linux installers give you a choice where to put the bootloader and the chain-loading option, while Windows just happily overwrites GRUB.
+It's been 20 years since I ran a dual-boot machine. Later, I used VMs, WSL or just a separate cheap laptop. The old advice was to install Windows first, Linux next. Linux installers give you a choice where to put the bootloader and the chain-loading option, while Windows just happily overwrites GRUB. I'm not sure if it's still relevant with UEFI boot, where each system registers its bootloader with UEFI boot manager, but I did that just in case.
+
+However, I found something pecular. I went into UEFI setup, made Debian's GRUB first in the boot order, rebooted - it worked. I turned Serenity off, disconnected keyboard and screen. Next time it started, it didn't show up on the network. I connected the screen again - it booted into Windows. Rebooted - it came back with Debian. Long story short: it booted into Windows when it was running headless, obeyed the configured boot order when the screen was connected.
+
+After more digging in UEFI setup, I found it had 3 different boot orders, called Normal, Automatic and Error. Running headless was considered an error condition. I changed all 3 boot orders to start Debian.
 
 ## Old vs new hardware
 

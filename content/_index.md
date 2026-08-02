@@ -32,12 +32,12 @@ comments: false
 
 - [Serenity: a dedicated homelab machine](/homelab/serenity/)
 - [Minikube: Kubernetes for learning and experiments](/homelab/minikube/)
+- [Slurm: an experimental HPC cluster at home](/homelab/slurm/)
 - [GPU for CUDA experiments, part 1: buying](/homelab/gpu-guide-1/)
 - [GPU for CUDA experiments, part 2: driver and Docker setup](/homelab/gpu-guide-2/)
 - [Ollama plus Open WebUI: running a local LLM](/homelab/ollama-openwebui/)
 - [Wazuh, part 1: what it is](/homelab/wazuh-1/)
 - [DebGPT: an LLM assistant for Debian work](/homelab/debgpt/)
-- [Slurm: an experimental HPC cluster at home](/homelab/slurm/)
 
 
 ## Self hosting on the internet

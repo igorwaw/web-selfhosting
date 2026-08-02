@@ -13,7 +13,7 @@ Sounds similar to Kubernetes? It is, but they are designed for slightly differen
 
 ## Why Slurm at home
 
-Similar reason to everything in the Homelab section. I worked with Slurm before. I don't use it day to day any more, and skills you don't use have a way of quietly evaporating.
+Similar reason to everything in the Homelab section. I worked with Slurm before. I don't use it day to day any more, and skills you don't use have a habit of evaporating.
 
 ## Running a small cluster
 
@@ -132,7 +132,7 @@ In both cases, I could see the jobs starting in `squeue` and `sacct -j 1`, cance
 
 ### A larger test
 
-Now let's try something that will cause a bit of CPU usage. It just happens I don't have any number crunching to do! I have to simulate it. There's Python on the Slurm containers. Python is notoriously slow for computation if you use native code and not compiled libraries like NumPy. I helped it by deliberately using an inefficient algorithm for finding prime numbers. The script also prints the hostname, so I can see if it's really running on all nodes.
+Now let's try something that will cause a bit of CPU usage. It just happens I don't have any number crunching to do! I have to simulate it. There's Python on the Slurm containers. Python is notoriously slow for computation if you use native code and not compiled libraries like NumPy. I helped it by deliberately using an inefficient algorithm for finding prime numbers (it's O(N²) - pretty bad, but I could do worse!). The script also prints the hostname, so I can see if it's really running on all nodes.
 
 ```python
 #!/usr/bin/env python3

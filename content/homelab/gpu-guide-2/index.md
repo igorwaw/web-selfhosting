@@ -3,6 +3,7 @@ title: "GPU for CUDA experiments, part 2: driver and Docker setup"
 date: 2026-07-25T09:00:00
 draft: false
 tags: ["hardware", "gpu"]
+image: 1.png
 ---
 
 In [part 1](/homelab/gpu-guide-1/) I went through choosing the GPU. This part is how to get it working on Linux.
