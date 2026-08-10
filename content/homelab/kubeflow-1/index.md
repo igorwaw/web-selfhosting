@@ -5,7 +5,7 @@ draft: true
 tags: ["ai", "services"]
 ---
 
-[Minikube](/homelab/minikube/) gave me a Kubernetes cluster to break things on, and [the GPU](/homelab/gpu-guide-2/) gave me something to break with. Kubeflow is where the two meet: it's a collection of Kubernetes-native components for machine learning - notebooks, pipelines, hyperparameter tuning, model serving - all running as ordinary pods, controllers and CRDs on top of a cluster. At work, it's how a few hundred people share a GPU budget without stepping on each other. At home, on a single card, it solves no problem I actually have. I want to install it anyway, for the same reason I wanted Minikube in the first place: it's what I use at work, and the only way to actually learn a system this size is to stand it up and watch it fall over a few times.
+[Minikube](/homelab/minikube/) gave me a Kubernetes cluster to break things on, and [the GPU](/homelab/gpu-guide-2/) gave me something to break with. **[Kubeflow](https://www.kubeflow.org/)** is where the two meet: it's a collection of Kubernetes-native components for machine learning - notebooks, pipelines, hyperparameter tuning, model serving - all running as ordinary pods, controllers and CRDs on top of a cluster. At work, it's how a few hundred people share a GPU budget without stepping on each other. At home, on a single card, it solves no problem I actually have. I want to install it anyway, for the same reason I wanted Minikube in the first place: it's what I use at work, and the only way to actually learn a system this size is to stand it up and watch it fall over a few times.
 
 ## What this covers
 
@@ -14,6 +14,8 @@ tags: ["ai", "services"]
 - **Installing with kustomize** - the official method, warts included
 - **Getting to the dashboard** - through Istio, the same tunnelling approach as the plain Minikube dashboard
 - **Checking the GPU actually shows up** - proving the plumbing works, before doing anything useful with it in part 2
+
+There's no shortage of existing write-ups on getting this running locally - IBM's [KubeflowDojo](https://github.com/IBM/KubeflowDojo/blob/master/HandsOn/Deployment/kubeflow-on-minikube.md) walks through a similar Minikube setup, and [DagsHub's local-install guide](https://dagshub.com/blog/how-to-install-kubeflow-locally/) covers a couple of alternative distributions if Minikube isn't your thing. Worth a look if you get stuck, but none of them were sized for Serenity's constraints, so what follows is what actually worked here.
 
 ## Setting expectations on hardware
 
@@ -40,7 +42,7 @@ That should print `"1"`. If it prints nothing, the device plugin's pod (`kube-sy
 
 ## Trimming the install
 
-Kubeflow's manifests repo ships one big `example/kustomization.yaml` that pulls in everything: Istio, cert-manager, Dex, oauth2-proxy, the central dashboard, Notebooks, Katib, Kubeflow Pipelines, KServe, the training operator, and a handful of supporting web apps. On a 6-core, 12GB VM, all of it starting at once is still a good way to watch pods get OOMKilled and stuck in `CrashLoopBackOff` while they fight over scheduling.
+Kubeflow's [manifests repo](https://github.com/kubeflow/manifests) ships one big `example/kustomization.yaml` that pulls in everything: Istio, cert-manager, Dex, oauth2-proxy, the central dashboard, Notebooks, Katib, Kubeflow Pipelines, KServe, the training operator, and a handful of supporting web apps. On a 6-core, 12GB VM, all of it starting at once is still a good way to watch pods get OOMKilled and stuck in `CrashLoopBackOff` while they fight over scheduling.
 
 I don't need most of it. Katib (hyperparameter tuning), Pipelines and KServe are aimed at problems - many parallel experiments, serving models behind autoscaling - that don't exist with one GPU and one person using it. For this round, I want: the platform plumbing (Istio, cert-manager, Dex), the central dashboard, and Notebooks. Everything else can wait for a day it's actually needed.
 

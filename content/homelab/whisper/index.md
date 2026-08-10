@@ -5,11 +5,12 @@ draft: true
 tags: ["ai"]
 ---
 
-Of the GPU experiments on the list after [the LLM posts](/homelab/gpu-guide-3/), this is the one that's actually useful day to day rather than just a way to watch a 6GB card sweat: transcribing podcasts and recordings locally with Whisper.
+Of the GPU experiments I did, this one is bordering on practical: transcribing audio to text. I mean, it IS practical, I just don't have much use for it.
 
 ## Why this one, and why local
 
-Whisper turns speech into text - OpenAI's model, released openly rather than kept behind an API. Transcription runs fine on a CPU, but slowly: minutes of audio can mean minutes of waiting, sometimes longer than the recording itself. On the GPU, even this small card, it's close to real-time. That gap alone is worth having the card around for.
+
+[Whisper](https://github.com/openai/whisper) turns speech into text - OpenAI's model, released openly rather than kept behind an API. Transcription runs fine on a CPU, but slowly: minutes of audio can mean minutes of waiting, sometimes longer than the recording itself. On the GPU, even this small card, it's close to real-time. That gap alone is worth having the card around for.
 
 Local also means not uploading a recording anywhere to get text back - meetings, voice notes, anything not meant to leave the house. Given everything else on this blog is about keeping data at home, using a cloud transcription API here would have been an odd exception.
 

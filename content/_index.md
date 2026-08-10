@@ -36,8 +36,11 @@ comments: false
 - [GPU for CUDA experiments, part 1: buying](/homelab/gpu-guide-1/)
 - [GPU for CUDA experiments, part 2: driver and Docker setup](/homelab/gpu-guide-2/)
 - [Ollama plus Open WebUI: running a local LLM](/homelab/ollama-openwebui/)
-- [Wazuh, part 1: what it is](/homelab/wazuh-1/)
+- [Stable Diffusion: AI image generation at home](/homelab/stable-diffusion/)
 - [DebGPT: an LLM assistant for Debian work](/homelab/debgpt/)
+- [Stable Diffusion: AI image generation at home](/homelab/stable-diffusion/)
+- [Hashcat: experiments with password cracking](/homelab/hashcat/)
+- [Wazuh, part 1: what it is](/homelab/wazuh-1/)
 
 
 ## Self hosting on the internet
@@ -48,3 +51,4 @@ comments: false
 - [Generating websites with Hugo](/internet/hugo/)
 - [(OUTDATED) Generating websites with Pelican](/internet/pelican/)
 - [Creating a photo gallery with Hugo and Mapael](/internet/gallery/)
+- [Self hosting comments with Remark42](/internet/comments/)
