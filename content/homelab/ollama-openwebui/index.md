@@ -34,9 +34,9 @@ There are several file formats for publishing models, the most popular is **GGUF
 
 Models are trained and originally published at FP16 or BF16 - the formats from [GPU part 1](/homelab/gpu-guide-1/)'s floating point table - because it's optimal for training stability. That means 16 bits, or 2 bytes, per parameter. Inference - using the model - can work with lower precision numbers.
 
-**Quantisation** is reducing that precision after training, storing each weight in fewer bits. Common levels are Q8, Q6, Q5, Q4 and Q2 - that many bits per weight. Though the "K-quants" most people use (*Q4_K_M*, *Q5_K_S*, etc.) mix bit-depths - e.g. Q4_K_M might use Q6 for most important parts of attention and feed-forward sensors, Q4 for everything else, making it slightly larger than 100% Q4 but more stable. And the S/M/L suffix is a size/quality tradeoff within that same nominal bit count. Confused? Don't worry about that, just experiment.
+**Quantisation** is reducing that precision after training, storing each weight in fewer bits. Common levels are Q8, Q6, Q5, Q4 and Q2 - that many bits per weight. Though the "K-quants" most people use (*Q4_K_M*, *Q5_K_S*, etc.) mix bit-depths - e.g. Q4_K_M might use Q6 for the most important parts of attention and feed-forward tensors, Q4 for everything else, making it slightly larger than 100% Q4 but more stable. And the S/M/L suffix is a size/quality tradeoff within that same nominal bit count. Confused? Don't worry about that, just experiment.
 
-As a rough rule of thumb, size in GB is **parameters (billions) × bits ÷ 8**. A 7B model at BF16 needs 14GB just for the weights, reduced to Q4 is about 3.5GB - more, since some weights likely use larger format. Right size for my 6GB card - I need to leave some space for context and other purposes.
+As a rough rule of thumb, size in GB is **parameters (billions) × bits ÷ 8**. A 7B model at BF16 needs 14GB just for the weights, reduced to Q4 is about 3.5GB - more, since some weights likely use a larger format. Right size for my 6GB card - I need to leave some space for context and other purposes.
 
 ### Distillation
 
@@ -112,9 +112,9 @@ Most of the useful configuration is environment variables, set with `-e` on the 
 - **`OLLAMA_MAX_LOADED_MODELS`** - how many models can be resident at once. On this card, that's staying at 1 - there isn't room for a second.
 - **`OLLAMA_NUM_PARALLEL`** - concurrent requests handled per model. Left at the default; concurrency isn't the constraint here, VRAM is.
 
-### Customizing models
+### Customising models
 
-If yo're familiar with building Docker images, the concepts will look familiar. Write a Modelfile image with a syntax you'll immediately recognize, set parameters and system prompt, then build your own model.
+If you're familiar with building Docker images, the concepts will look familiar. Write a Modelfile image with a syntax you'll immediately recognise, set parameters and system prompt, then build your own model.
 
 ```dockerfile
 FROM llama3.2
@@ -220,3 +220,13 @@ A few things seemed different compared to commercial products:
 - **Document upload / RAG** - Open WebUI can embed a document, then pull relevant knowledge into the chat. It works, sort of, it would give excellent privacy. But it needs an embedding model in addition to the chat model. On a 6GB card, there's no room for both.
 
 ![Open WebUI](openwebui.png)
+
+## What have I learned
+
+- How the floating point format affects stability.
+- How model size affects quality of the answers.
+- How specialised models, like Bielik, can give good answers despite small size.
+- How much GPU is faster than CPU.
+- How the software stack is built.
+
+Technically, I knew all of these. But reading and seeing with your own eyes are two different things.

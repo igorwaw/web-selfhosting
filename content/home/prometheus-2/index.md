@@ -53,7 +53,7 @@ We're now only missing the restart handler - a task that will run only when "Gen
 
 ## Configuring Grafana
 
-Grafana is a visual tool. You can programmatically generate the config (it's all YAML) if you know what you want to achieve, but if you're exploring, GUI is a better option. Login to Grafana and click on "Add data source". Select "Prometheus" as the type, then enter the hostname (either host.docker.internal or a real external hostname, localhost won't work) with the port (9090 is the default). Select "No authentication" as we didn't configure any. Grafana will confirm it can read metrics from Prometheus.
+Grafana is a visual tool. You can programmatically generate the config (it's all YAML) if you know what you want to achieve, but if you're exploring, GUI is a better option. Login to Grafana and click on "Add data source". Select "Prometheus" as the type, then enter the hostname (either **host.docker.internal** or a real external hostname, localhost won't work) with the port (9090 is the default). Select "No authentication" as we didn't configure any. Grafana will confirm it can read metrics from Prometheus.
 
 Let's get the graphs already. There are two options. You can create your own dashboard by manually adding graphs of various types and entering PromQL queries. Or you can import an existing dashboard from Grafana. The first way is useful if you need a custom dashboard to quickly see selected metrics from different sources.
 
