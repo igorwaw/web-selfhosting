@@ -106,6 +106,8 @@ The defaults are tuned for datacentre GPUs with plenty of VRAM, so running it on
 - **`--max-num-seqs`** - A limit on concurrency; it doesn't need to be high to prove the batching works, and setting it too high uses more VRAM.
 - **Model size** - 1-3B parameters at 4 bits. A 7B model that fits comfortably in Ollama would be too large here, because of vLLM's caches.
 
+![Effect of context length set to 2048](2048-context-too-small.png)
+
 ### Startup time
 
 Getting from `docker compose up` to the engine that answers requests took about half an hour. I was prepared for a bit of a wait but that was even longer than I expected. I checked the container logs to see what took so long:
