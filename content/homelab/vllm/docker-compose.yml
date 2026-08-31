@@ -1,0 +1,25 @@
+services:
+  vllm:
+    # pinned below latest: newer images ship CUDA 13, which needs a driver newer than this host's 550.163.01
+    image: vllm/vllm-openai:v0.8.5
+    restart: unless-stopped
+    runtime: nvidia
+    ipc: host
+    ports:
+      - "8000:8000"
+    volumes:
+      - hf-cache:/root/.cache/huggingface
+    environment:
+      - HUGGING_FACE_HUB_TOKEN=${HF_TOKEN}
+    command:
+      - --model=Qwen/Qwen2.5-1.5B-Instruct-AWQ
+      - --served-model-name=qwen2.5-1.5b-awq
+      - --quantization=awq
+      - --gpu-memory-utilization=0.85
+      - --max-model-len=8192
+      - --max-num-seqs=4
+      - --enable-auto-tool-choice
+      - --tool-call-parser=hermes
+
+volumes:
+  hf-cache:

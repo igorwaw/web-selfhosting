@@ -114,7 +114,7 @@ If I want to look around the archive, I can mount it with FUSE: `borg-access.sh 
 
 If the machine is gone, I can't use this way anymore. Even after I reinstall (I don't back up the whole system, just the data). SSH private key, stored in /root, is not backed up anywhere and not stored in Ansible. That's intentional, a tradeoff between security and easy bare metal restore. I decided it's unlikely, so I don't need an easy process.
 
-What I would need to do instead is log in to firefly, which doesn't need SSH - it can use local paths */data/noshare/borg/<client>*. It needs the passphrase, but it's stored in firefly and in Ansible vault. 
+What I would need to do instead is log in to firefly, which doesn't need SSH - it can use local paths */data/noshare/borg/\<client\>*. It needs the passphrase, but it's stored in firefly and in Ansible vault. 
 
 Or: I can replace the SSH keypair manually. That would probably work, I haven't tested it though.
 

@@ -41,6 +41,7 @@ comments: false
 - [Stable Diffusion: AI image generation at home](/homelab/stable-diffusion/)
 - [Hashcat: experiments with password cracking](/homelab/hashcat/)
 - [Wazuh, part 1: what it is](/homelab/wazuh-1/)
+- [vLLM: a more serious AI server (and benchmark against Ollama)](/homelab/vllm/)
 
 
 ## Self hosting on the internet
@@ -51,4 +52,4 @@ comments: false
 - [Generating websites with Hugo](/internet/hugo/)
 - [(OUTDATED) Generating websites with Pelican](/internet/pelican/)
 - [Creating a photo gallery with Hugo and Mapael](/internet/gallery/)
-- [Self hosting comments with Remark42](/internet/comments/)
+- [Remark42: self-hosting blog comments](/internet/comments/)

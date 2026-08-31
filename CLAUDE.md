@@ -25,6 +25,12 @@ Personal blog (Hugo static site, theme `hugo-theme-stack`) about self-hosting: a
 - `content/_index.md` has hand-curated, categorized link lists (`## General information`, `## Self hosting at home`, `## Homelab`, `## Self hosting on the internet`) that must be manually updated when adding a new post - Hugo does not auto-generate this list. Match the existing ordering convention in each list (usually append at the end unless the user specifies a position).
 - A banner/featured image needs an explicit `image: filename.png` front matter field pointing at a file in the same bundle (or a full URL). This theme's stock `_partials/helper/image.html` has **no fallback** to the first image in the bundle - unlike the sibling `web-random`/`web-diy` sites, which have a custom override that adds one. Don't assume that fallback exists here.
 
+## Available servers (all running Debian Linux)
+
+- `firefly` - a home-made NAS, with weak CPU, 8GB of RAM and multiple hard drives. Runs most services from `home` section.
+- `serenity` - a machine for experiments, runs most services from `homelab` section - old Lenovo Thinkstation with 2 old Xeons, 16GB of RAM and NVIDIA RTX 3050 6GB.
+- `mikrus` - a low-spec VPS aimed for selfhosters and homelabers, runs most services from `internet` section. A special quirk: it has a public IPv6 address, but on IPv4 it's only available through cloudflare proxy (web apps) or port redirection (other apps)
+
 ## Writing style
 
 - British English spelling throughout (colour, organise, centimetre, etc.).

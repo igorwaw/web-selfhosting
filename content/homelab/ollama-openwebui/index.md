@@ -210,7 +210,7 @@ A few other settings in the admin panel:
 
 ### Using Open WebUI
 
-Point your browser to *http://<your hostname or IP>:3000/*. What you'll see is just an AI chat like any other - only slower and dumber. You can pick a model from the dropdown (if nothing shows up, do `ollama pull` first), type, and get an answer. 
+Point your browser to *http://\<your hostname or IP\>:3000/*. What you'll see is just an AI chat like any other - only slower and dumber. You can pick a model from the dropdown (if nothing shows up, do `ollama pull` first), type, and get an answer. 
 
 ![Model selection](ui-select-model.png)
 
