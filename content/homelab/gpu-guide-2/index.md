@@ -17,7 +17,11 @@ In [part 1](/homelab/gpu-guide-1/) I went through choosing the GPU. This part is
 
 ## Installing drivers on Linux
 
-On Debian, the proprietary driver is available in the repository, but in the *contrib* and *non-free-firmware* sections, which aren't enabled by default. Check your */etc/apt/sources.list*, it should contain a line like this:
+### Option 1: Debian-provided driver
+
+I use Debian, which provides *nvidia-driver* package. I tried this option first, until it turned the driver is a bit dated (version 550) and the latest CUDA doesn't work with it. And in turn, some apps fail to run with an older CUDA. The usual compatibility problems you get with NVIDIA.
+
+But, if you don't need a recent CUDA, this option is easier. First, you need to enable *contrib* and *non-free-firmware* sections of Debian's standard apt repo.. Check your */etc/apt/sources.list*, it should contain a line like this:
 
 ```
 deb http://deb.debian.org/debian/ trixie main contrib non-free non-free-firmware
@@ -31,6 +35,30 @@ sudo apt install nvidia-driver firmware-misc-nonfree
 ```
 
 A reboot is needed for the kernel module to load. After that, run `nvidia-smi` for a quick check. It should show the card model, its driver version, and current power/temperature. If it doesn't, you might have Secure Boot enabled (check with `mokutil --sb-state`) - if that's the case, see below.
+
+### Option 2: NVIDIA-provided driver
+
+NVIDIA runs an apt repository containing a newer driver (plus CUDA). If you want to use it, but you had the Debian-provided driver installed, it's crucial to remove it first: `dpkg --purge nvidia-kernel nvidia-kernel-dkms`. Otherwise, there will be conflict and you might end up with neither GPU driver working properly. If you didn't have a driver, skip this step.
+
+Next, you need to add the NVIDIA repo - the easiest way is to install one .deb file manually. Finally, install the driver.
+
+```bash
+  wget https://developer.download.nvidia.com/compute/cuda/repos/debian13/x86_64/cuda-keyring_1.1-1_all.deb
+  dpkg -i cuda-keyring_1.1-1_all.deb
+  apt update
+  apt install cuda-driver
+```
+
+As with the other driver: reboot and verify with `nvidia-smi`
+
+### Possible problem: nouveau module
+
+Nouveau is an open-source driver for NVIDIA GPUs. It supports standard display functions, partially support the more advanced things one might need from the graphics adapter (3D, video decoding). But it doesn't do CUDA at all.
+
+The driver is a standard part of the Linux kernel, the system would prefer it over the proprietary driver if not configured otherwise. And usually, it will be automatically configured otherwise - driver package will create file */etc/modprobe.d/nvidia.conf* containing `blacklist nouveau` (plus other lines, relevant for your GPU).
+
+But sometimes, maybe when dpkg is stopped in the middle or there's some other edge case, you might end up with */etc/modprobe.d/nvidia.conf.dpkg-new* instead. It happens to me more than once. In `nvidia-smi` doesn't work, `lsmod | grep nouveau` is one of my first debug steps.
+
 
 ### Bundled tools
 

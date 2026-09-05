@@ -27,6 +27,7 @@ comments: false
 - [Syncthing: synchronising files between the devices](/home/syncthing/)
 - [Prometheus and Grafana: monitoring - part 1](/home/prometheus-1/)
 - [Prometheus and Grafana: monitoring - part 2](/home/prometheus-2/)
+- [Doku: disk usage dashboard for Docker](/home/doku/)
 
 ## Homelab
 
@@ -42,7 +43,7 @@ comments: false
 - [Hashcat: experiments with password cracking](/homelab/hashcat/)
 - [Wazuh, part 1: what it is](/homelab/wazuh-1/)
 - [vLLM: a more serious AI server (and benchmark against Ollama)](/homelab/vllm/)
-
+- [TensorRT-LLM: the fastest LLM engine](/homelab/tensorrt-llm/)
 
 ## Self hosting on the internet
 
