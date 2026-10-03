@@ -21,7 +21,7 @@ In [part 1](/homelab/gpu-guide-1/) I went through choosing the GPU. This part is
 
 I use Debian, which provides *nvidia-driver* package. I tried this option first, until it turned the driver is a bit dated (version 550) and the latest CUDA doesn't work with it. And in turn, some apps fail to run with an older CUDA. The usual compatibility problems you get with NVIDIA.
 
-But, if you don't need a recent CUDA, this option is easier. First, you need to enable *contrib* and *non-free-firmware* sections of Debian's standard apt repo.. Check your */etc/apt/sources.list*, it should contain a line like this:
+But, if you don't need a recent CUDA, this option is easier. First, you need to enable *contrib* and *non-free-firmware* sections of Debian's standard apt repo. Check your */etc/apt/sources.list*, it should contain a line like this:
 
 ```
 deb http://deb.debian.org/debian/ trixie main contrib non-free non-free-firmware
@@ -57,7 +57,7 @@ Nouveau is an open-source driver for NVIDIA GPUs. It supports standard display f
 
 The driver is a standard part of the Linux kernel, the system would prefer it over the proprietary driver if not configured otherwise. And usually, it will be automatically configured otherwise - driver package will create file */etc/modprobe.d/nvidia.conf* containing `blacklist nouveau` (plus other lines, relevant for your GPU).
 
-But sometimes, maybe when dpkg is stopped in the middle or there's some other edge case, you might end up with */etc/modprobe.d/nvidia.conf.dpkg-new* instead. It happens to me more than once. In `nvidia-smi` doesn't work, `lsmod | grep nouveau` is one of my first debug steps.
+But sometimes, maybe when dpkg is stopped in the middle or there's some other edge case, you might end up with */etc/modprobe.d/nvidia.conf.dpkg-new* instead. It happened to me more than once. In `nvidia-smi` doesn't work, `lsmod | grep nouveau` is one of my first debug steps.
 
 
 ### Bundled tools

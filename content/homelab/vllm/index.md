@@ -58,6 +58,8 @@ If you work with CUDA, you know that compatibility problems are common. That was
 
 Debian ships with version 550 which supports CUDA up to 12.4. I had two choices: upgrade the driver or run an older Docker image. Since updating the driver is more invasive, I tried the older image first.
 
+Later I replaced the drivers, as described in [part 2 of the GPU guide](/homelab/gpu-guide-2/), so now I can use `latest`.
+
 ### Running the image
 
 Here's my Docker Compose file - you can also [download it here](docker-compose.yml).
@@ -178,7 +180,9 @@ client = OpenAI(base_url="http://localhost:8000/v1", api_key=os.environ["VLLM_AP
 
 On top of that, the key only guards requests under the `/v1`, `/v2`, and `/inference` path prefixes. [vLLM's own docs](https://docs.vllm.ai/en/stable/usage/security/) explain it clearly - *"do not rely on `--api-key` alone to secure vLLM"*. Other endpoints skip the check entirely: `/invocations` (a SageMaker-compatible route) offers the same inference capability as `/v1`, and utility/operational endpoints are open to anyone who can reach the port.
 
-The recommended workaround is a reverse proxy in front of vLLM to handle authentication, DDoS protection and TLS termination, and expose only the paths meant to be public. I didn't bother for a homelab; for production use it's likely necessary.
+The recommended workaround is a reverse proxy in front of vLLM to handle authentication, DDoS protection and TLS termination, and expose only the paths meant to be public. Or don't have it public, keep it on the backend, only accessible to one app.
+
+In my case, it was only available on the Docker network.
 
 ### Talking to it from Python
 
