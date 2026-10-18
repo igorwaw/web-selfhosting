@@ -39,7 +39,6 @@ comments: false
 - [Ollama plus Open WebUI: running a local LLM](/homelab/ollama-openwebui/)
 - [Stable Diffusion: AI image generation at home](/homelab/stable-diffusion/)
 - [DebGPT: an LLM assistant for Debian work](/homelab/debgpt/)
-- [Stable Diffusion: AI image generation at home](/homelab/stable-diffusion/)
 - [Hashcat: experiments with password cracking](/homelab/hashcat/)
 - [Wazuh, part 1: what it is](/homelab/wazuh-1/)
 - [vLLM: a more serious AI server (and benchmark against Ollama)](/homelab/vllm/)
@@ -54,3 +53,9 @@ comments: false
 - [(OUTDATED) Generating websites with Pelican](/internet/pelican/)
 - [Creating a photo gallery with Hugo and Mapael](/internet/gallery/)
 - [Remark42: self-hosting blog comments](/internet/comments/)
+
+## Android
+
+- [Intro: reclaiming your phone](/android/intro/)
+- [F-Droid: the open source app store](/android/f-droid/)
+- [F-Droid: 10 apps worth installing](/android/fdroid-apps/)
