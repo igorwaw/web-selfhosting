@@ -13,7 +13,7 @@ In many cases they can replace a popular, privacy-invasive app. Sort of. Replaci
 
 Before replacing anything, it's good to know what you're replacing. [Exodus Privacy](https://exodus-privacy.eu.org/) is a non-profit that analyses Android apps and lists the trackers and permissions they contain. Search for an app on their reports page and you'll see which tracking companies (Google Firebase, Facebook, ad networks etc.) are built into it, and which permissions it asks for.
 
-The Exodus app does the same for all the apps installed on your phone. It's often eye-opening: popular apps commonly have several trackers, while the F-Droid ones below usually have none (or mostly harmless ones, like crash reporting).
+The Exodus app does the same for all the apps installed on your phone. It's often eye-opening: popular apps commonly have several trackers, while the F-Droid ones below usually have none (or ones that are mostly harmless, like crash reporting).
 
 ![Exodus](exodus.jpg)
 
@@ -34,8 +34,8 @@ It's not available in the Play Store, as it breaks Google's terms of service. Be
 
 **Limitations:**
 
-- **It breaks regularly.** YouTube tries to block alternative clients. Sometimes there's a bigger change to the YouTube website and it breaks NewPipe completely. The fixes usually come within days, but for those days the app is useless [^1]. Other times it plays most videos, but crashes on a specific one. 
-- **No account features.** You can't log in, so no comments, no likes, and subscriptions are stored locally (not synced with other devices). You also can't access YouTube Premium videos, age-restricted content is theoretically supported in new versions but mostly doesn't work.
+- **It breaks regularly.** YouTube tries to block alternative clients. Sometimes there's a bigger change to the YouTube website and it breaks NewPipe completely. The fixes usually come within days, but for those days the app is useless. Other times it plays most videos, but crashes on a specific one. 
+- **No account features.** You can't log in, so no comments, no likes, and subscriptions are stored locally (not synced with other devices). You also can't access YouTube Premium videos. Age-restricted content is theoretically supported in new versions but mostly doesn't work.
 
 **Alternatives:**
 
@@ -50,12 +50,12 @@ It's not available in the Play Store, as it breaks Google's terms of service. Be
 **Limitations:**
 
 - **Not completely "clean".** F-Droid flags it with the *tracking* anti-feature, because it still connects to some Mozilla services. It's much better than Chrome, but not perfect. There are other, more hardened Firefox forks.
-- **Compatibility.** It doesn't happen often, but some websites only work in Chrome. Extensions can also cause issues: in 2025, a Fennec update made pages load extremely slowly with uBlock Origin enabled, until it was fixed [^2].
+- **Compatibility.** It doesn't happen often, but some websites only work in Chrome. Extensions can also cause issues: in 2025, a Fennec update made pages load extremely slowly with uBlock Origin enabled, until it was fixed.
 
 **Alternatives:**
 
-- Regular **Firefox** is not so bad either. Even with the recent privacy controversies [^3], I still rate it higher than Chrome. The uBlock itself makes it worth to migrate. If you don't use F-Droid, that's the way to go.
-- I don't use **Brave**, despite the privacy hype around it. Some early issues - replacing ads with their own, adding affiliate codes to the URLs, promoting cryptocurrency, selling search data for AI training [^4] - put me off. Even with all those fixed, I'm highly distrustful of the project.
+- Regular **Firefox** is not so bad either. Even with the recent privacy controversies, I still rate it higher than Chrome. The uBlock itself makes it worth to migrate. If you don't use F-Droid, that's the way to go.
+- I don't use **Brave**, despite the privacy hype around it. Some early issues - replacing ads with their own, adding affiliate codes to the URLs, promoting cryptocurrency, selling search data for AI training - put me off. Even with all those fixed, I'm highly distrustful of the project.
 
 ## 4. Aegis instead of Google or Microsoft Authenticator
 
@@ -75,7 +75,7 @@ To move from Google Authenticator: in Google Authenticator, choose **Transfer ac
 
 Most people - or at least, most of those few people who don't use the same simple password everywhere (see my [Hashcat experiment](/homelab/hashcat/) if you're not one of them) - save their passwords in their browser. In the case of Chrome, that's Google Password Manager. It's relatively safe under normal conditions. The biggest problem: it's the prime target of malware. Extracting data from Google Password Manager is the second thing that a typical malicious program does (first is disabling antivirus on Windows). Plus, it's one more thing that ties you to Google, which is wrong on general principles. And it's very easy with Chrome, but awkward with other browsers or for passwords you need to enter somewhere else.
 
-Next step is a cloud-based password manager. If properly written, such products don't expose your passwords to the provider. Some of them had independent audits and a good security history (e.g. BitWarden, 1Password), some had not so great history (LastPass comes to mind). But I prefer not to rely on the cloud for such an important service. **KeePass** has long ago been a de-facto standard for offline password managers. The original is built on .NET, it only works well on Windows (it can work on Linux and MacOS with Mono, but it feels clunky). The UI looks dated and the development is slow. Which is why the clones are now more popular: **KeePassXC** for Windows, Linux and MacOS, **KeePassDX** on Android (and a few others). They all share the same DB format, so you can mix them any way you like[^5].
+Next step is a cloud-based password manager. If properly written, such products don't expose your passwords to the provider. Some of them had independent audits and a good security history (e.g. BitWarden, 1Password), some had not so great history (LastPass comes to mind). But I prefer not to rely on the cloud for such an important service. **KeePass** has long ago been a de-facto standard for offline password managers. The original is built on .NET, it only works well on Windows (it can work on Linux and MacOS with Mono, but it feels clunky). The UI looks dated and the development is slow. Which is why the clones are now more popular: **KeePassXC** for Windows, Linux and MacOS, **KeePassDX** on Android (and a few others). They all share the same DB format, so you can mix them any way you like.
 
 
 **Limitations:**
@@ -96,7 +96,7 @@ Next step is a cloud-based password manager. If properly written, such products 
 
 It's the missing piece for KeePassDX: put the database in a synced folder, and every change you make on one device shows up on all others. But obviously it works for everything else you want synced: documents, notes, important backups. I have a small set of documents that I keep on my phone, in addition to the computers. My phone also does a one-way copy of photos to my laptop.
 
-On Android, you need **Syncthing-Fork**. The official Syncthing Android app was discontinued at the end of 2024, and the fork, which already had extra features, improved GUI and better battery handling [^6], became the only way to run it. If you have the old Syncthing app, it still works, but it can't be installed from app stores anymore. Unfortunately, there's no migration path if you decide to move to Syncthing-Fork, you need to configure the synced folders and devices again. 
+On Android, you need **Syncthing-Fork**. The official Syncthing Android app was discontinued at the end of 2024, and the fork, which already had extra features, improved GUI and better battery handling, became the only way to run it. If you have the old Syncthing app, it still works, but it can't be installed from app stores anymore. Unfortunately, there's no migration path if you decide to move to Syncthing-Fork, you need to configure the synced folders and devices again. 
 
 ![Syncthing-Fork](syncthing-fork.jpg)
 
@@ -131,7 +131,7 @@ Most podcasts are published by their authors on their websites, with RSS feeds t
 
 ## 8. Phonograph Plus instead of Spotify or other streaming services for music
 
-I'm afraid I'm revealing my age now, but I keep a collection of MP3 files instead of using a streaming service. That means my music won't disappear one day, or won't be replaced by another version [^7].
+I'm afraid I'm revealing my age now, but I keep a collection of MP3 files instead of using a streaming service. That means my music won't disappear one day, or won't be replaced by another version.
 
 There was a time when every smartphone (and dumbphone before) came with a simple audio player. Today, if there is one, it's anything but simple. I checked a few on F-Droid and I liked Phonograph Plus. It has everything I expect from a music player (browsing and searching by multiple categories, playlists, queue management, lyrics, tag editor, widgets and Android Auto support) without feeling heavy or overwhelming. It's licensed under GPL-3.0.
 
@@ -181,20 +181,20 @@ Compare that with the calculators preinstalled by some phone manufacturers, or t
 **Limitations:**
 
 - **It's a young app.** The desktop Qalculate! has been around for 20 years, but the Android port is still at version 0.x. The engine is mature, the interface less so.
-- **Overkill for simple sums.** If you only need to split a restaurant bill, a simple calculator is quicker. The typing-based interface takes some getting used to.
+- **Overkill for simple sums.** If all you need is simple arithmetics, a simple calculator is easier to use.
 - **Currency conversion needs the internet.** Exchange rates have to be downloaded, everything else works offline.
 
 **Alternatives:**
 
-- **HiPER Scientific Calculator** - if you don't use F-Droid, this is the scientific calculator worth considering. It's not open source and it's only in the Play Store, but it's feature-packed (fractions, complex numbers, equation solver, unit conversion and much more). There's a free version with tracker and ads, and a paid version that doesn't collect user data (except for device ID) and has some extra features.
-- **Qalculate! on desktop** - not an Android alternative, but if you like the app, get the desktop version too (GTK or Qt GUI, or `qalc` in the terminal). Same engine, same syntax.
+- **HiPER Scientific Calculator** - if you don't use F-Droid, this is the scientific calculator worth considering. It's not open source and it's only in the Play Store, but it's feature-packed (fractions, complex numbers, equation solver, unit conversion and much more). There's a free version **with trackers and ads**, and a paid version that doesn't collect user data (except for device ID) and has some extra features.
+- **Qalculate! on desktop** - not an Android alternative, but if you like the app, get the desktop version too (GTK or Qt GUI, or a terminal version)
 - **Fossify Calculator** - part of the Fossify suite (see Honourable mentions). A simple, button-based calculator for everyday use. Available in both F-Droid and Play Store.
 
 ## Honourable mentions
 
 There are tons of simple apps who have no need to know my location, email or contacts, and yet they try to do exactly that. Good luck finding a privacy-friendly app on Play Store. On F-Droid it's easy.
 
-![Honourable mentions](honourable-mentions.jpg)
+![Installed apps](honourable-mentions.jpg)
 
 - **Bubble** - bubble level/inclinometer. I use it occasionally for home renovation when I can't find the real bubble level.
 - **Circuit Training** - an interval timer, for Tabata training or anything that needs several timers in a row.
@@ -205,34 +205,43 @@ There are tons of simple apps who have no need to know my location, email or con
 
 ## Sources
 
-[^1]: NewPipe problems:
+### NewPipe problems:
+
 - [NewPipe not loading videos: what's going on](https://tecnobits.net/newpipe-not-loading-videos-heres-whats-going-on-and-how-to-fix-it/) - TecnoBits
 
-[^2]: Fennec problems:
+### Fennec problems:
+
 - [Fennec 142 takes several minutes to load websites with uBlock Origin](https://forum.f-droid.org/t/fennec-142-takes-several-minutes-to-load-websites-when-using-ublock-origin-or-privacy-badger-or-ghostery/33120) - F-Droid forum
 
-[^3]: Firefox privacy controversies:
+### Firefox privacy controversies:
+
 - [Firefox tracks you with "privacy preserving" feature](https://edri.org/our-work/firefox-tracks-you-with-privacy-preserving-feature/) - EDRi (Privacy Preserving Attribution, 2024)
 - [Mozilla buys Anonym, betting privacy is compatible with ads](https://www.theregister.com/2024/06/18/mozilla_buys_anonym_betting_privacy/) - The Register (2024)
 - [Mozilla responds to backlash over new terms, saying it's not using people's data for AI](https://techcrunch.com/2025/02/28/mozilla-responds-to-backlash-over-new-terms-saying-its-not-using-peoples-data-for-ai) - TechCrunch (2025)
 - [Firefox responds to AI backlash by promising a 'kill switch'](https://techradar.com/computing/firefox-responds-to-ai-backlash-by-promising-a-kill-switch-for-turning-off-controversial-new-features) - TechRadar (2025)
 
-[^4]: Brave controversies:
+### Brave controversies:
+
 - [Brave browser is collecting donations on your behalf - did you know?](https://www.theblock.co/post/5839/brave-browser-is-collecting-donations-on-your-behalf-did-you-know) - The Block (tips collected for creators without their consent, 2018)
 - [Brave's browser has been autocompleting websites with referral codes](https://www.theblock.co/post/67594/braves-browser-has-been-autocompleting-websites-with-referral-codes) - The Block (affiliate codes in the address bar, 2020)
 - [Brave browser's Tor mode exposed users' dark web activity](https://www.welivesecurity.com/2021/02/22/brave-browser-tor-mode-exposed-dark-web-activity/) - WeLiveSecurity (.onion DNS leak, 2021)
 - [Brave browser under fire for alleged sale of copyrighted data](https://www.searchenginejournal.com/brave-browser-under-fire-for-alleged-sale-of-copyrighted-data/491854/) - Search Engine Journal (Search API data for AI training, 2023)
 - [Brave browser under fire for installing its VPN without user permission](https://www.techradar.com/pro/vpn/brave-browser-under-fire-for-installing-its-vpn-without-user-permission) - TechRadar (2023)
 
-[^5]: KeePass clones compatibility - there are some caveats about version formats (avoided if you use recent versions, which you should anyway), TOTP (which I recommend to keep outside of the password manager) and some other uncommon features. In real life, you're unlikely to encounter them. See here if you're curious: 
+### KeePass clones compatibility:
+
+There are some caveats about version formats (avoided if you use recent versions, which you should anyway), TOTP (which I recommend to keep outside of the password manager) and some other uncommon features. In real life, you're unlikely to encounter them. See here if you're curious: 
+
 - [KeePassXC Documentation and FAQ](https://keepassxc.org/docs/) - KeePassXC (YubiKey incompatible with KeePass 2, no plugins, supported KDBX versions)
 - [KeePass KDBX Compatibility: Apps & Versions](https://www.panicvault.org/keepass/compatibility-guide/) - PanicVault (per-app matrix: Twofish, YubiKey, TOTP, KDBX 3.1 vs 4.0)
 
-[^6]: Syncthing on Android:
+### Syncthing on Android:
+
 - [Syncthing for Android is being discontinued, but there's an alternative app](https://www.ghacks.net/2024/10/21/syncthing-for-android-is-being-discontinued-but-theres-an-alternative-app-you-can-switch-to/) - gHacks (2024)
 - [Does anyone know why syncthing-fork is no longer available on Github?](https://forum.syncthing.net/t/does-anyone-know-why-syncthing-fork-is-no-longer-available-on-github/25661) - Syncthing forum (maintainer change, 2025)
 
-[^7]: Music removed or replaced on streaming services:
+### Music removed or replaced on streaming services:
+
 - [Taylor Swift shakes off Spotify, pulls entire catalog](https://www.engadget.com/2014-11-03-taylor-swift-spotify-break-up.html) - Engadget (2014, back in 2017)
 - [Kanye just changed an album that's been out for four months](https://www.mtv.com/news/1u5bou/kanye-west-updates-the-life-of-pablo-saint-pablo) - MTV (The Life of Pablo modified after release, 2016)
 - [Neil Young removes music from Spotify in protest of Joe Rogan's podcast](https://variety.com/2022/music/news/neil-young-spotify-joe-rogan-1235164458) - Variety (2022, back in 2024)
