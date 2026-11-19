@@ -57,7 +57,7 @@ Nouveau is an open-source driver for NVIDIA GPUs. It supports standard display f
 
 The driver is a standard part of the Linux kernel, the system would prefer it over the proprietary driver if not configured otherwise. And usually, it will be automatically configured otherwise - driver package will create file */etc/modprobe.d/nvidia.conf* containing `blacklist nouveau` (plus other lines, relevant for your GPU).
 
-But sometimes, maybe when dpkg is stopped in the middle or there's some other edge case, you might end up with */etc/modprobe.d/nvidia.conf.dpkg-new* instead. It happened to me more than once. In `nvidia-smi` doesn't work, `lsmod | grep nouveau` is one of my first debug steps.
+But sometimes, maybe when dpkg is stopped in the middle or there's some other edge case, you might end up with */etc/modprobe.d/nvidia.conf.dpkg-new* instead. It happened to me more than once. If `nvidia-smi` doesn't work, `lsmod | grep nouveau` is one of my first debug steps.
 
 
 ### Bundled tools
