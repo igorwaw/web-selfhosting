@@ -41,6 +41,7 @@ comments: false
 - [DebGPT: an LLM assistant for Debian work](/homelab/debgpt/)
 - [Hashcat: experiments with password cracking](/homelab/hashcat/)
 - [Wazuh, part 1: what it is](/homelab/wazuh-1/)
+- [Wazuh, part 2: installing and configuring](/homelab/wazuh-2/)
 - [vLLM: a more serious AI server (and benchmark against Ollama)](/homelab/vllm/)
 - [TensorRT-LLM: the fastest LLM engine](/homelab/tensorrt-llm/)
 
@@ -59,3 +60,4 @@ comments: false
 - [Intro: reclaiming your phone](/android/intro/)
 - [F-Droid: the open source app store](/android/f-droid/)
 - [F-Droid: 10 apps worth installing](/android/fdroid-apps/)
+- [Security and privacy tweaks for standard Android](/android/stock-android-tweaks/)

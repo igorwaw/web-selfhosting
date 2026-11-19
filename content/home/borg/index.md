@@ -9,7 +9,7 @@ In [part 1](/home/backup-choices/), I reviewed several backup solutions and hate
 
 ## Installing and configuring with Ansible
 
-Two Ansible roles: *borg_client* is applied to every host that needs backing up. Firefly, which is both the client and the target, only backs up /etc. My laptop backs up /etc and my home dir, with some exclusions. The role also delegates some tasks to the Borg server - mainly, creating a dedicated user account (one per each client) and the directory. Since Borg writes lots of small files, and btrfs's copy-on-write fragments badly under that pattern, the repository directory gets `chattr +C` applied before any repo is created in it. Which means btrfs will not do checksumming for that directory, but Borg already does chunk-level integrity checking.
+Two Ansible roles: *borg_client* is applied to every host that needs backing up. Firefly, which is both the client and the target, only backs up /etc. My laptop backs up /etc and my home dir, with some exclusions. The role also delegates some tasks to the Borg server - mainly, creating a dedicated user account (one per client) and the directory. Since Borg writes lots of small files, and btrfs's copy-on-write fragments badly under that pattern, the repository directory gets `chattr +C` applied before any repo is created in it. Which means btrfs will not do checksumming for that directory, but Borg already does chunk-level integrity checking.
 
 Second role *borg_server*, applied only to firefly, doesn't actually install the server - there's no separate client and server app, the same binary does both. Instead, it configures retention (deleting old archives) and compacting the repositories.
 
@@ -66,7 +66,7 @@ A good backup system doesn't get in your way - it just does its job silently. Wh
 
 ### Checking if the backup ran
 
-Since I use a systemd timer, it's easy to get status of the last run:
+Since I use a systemd timer, it's easy to get the status of the last run:
 
 ```bash
 systemctl status borg-backup.timer
@@ -112,9 +112,9 @@ If I want to look around the archive, I can mount it with FUSE: `borg-access.sh 
 
 ### Restoring everything
 
-If the machine is gone, I can't use this way anymore. Even after I reinstall (I don't back up the whole system, just the data). SSH private key, stored in /root, is not backed up anywhere and not stored in Ansible. That's intentional, a tradeoff between security and easy bare metal restore. I decided it's unlikely, so I don't need an easy process.
+If the machine is gone, I can't use this way anymore. Even after I reinstall (I don't back up the whole system, just the data). SSH private key, stored in /root, is not backed up anywhere and not stored in Ansible. That's intentional, a trade-off between security and easy bare metal restore. I decided it's unlikely, so I don't need an easy process.
 
-What I would need to do instead is log in to firefly, which doesn't need SSH - it can use local paths */data/noshare/borg/\<client\>*. It needs the passphrase, but it's stored in firefly and in Ansible vault. 
+What I would need to do instead is log in to firefly, which doesn't need SSH - it can use local paths */data/noshare/borg/\<client\>*. It needs the passphrase, but it's stored on Firefly and in Ansible vault. 
 
 Or: I can replace the SSH keypair manually. That would probably work, I haven't tested it though.
 
@@ -126,3 +126,32 @@ Automating the checks is left as an exercise for the reader. What is possible, a
 - An automated restore test: a script run by the systemd timer that extracts a known canary file from the latest archive, checksums it, and notifies if something is wrong.
 
 I haven't done it and currently I have no plans to do it. I think my system is robust enough for home use.
+
+## Update: lessons learned
+
+The plan was to schedule the backup scripts with a systemd timer and forget about them. Good thing that I didn't, because when I checked a few days later, it turned out that no automated backups were ever done, despite the manual runs working fine.  
+
+### The laptop: too fast after waking up
+
+The timer is set for 2:30 at night, usually the laptop is asleep (and so am I). *Persistent=true* did exactly what I wanted - it ran the missed backup on wake. The problem is that it ran it immediately, before Wi-Fi reconnected. The service did have *After=network-online.target*, but that target stays "reached" through suspend, so it doesn't delay anything after resume.
+
+So every morning the script tried to connect, got "Network is unreachable", decided the laptop was away from home, logged "nothing to do this run" and exited 0. The very feature I wanted - not treating an unreachable server as a failure, because the laptop could be away from LAN - is what hid the problem.
+
+The fix: before starting the backup, the script now waits up to 5 minutes, checking every 15 seconds.
+
+### Firefly: a question nobody could answer
+
+Firefly backs up to itself, so the same root user opens the same repository in two ways: over *ssh://* for the backup, and through a local path for pruning. Borg remembers where it last saw a repository and asks for confirmation when the location changes:
+
+```
+Warning: The repository at location ssh://borg-firefly@firefly:37431/data/noshare/borg/firefly was previously located at /data/noshare/borg/firefly
+Do you want to continue? [yN] Aborting.
+```
+
+Since it wasn't running interactively, nobody could answer the question. I covered it on the prune side before - the prune script sets *BORG_RELOCATED_REPO_ACCESS_IS_OK=yes* to skip the question. Now the backup script sets it too, but only on the host that is also the server.
+
+### What I learned
+
+- Be careful with "ignore errors and exit 0". Treating an offline laptop as normal was the right call, but it could also hide real failures. 
+- I wrote above that automating the checks was "left as an exercise for the reader" and that my system was "robust enough for home use". It wasn't.
+- I wrote in "Backup part 1" that "Borg seems to be halfway between a typical self-contained backup software and hacking your own solution with common utilities such as tar or rsync". That was exactly right. A GUI application would show problems quickly, for a "configure once and forget" approach some sort of monitoring or automated test is necessary.
