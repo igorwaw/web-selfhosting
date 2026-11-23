@@ -31,19 +31,25 @@ comments: false
 
 ## Homelab
 
+### Other experiments 
+
 - [Serenity: a dedicated homelab machine](/homelab/serenity/)
 - [Minikube: Kubernetes for learning and experiments](/homelab/minikube/)
 - [Slurm: an experimental HPC cluster at home](/homelab/slurm/)
 - [GPU for CUDA experiments, part 1: buying](/homelab/gpu-guide-1/)
 - [GPU for CUDA experiments, part 2: driver and Docker setup](/homelab/gpu-guide-2/)
-- [Ollama plus Open WebUI: running a local LLM](/homelab/ollama-openwebui/)
-- [Stable Diffusion: AI image generation at home](/homelab/stable-diffusion/)
-- [DebGPT: an LLM assistant for Debian work](/homelab/debgpt/)
 - [Hashcat: experiments with password cracking](/homelab/hashcat/)
 - [Wazuh, part 1: what it is](/homelab/wazuh-1/)
 - [Wazuh, part 2: installing and configuring](/homelab/wazuh-2/)
+
+### AI experiments
+
+- [Ollama plus Open WebUI: running a local LLM](/homelab/ollama-openwebui/)
+- [Stable Diffusion: AI image generation at home](/homelab/stable-diffusion/)
+- [DebGPT: an LLM assistant for Debian work](/homelab/debgpt/)
 - [vLLM: a more serious AI server (and benchmark against Ollama)](/homelab/vllm/)
 - [TensorRT-LLM: the fastest LLM engine](/homelab/tensorrt-llm/)
+- [Chinese LLMs and censorship: does the language matter?](/homelab/chinese-models-censorship/)
 
 ## Self hosting on the internet
 
