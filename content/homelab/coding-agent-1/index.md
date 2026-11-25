@@ -1,7 +1,7 @@
 ---
 title: "Self-hosted coding agent, part 1: concepts and choices"
-date: 2026-11-12T00:00:00
-draft: true
+date: 2026-11-21T17:00:00
+draft: false
 tags: ["ai", "gpu"]
 ---
 
@@ -13,7 +13,7 @@ It might change in the future. Open models keep getting better at smaller sizes,
 
 Of course, you can always experiment. I did it some time ago at work. The company owned on-prem GPUs and wanted to see whether a self-hosted coding agent was worth it. In the end they decided not to go this route - the GPUs were usually needed for something else and they would have to dedicate a significant portion of their hardware to achieve the same thing that a $20/month subscription did. I can't share details of that setup, as they are confidential, so I decided to recreate something similar as a personal experiment.
 
-So this goes into a homelab category, though strictly speaking, it was hosted outside the home. Serenity's 6GB RTX 3050 can't run a model that is any good at this - I tried, and a 3B model can't even do a simple bash script. Previously in the [vLLM](/homelab/vllm/) and [TensorRT-LLM](/homelab/tensorrt-llm/) posts, I compared my GPU to a rented VM on Lightning AI. This time, I only used the remote VM. Yes, that defeats the privacy argument. But I'm not going to use it for real workloads, and the setup is exactly the same as it would be with on-prem hardware. And I'm certainly not buying a 48GB GPU.
+So this goes into a homelab category, though strictly speaking, most of it was hosted outside the home. Serenity's 6GB RTX 3050 can't run a model that is any good at this - I expect it won't even write simple bash script. Previously in the [vLLM](/homelab/vllm/) and [TensorRT-LLM](/homelab/tensorrt-llm/) posts, I compared my GPU to a rented VM on Lightning AI. I'm going to do the same, only to test things for free before I power on an expensive VM. Because I'm certainly not buying a 48GB GPU.
 
 ## Software stack
 
@@ -27,11 +27,11 @@ Most popular software as of mid-November 2026. Everything in this space moves fa
 
 ### Claude Code
 
-I use Claude Code, so I'll compare everything to it. The harness can work with a self-hosted model (or a model provided by another company), though it's rarely used this way.
+I use Claude Code, so I'll compare everything to it. The harness can also work with a self-hosted model (or a model provided by another company), though it's rarely used this way.
 
 **Strong points:** the most polished of the bunch. Sub-agents, plan mode, hooks, skills, MCP, permission modes, fine-grained tool approval. Huge ecosystem of plugins and guides.
 
-**Limitations:** closed source, so only half of the stack is self-hosted. It only speaks Anthropic's Messages API. vLLM and Ollama have an Anthropic-compatible endpoint now, so it works without a translation proxy, but not every feature maps cleanly. If you use a different engine, you might need a translation proxy. The bigger problem is the size of the system prompt and tool definitions: tens of thousands of tokens before you type anything, written and tuned for Claude. A mid-size open model gets less room for your code, and more instructions it wasn't trained to follow.
+**Limitations:** closed source, so only half of the stack is self-hosted. It only speaks Anthropic's Messages API. vLLM and Ollama have an Anthropic-compatible endpoint now, so it works without a translation proxy, but not every feature maps cleanly. If you use a different engine, you might need a translation proxy. The bigger problem for running with limited hardware is the size of the system prompt and tool definitions: tens of thousands of tokens before you type anything, written and tuned for Claude. A mid-size open model gets less room for your code, and more instructions it wasn't trained to follow.
 
 ### OpenAI Codex CLI
 
@@ -99,7 +99,7 @@ My second choice would be OpenCode. Probably easier if you want your setup to ju
 
 ### Hardware limitation
 
-I decided to use a single 48GB GPU - an L40S, which costs $3.54/h on Lightning AI. I need to leave about 15GB-20GB of VRAM for the KV cache. Coding agents need a long context, 32K tokens is the bare minimum, 64-128K is comfortable.
+I decided to use a single 48GB GPU - an L40S, which costs $3.54/h on Lightning AI (there are cheaper providers, but I still have free credits). I need to leave about 15GB-20GB of VRAM for the KV cache. Coding agents need a long context, 32K tokens is the bare minimum, 64-128K is comfortable.
 
 BF16 weights would take too much space. 4-bit quantisation is sometimes not stable enough for coding, FP8 is the sweet spot (reports vary, for some tasks larger models with 4-bit weights might work better). That means I can run models of about 20B-30B parameters (up to 35B at the cost of a smaller KV cache). Models of that size are good enough for a lot of coding and document processing work.
 
@@ -131,7 +131,7 @@ OpenAI's open model from August 2025, 21B parameters (3.6B active), Apache 2.0. 
 
 ### Qwen3-Coder-Next (if I choose a bigger card)
 
-80B MoE, 3B active, dedicated coding model, Apache 2.0. Probably the strongest agentic coder you can self-host without a multi-GPU server. But the FP8 version needs around 90GB, and even 4-bit AWQ is about 46GB - technically loads on 48GB, but no room left for context. It needs an 80GB card (H100 with AWQ) or bigger.
+80B MoE, 3B active, dedicated coding model, Apache 2.0. Probably the strongest agentic coder you can self-host without a multi-GPU server. But the FP8 version needs around 90GB, and even 4-bit AWQ is about 46GB - technically loads on 48GB, but no room left for context. It needs at least an 80GB card (H100 with AWQ).
 
 ### Others
 
@@ -139,9 +139,9 @@ OpenAI's open model from August 2025, 21B parameters (3.6B active), Apache 2.0. 
 
 ### A note on Chinese models
 
-American and European companies don't share their best models. Most Open Weight models come from Chinese companies (Alibaba, DeepSeek and others). Can you trust them? If you run them on your own server, they can't leak your data - a model can't make a network connection. What knowledge is stored in weights - that's a different matter. There were some well-known tests - people asked Chinese models about Tibet or Tiananmen Square and the models seemed evasive (especially when asked in Chinese).
+American and European companies don't share their best models. Most Open Weight models come from Chinese companies (Alibaba, DeepSeek and others). Can you trust them? Depends on what you mean by "trust". If you run them on your own server, they can't leak your data - a model can't make a network connection. What knowledge is stored in weights - that's a different matter. There were some well-known tests and I did the experiment myself. If you [ask Chinese models about Tiber or Tiananmen Square](/homelab/coding-agent-1/), it will give evasive answer or even plainly refuse.
 
-Does it matter, if you want it to generate Python or JavaScript? Probably not. Stretching my imagination, I can think of an example (if you develop an app for learning geography, it might say Taiwan is a part of China). But for most coding tasks, it's not an issue.
+Does it matter, if you want it to generate Python or JavaScript? Probably not. Stretching my imagination, I can think of some examples (if you develop an app for learning geography, it might say Taiwan is a part of China). But for most coding tasks, it's not an issue. If you want to avoid the problem, there are some non-Chinese models available, e.g. Mistral. I wonder if it has an opinion about Napoleon?
 
 ### Summary
 
